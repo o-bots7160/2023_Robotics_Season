@@ -12,6 +12,8 @@ public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs = new CTREConfigs();
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static double speedReducer = 2;
+  private static double turnReducer = 0.75;
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final Swerve _drive = new Swerve();
@@ -75,9 +77,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // Convert these from -1.0 - 1.0 to min/max speed or rotation
-    double x = Joystick.getRawAxis(0);
-    double y = Joystick.getRawAxis(1);
-    double z = Joystick.getRawAxis(4);
+    double x = Joystick.getRawAxis(0) / speedReducer;
+    double y = Joystick.getRawAxis(1) / speedReducer;
+    double z = Joystick.getRawAxis(4) / turnReducer;
     if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
     {
       x = 0;
