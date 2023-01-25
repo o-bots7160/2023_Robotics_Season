@@ -1,9 +1,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+
+import java.util.List;
+//import java.util.Timer;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,6 +25,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final Swerve _drive = new Swerve();
+  private Trajectory autonTrajectory;
+  public Timer timer = new Timer();
   //Joystick Joystick = new Joystick(0); // Joystick
   Joystick Joystick = new Joystick(0); // Gamepad
 
@@ -41,9 +51,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    timer.reset();
+    timer.start();
     _drive.zeroGyro();
     _drive.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
     curr_Auto = AUTONS.TEST_AUTO;
+
+    TrajectoryConfig config = new TrajectoryConfig(.1, 0.2);
+
+    autonTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), List.of(new Translation2d(-1,-1), new Translation2d(1,1)), new Pose2d(0,0, new Rotation2d(0)), config);
     //m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     //System.out.println("Auto selected: " + m_autoSelected);
@@ -53,6 +69,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch(curr_Auto){
       case TEST_AUTO:
+      _drive.drive(autonTrajectory.sample(timer.get()));
       break;
     }
   }
