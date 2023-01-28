@@ -76,6 +76,13 @@ public class Swerve {
     }    
 
     public boolean drive(Trajectory.State _state) {
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+        controller.calculate(getPose(), _state, getYaw()));
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+        }
         return false;
     }
 

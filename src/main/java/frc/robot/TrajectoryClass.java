@@ -16,18 +16,19 @@ public class TrajectoryClass {
     public Trajectory testTrajectory1() {
 
         // 2018 cross scale auto waypoints.
-        var sideStart = new Pose2d(Units.feetToMeters(1), Units.feetToMeters(1),
-            Rotation2d.fromDegrees(-180));
-        var crossScale = new Pose2d(Units.feetToMeters(-1), Units.feetToMeters(-1),
-            Rotation2d.fromDegrees(180));
+        var sideStart = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
+            Rotation2d.fromDegrees(-90));
+        var crossScale = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
+            Rotation2d.fromDegrees(90));
     
         var interiorWaypoints = new ArrayList<Translation2d>();
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1), Units.feetToMeters(1)));
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(-1), Units.feetToMeters(-1)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(2.5), Units.feetToMeters(2.5)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(2.5), Units.feetToMeters(2.5)));
     
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(1), Units.feetToMeters(1));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(1), Units.feetToMeters(1)).setKinematics(Constants.Swerve.swerveKinematics);
         config.setReversed(true);
     
+        System.out.println(config);
         return TrajectoryGenerator.generateTrajectory(
             sideStart,
             interiorWaypoints,
