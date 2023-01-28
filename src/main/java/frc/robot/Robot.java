@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch(curr_Auto){
       case TEST_AUTO:
-      Trajectory.State new_state = autonTrajectory.sample(timer.get());
+      Trajectory.State new_state = new Trajectory.State(timer.get(), 0, 0, new Pose2d(0,0, new Rotation2d(-Math.PI/2)), 0);  //autonTrajectory.sample(timer.get());
       _drive.drive( new_state);
       //_drive.controller = _drive.drive(null, kDefaultPeriod, isAutonomousEnabled(), isAutonomous());
       break;

@@ -30,8 +30,8 @@ public class Swerve {
     
     public HolonomicDriveController controller = new HolonomicDriveController(
     new PIDController(1, 0, 0), new PIDController(1, 0, 0),
-    new ProfiledPIDController(1, 0, 0,
-      new TrapezoidProfile.Constraints(2, 2)));
+    new ProfiledPIDController(0.4, 0, -0.2, //FIXME for comp bot
+      new TrapezoidProfile.Constraints(3, 3)));
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -77,7 +77,7 @@ public class Swerve {
 
     public boolean drive(Trajectory.State _state) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-        controller.calculate(getPose(), _state, getYaw()));
+        controller.calculate(getPose(), _state, _state.poseMeters.getRotation()));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){

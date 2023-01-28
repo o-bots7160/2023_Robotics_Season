@@ -16,9 +16,9 @@ public class TrajectoryClass {
     public Trajectory testTrajectory1() {
 
         // 2018 cross scale auto waypoints.
-        var sideStart = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
+        var startPoint = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
             Rotation2d.fromDegrees(-90));
-        var crossScale = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
+        var endPoint = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
             Rotation2d.fromDegrees(90));
     
         var interiorWaypoints = new ArrayList<Translation2d>();
@@ -28,11 +28,10 @@ public class TrajectoryClass {
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(1), Units.feetToMeters(1)).setKinematics(Constants.Swerve.swerveKinematics);
         config.setReversed(true);
     
-        System.out.println(config);
         return TrajectoryGenerator.generateTrajectory(
-            sideStart,
+            startPoint,
             interiorWaypoints,
-            crossScale,
+            endPoint,
             config);
       }
 }
