@@ -17,9 +17,9 @@ public class TrajectoryClass {
 
         // 2018 cross scale auto waypoints.
         var startPoint = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
-            Rotation2d.fromDegrees(-90));
+            Rotation2d.fromDegrees( 0.0));
         var endPoint = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
-            Rotation2d.fromDegrees(90));
+            Rotation2d.fromDegrees(0.0));
     
         var interiorWaypoints = new ArrayList<Translation2d>();
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(2.5), Units.feetToMeters(2.5)));

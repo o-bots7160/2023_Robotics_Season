@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //Swerve-specific imports
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -72,8 +73,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch(curr_Auto){
       case TEST_AUTO:
-      Trajectory.State new_state = new Trajectory.State(timer.get(), 0, 0, new Pose2d(0,0, new Rotation2d(-Math.PI/2)), 0);  //autonTrajectory.sample(timer.get());
-      _drive.drive( new_state);
+      test_Auto();
+
+      //Trajectory.State new_state = new Trajectory.State(timer.get(), 0, 0, new Pose2d( Units.feetToMeters(2.5),0, new Rotation2d(-Math.PI/2)), 0);  //autonTrajectory.sample(timer.get());
+      //_drive.drive( new_state);
       //_drive.controller = _drive.drive(null, kDefaultPeriod, isAutonomousEnabled(), isAutonomous());
       break;
     }
@@ -82,6 +85,11 @@ public class Robot extends TimedRobot {
   private void test_Auto(){
     switch(step){
       case 0:
+      if ( _drive.rotate(180) )
+      {
+        step++;
+        _drive.drive( new Translation2d(), 0, true, true);
+      }
       // if (_drive.goTo(new Pose2d(1,0,new Rotation2d(0)))){
       //   step++;
       // }

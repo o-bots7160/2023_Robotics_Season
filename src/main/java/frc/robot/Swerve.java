@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -24,14 +25,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve {
+    private boolean auton_active = false;
     public SwerveDriveOdometry swerveOdometry;
+    private double rot_ctrl;
+    private double rot_err;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    
+    public ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0, //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
+      new TrapezoidProfile.Constraints(3, 5));    
     public HolonomicDriveController controller = new HolonomicDriveController(
-    new PIDController(1, 0, 0), new PIDController(1, 0, 0),
-    new ProfiledPIDController(0.4, 0, -0.2, //FIXME for comp bot
-      new TrapezoidProfile.Constraints(3, 3)));
+    new PIDController(1, 0, 0), new PIDController(1, 0, 0), rotPID );
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -45,11 +48,14 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
+        rotPID.setTolerance( Math.toRadians(1.0), 0.25);
+        rotPID.enableContinuousInput(0.0, 2*Math.PI);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         Timer.delay(1.0);
         resetModulesToAbsolute();
+
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
     }
@@ -86,6 +92,18 @@ public class Swerve {
         return false;
     }
 
+    public boolean rotate( double angle )
+    {
+        if ( ! auton_active )
+        {
+            rotPID.reset(getYaw().getRadians());
+        }
+        rot_err  = getYaw().getRadians() - Math.toRadians(angle);
+        rot_ctrl = rotPID.calculate( Math.toRadians(angle));
+        drive( new Translation2d(), rot_ctrl, true, true);
+        auton_active = rotPID.atGoal(); 
+        return auton_active;
+    }
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
@@ -134,7 +152,9 @@ public class Swerve {
     }
 
     public void periodic(){
-        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());  
+        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
+        SmartDashboard.putNumber("rot_err", rot_err);  
         SmartDashboard.putNumber("X   ", pose.getX());
         SmartDashboard.putNumber("Y   ", pose.getY());
         SmartDashboard.putNumber("ROT ", pose.getRotation().getDegrees());    

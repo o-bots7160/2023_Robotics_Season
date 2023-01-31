@@ -1,4 +1,4 @@
-package frc.robot;
+/*package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -58,4 +58,4 @@ public class ManipulatorControl {
       en_Claw = claw.getEncoder();
    }
    
-}
+}*/
