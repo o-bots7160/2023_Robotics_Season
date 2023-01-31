@@ -29,12 +29,17 @@ public class Swerve {
     public SwerveDriveOdometry swerveOdometry;
     private double rot_ctrl;
     private double rot_err;
+    private double x_ctrl;
+    private double x_err;
+    private double y_ctrl;
+    private double y_err;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    public ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0, //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
-      new TrapezoidProfile.Constraints(3, 5));    
-    public HolonomicDriveController controller = new HolonomicDriveController(
-    new PIDController(1, 0, 0), new PIDController(1, 0, 0), rotPID );
+    private ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0, //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
+      new TrapezoidProfile.Constraints(3, 5));
+    private PIDController x_PID = new PIDController(2, 0, 0);
+    private PIDController y_PID = new PIDController(1, 0, 0);
+    public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotPID );
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -50,12 +55,13 @@ public class Swerve {
 
         rotPID.setTolerance( Math.toRadians(1.0), 0.25);
         rotPID.enableContinuousInput(0.0, 2*Math.PI);
+        x_PID.setTolerance( 0.01, 0.01);
+        y_PID.setTolerance( 0.01, 0.01);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         Timer.delay(1.0);
         resetModulesToAbsolute();
-
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
     }
@@ -102,6 +108,34 @@ public class Swerve {
         rot_ctrl = rotPID.calculate( Math.toRadians(angle));
         drive( new Translation2d(), rot_ctrl, true, true);
         auton_active = rotPID.atGoal(); 
+        return auton_active;
+    }
+    public boolean move_x( double distance )
+    {
+        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        if ( ! auton_active )
+        {
+            x_PID.reset( );
+            x_PID.setSetpoint(distance);
+        }
+        x_err  = pose.getX() - distance;
+        x_ctrl = x_PID.calculate( pose.getX() );
+        drive( new Translation2d( x_ctrl, 0), 0, true, true);
+        auton_active = x_PID.atSetpoint(); 
+        return auton_active;
+    }
+    public boolean move_y( double distance )
+    {
+        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        if ( ! auton_active )
+        {
+            y_PID.reset( );
+            y_PID.setSetpoint(distance);
+        }
+        y_err  = pose.getY() - distance;
+        y_ctrl = y_PID.calculate( pose.getY() );
+        drive( new Translation2d( 0, y_ctrl), 0, true, true);
+        auton_active = y_PID.atSetpoint(); 
         return auton_active;
     }
     /* Used by SwerveControllerCommand in Auto */

@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
   private void test_Auto(){
     switch(step){
       case 0:
-      if ( _drive.rotate(180) )
+      if ( _drive.move_y(1) )
       {
         step++;
         _drive.drive( new Translation2d(), 0, true, true);
