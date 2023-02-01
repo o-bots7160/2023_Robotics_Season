@@ -16,9 +16,9 @@ public class TrajectoryClass {
     public Trajectory testTrajectory1() {
 
         // 2018 cross scale auto waypoints.
-        var startPoint = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
+        var x5y5 = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5),
             Rotation2d.fromDegrees( 0.0));
-        var endPoint = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
+        var x0y0 = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
             Rotation2d.fromDegrees(0.0));
     
         var interiorWaypoints = new ArrayList<Translation2d>();
@@ -29,9 +29,9 @@ public class TrajectoryClass {
         config.setReversed(true);
     
         return TrajectoryGenerator.generateTrajectory(
-            startPoint,
+            x5y5,
             interiorWaypoints,
-            endPoint,
+            x0y0,
             config);
       }
 }

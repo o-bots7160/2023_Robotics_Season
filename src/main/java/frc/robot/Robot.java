@@ -6,7 +6,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //Swerve-specific imports
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
   private void test_Auto(){
     switch(step){
       case 0:
-      if ( _drive.move_y(1) )
+      if ( _drive.move_y(2) )
       {
         step++;
         _drive.drive( new Translation2d(), 0, true, true);

@@ -35,10 +35,12 @@ public class Swerve {
     private double y_err;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    private ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0, //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
-      new TrapezoidProfile.Constraints(3, 5));
-    private PIDController x_PID = new PIDController(2, 0, 0);
-    private PIDController y_PID = new PIDController(1, 0, 0);
+    
+    private ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0,  //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
+      new TrapezoidProfile.Constraints(3, 5));                   
+    private PIDController x_PID = new PIDController(3.7, 0, 0);                      //FIXME
+    private PIDController y_PID = new PIDController(3.4, 0, 0);                      //FIXME
+
     public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotPID );
 
     public Swerve() {
@@ -98,6 +100,7 @@ public class Swerve {
         return false;
     }
 
+    //Testing rotPID for HolonomicDriveController
     public boolean rotate( double angle )
     {
         if ( ! auton_active )
@@ -110,6 +113,8 @@ public class Swerve {
         auton_active = rotPID.atGoal(); 
         return auton_active;
     }
+
+    //Testing x_PID for HolonomicDriveController
     public boolean move_x( double distance )
     {
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
@@ -124,6 +129,8 @@ public class Swerve {
         auton_active = x_PID.atSetpoint(); 
         return auton_active;
     }
+
+    //Testing y_PID for HolonomicDriveController
     public boolean move_y( double distance )
     {
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
@@ -138,6 +145,7 @@ public class Swerve {
         auton_active = y_PID.atSetpoint(); 
         return auton_active;
     }
+    
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
