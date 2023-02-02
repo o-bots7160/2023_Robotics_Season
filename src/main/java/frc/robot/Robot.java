@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.List;
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
   Joystick Joystick = new Joystick(0); // Joystick
   //Joystick Joystick = new Joystick(1); // Gamepad
 
+  private ArrayList<Pose2d> targets;
   enum AUTONS {
     TEST_AUTO
   };
@@ -62,8 +65,13 @@ public class Robot extends TimedRobot {
     _drive.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
     curr_Auto = AUTONS.TEST_AUTO;
 
+    // targets.add( new Pose2d( new Translation2d( 0.0, 0.5), new Rotation2d( 0 ) ) );
+    // targets.add( new Pose2d( new Translation2d( 0.5, 0.5), new Rotation2d( 0 ) ) );
+    // targets.add( new Pose2d( new Translation2d( 0.5, 0.0), new Rotation2d( 0 ) ) );
+    // targets.add( new Pose2d( new Translation2d( 0.0, 0.0), new Rotation2d( 0 ) ) );
     //TrajectoryConfig config = new TrajectoryConfig(.1, 0.2);
-    autonTrajectory = _trajectory.testTrajectory1(); // TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), List.of(new Translation2d(-1,-1), new Translation2d(1,1)), new Pose2d(0,0, new Rotation2d(0)), config);
+    autonTrajectory = _trajectory.testTrajectory2();
+     // TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), List.of(new Translation2d(-1,-1), new Translation2d(1,1)), new Pose2d(0,0, new Rotation2d(0)), config);
     //m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     //System.out.println("Auto selected: " + m_autoSelected);
@@ -74,22 +82,44 @@ public class Robot extends TimedRobot {
     switch(curr_Auto){
       case TEST_AUTO:
       test_Auto();
-
-      //Trajectory.State new_state = new Trajectory.State(timer.get(), 0, 0, new Pose2d( Units.feetToMeters(2.5),0, new Rotation2d(-Math.PI/2)), 0);  //autonTrajectory.sample(timer.get());
-      //_drive.drive( new_state);
       //_drive.controller = _drive.drive(null, kDefaultPeriod, isAutonomousEnabled(), isAutonomous());
       break;
     }
   }
 
   private void test_Auto(){
+
     switch(step){
       case 0:
-      if ( _drive.move_y(2) )
-      {
+      // if(_drive.move_Pose2d(1.0, 0.0, 0.0)) {
+      //   step++;
+      // }
+      // case 1:
+      // if(_drive.move_x(0.5)) {
+      //   step++;
+      // }
+      // case 2:
+      // if(_drive.move_y(-0.5)) {
+      //   step++;
+      // }
+      // case 3:
+      // if(_drive.move_x(-0.5)) {
+      //   step++;
+      //   _drive.drive(new Translation2d(0,0), 0, true, false);
+      // }
+      SmartDashboard.putNumber("getTotalTimeSeconds", autonTrajectory.getTotalTimeSeconds());
+      if (timer.get() > autonTrajectory.getTotalTimeSeconds()) {
         step++;
-        _drive.drive( new Translation2d(), 0, true, true);
+        _drive.drive(new Translation2d(0,0), 0, true, false);
+      } else {
+        Trajectory.State new_state = autonTrajectory.sample(timer.get());
+        _drive.drive( new_state, new Rotation2d( Math.PI));
       }
+      // if ( _drive.move_y(2) )
+      // {
+      //   step++;
+      //   _drive.drive( new Translation2d(), 0, true, true);
+      // }
       // if (_drive.goTo(new Pose2d(1,0,new Rotation2d(0)))){
       //   step++;
       // }

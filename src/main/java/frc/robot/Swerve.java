@@ -30,9 +30,9 @@ public class Swerve {
     private double rot_ctrl;
     private double rot_err;
     private double x_ctrl;
-    private double x_err;
+    private double x_err = 0;
     private double y_ctrl;
-    private double y_err;
+    private double y_err = 0;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
@@ -89,9 +89,10 @@ public class Swerve {
         }
     }    
 
-    public boolean drive(Trajectory.State _state) {
+    public boolean drive(Trajectory.State _state, Rotation2d end_heading ) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-        controller.calculate(getPose(), _state, _state.poseMeters.getRotation()));
+        controller.calculate(getPose(), _state, new Rotation2d(0.0)));
+        SmartDashboard.putNumber("getHeading", _state.poseMeters.getRotation().getDegrees());
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
@@ -121,7 +122,7 @@ public class Swerve {
         if ( ! auton_active )
         {
             x_PID.reset( );
-            x_PID.setSetpoint(distance);
+            x_PID.setSetpoint(pose.getX() + distance);
         }
         x_err  = pose.getX() - distance;
         x_ctrl = x_PID.calculate( pose.getX() );
@@ -137,12 +138,33 @@ public class Swerve {
         if ( ! auton_active )
         {
             y_PID.reset( );
-            y_PID.setSetpoint(distance);
+            y_PID.setSetpoint(pose.getY() + distance);
         }
         y_err  = pose.getY() - distance;
         y_ctrl = y_PID.calculate( pose.getY() );
         drive( new Translation2d( 0, y_ctrl), 0, true, true);
         auton_active = y_PID.atSetpoint(); 
+        return auton_active;
+    }
+    public boolean move_Pose2d( Pose2d new_pose)
+    {
+        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        if ( ! auton_active )
+        {
+            x_PID.reset( );
+            x_PID.setSetpoint( new_pose.getX());
+            y_PID.reset( );
+            y_PID.setSetpoint( new_pose.getY());
+            rotPID.reset(getYaw().getRadians());
+        }
+        rot_err  = getYaw().getRadians() - new_pose.getRotation().getRadians();
+        rot_ctrl = rotPID.calculate( new_pose.getRotation().getRadians());
+        x_err    = pose.getX() - new_pose.getX();
+        x_ctrl   = x_PID.calculate( pose.getX() );
+        y_err    = pose.getY() - new_pose.getY();
+        y_ctrl   = y_PID.calculate( pose.getY() );
+        drive( new Translation2d(x_ctrl, y_ctrl), rot_ctrl, true, true);
+        auton_active = x_PID.atSetpoint() | y_PID.atSetpoint() | rotPID.atGoal();
         return auton_active;
     }
     
@@ -196,10 +218,12 @@ public class Swerve {
     public void periodic(){
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
-        SmartDashboard.putNumber("rot_err", rot_err);  
-        SmartDashboard.putNumber("X   ", pose.getX());
-        SmartDashboard.putNumber("Y   ", pose.getY());
-        SmartDashboard.putNumber("ROT ", pose.getRotation().getDegrees());    
+        SmartDashboard.putNumber("rot_err",  rot_err);  
+        SmartDashboard.putNumber("x_err",    x_err);  
+        SmartDashboard.putNumber("y_err",    y_err);  
+        SmartDashboard.putNumber("X   ",     pose.getX());
+        SmartDashboard.putNumber("Y   ",     pose.getY());
+        SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
