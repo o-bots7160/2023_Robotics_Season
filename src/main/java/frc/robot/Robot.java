@@ -1,167 +1,75 @@
 package frc.robot;
 
-import java.util.ArrayList;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import java.util.List;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//Swerve-specific imports
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+
+//
+// Any Operation mode must implement the following interface
+//
+//
+interface OpModeInterface
+{
+   public void Init();
+   public void Periodic();
+}
 
 public class Robot extends TimedRobot {
+   private OpModeInterface teleop;
+   private OpModeInterface auton;
+   private RobotContainer  robot;
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+   private final SendableChooser<OpModeInterface> m_chooser = new SendableChooser<>();
 
-  //Speed & Turn reducer
-  private static double speedReducer = 2;
-  private static double turnReducer  = 0.75;
+   public  static CTREConfigs ctreConfigs = new CTREConfigs();
 
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final Swerve _drive = new Swerve();
-  private final frc.robot.TrajectoryClass _trajectory = new frc.robot.TrajectoryClass();
-  private Trajectory autonTrajectory;
-  private String m_autoSelected;
-
-  public  Timer timer = new Timer();
-  public  static CTREConfigs ctreConfigs = new CTREConfigs();
-
-  Joystick Joystick = new Joystick(0); // Joystick
-  //Joystick Joystick = new Joystick(1); // Gamepad
-
-  private ArrayList<Pose2d> targets;
-  enum AUTONS {
-    TEST_AUTO
-  };
-
-  AUTONS curr_Auto;
-  private int step = 0;
-
-  @Override
-  public void robotInit() {
-    //m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    //m_chooser.addOption("My Auto", kCustomAuto);
-    //SmartDashboard.putData("Auto choices", m_chooser);
-    _drive.zeroGyro();
-  }
-  @Override
-  public void robotPeriodic() {
-    _drive.periodic();
+   @Override
+   public void robotInit() {
+      robot = RobotContainer.getInstance();
+      m_chooser.setDefaultOption("AutonTest", new AutonTest());
+      m_chooser.addOption("Auton2", new Auton2() );
+      SmartDashboard.putData("Auto choices", m_chooser);
+    }
+   @Override
+   public void robotPeriodic() {
+      robot.periodic();
    }
 
-  @Override
-  public void autonomousInit() {
-    timer.reset();
-    timer.start();
-    _drive.zeroGyro();
-    _drive.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
-    curr_Auto = AUTONS.TEST_AUTO;
+   @Override
+   public void autonomousInit()
+   {
+      auton = m_chooser.getSelected();
+      System.out.println("Auto selected: " + auton.toString());
 
-    // targets.add( new Pose2d( new Translation2d( 0.0, 0.5), new Rotation2d( 0 ) ) );
-    // targets.add( new Pose2d( new Translation2d( 0.5, 0.5), new Rotation2d( 0 ) ) );
-    // targets.add( new Pose2d( new Translation2d( 0.5, 0.0), new Rotation2d( 0 ) ) );
-    // targets.add( new Pose2d( new Translation2d( 0.0, 0.0), new Rotation2d( 0 ) ) );
-    //TrajectoryConfig config = new TrajectoryConfig(.1, 0.2);
-    autonTrajectory = _trajectory.testTrajectory2();
-     // TrajectoryGenerator.generateTrajectory(new Pose2d(0,0, new Rotation2d(0)), List.of(new Translation2d(-1,-1), new Translation2d(1,1)), new Pose2d(0,0, new Rotation2d(0)), config);
-    //m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    //System.out.println("Auto selected: " + m_autoSelected);
-  }
+      auton.Init();
+   }
 
-  @Override
-  public void autonomousPeriodic() {
-    switch(curr_Auto){
-      case TEST_AUTO:
-      test_Auto();
-      //_drive.controller = _drive.drive(null, kDefaultPeriod, isAutonomousEnabled(), isAutonomous());
-      break;
-    }
-  }
+   @Override
+   public void autonomousPeriodic()
+   {
+      auton.Periodic();
+   }
 
-  private void test_Auto(){
+   @Override
+   public void teleopInit() {
+      teleop = new Teleop();
+      teleop.Init();
+   }
 
-    switch(step){
-      case 0:
-      // if(_drive.move_Pose2d(1.0, 0.0, 0.0)) {
-      //   step++;
-      // }
-      // case 1:
-      // if(_drive.move_x(0.5)) {
-      //   step++;
-      // }
-      // case 2:
-      // if(_drive.move_y(-0.5)) {
-      //   step++;
-      // }
-      // case 3:
-      // if(_drive.move_x(-0.5)) {
-      //   step++;
-      //   _drive.drive(new Translation2d(0,0), 0, true, false);
-      // }
-      SmartDashboard.putNumber("getTotalTimeSeconds", autonTrajectory.getTotalTimeSeconds());
-      if (timer.get() > autonTrajectory.getTotalTimeSeconds()) {
-        step++;
-        _drive.drive(new Translation2d(0,0), 0, true, false);
-      } else {
-        Trajectory.State new_state = autonTrajectory.sample(timer.get());
-        _drive.drive( new_state, new Rotation2d( Math.PI));
-      }
-      // if ( _drive.move_y(2) )
-      // {
-      //   step++;
-      //   _drive.drive( new Translation2d(), 0, true, true);
-      // }
-      // if (_drive.goTo(new Pose2d(1,0,new Rotation2d(0)))){
-      //   step++;
-      // }
-      break;
-    }
-  }
+   @Override
+   public void teleopPeriodic() {
+      teleop.Periodic();
+   }
 
-  @Override
-  public void teleopInit() {
-    _drive.zeroGyro();
-  }
+   @Override
+   public void disabledInit() {}
 
-  @Override
-  public void teleopPeriodic() {
-    // Convert these from -1.0 - 1.0 to min/max speed or rotation
-    double x = Joystick.getRawAxis(0) / speedReducer;
-    double y = Joystick.getRawAxis(1) / speedReducer;
-    double z = Joystick.getRawAxis(4) / turnReducer;
-    if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
-    {
-      x = 0;
-    }
-    if (y < Constants.JOYSTICK_Y_POSITIVE_DEADBAND && y > Constants.JOYSTICK_Y_NEGATIVE_DEADBAND)
-    {
-      y = 0;
-    }
-    if (z < Constants.JOYSTICK_Z_POSITIVE_DEADBAND && z > Constants.JOYSTICK_Z_NEGATIVE_DEADBAND)
-    {
-      z = 0;
-    }
-    _drive.drive( new Translation2d( y, x).times(Constants.Swerve.maxSpeed), z, true, true );
-  }
+   @Override
+   public void disabledPeriodic() {}
 
-  @Override
-  public void disabledInit() {}
+   @Override
+   public void testInit() {}
 
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void testInit() {}
-
-  @Override
-  public void testPeriodic() {}
+   @Override
+   public void testPeriodic() {}
 }

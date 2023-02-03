@@ -1,8 +1,5 @@
 package frc.robot;
 
-import frc.robot.SwerveModule;
-import frc.robot.Constants;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -16,13 +13,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve {
     private boolean auton_active = false;
@@ -89,7 +84,7 @@ public class Swerve {
         }
     }    
 
-    public boolean drive(Trajectory.State _state, Rotation2d end_heading ) {
+    public boolean drive(Trajectory.State _state ) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         controller.calculate(getPose(), _state, new Rotation2d(0.0)));
         SmartDashboard.putNumber("getHeading", _state.poseMeters.getRotation().getDegrees());
