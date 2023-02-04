@@ -101,7 +101,6 @@ public class Swerve {
     {
         if ( ! auton_active )
         {
-            auton_active = true;
             rotPID.reset(getYaw().getRadians());
         }
         rot_err  = getYaw().getRadians() - Math.toRadians(angle);
@@ -118,7 +117,6 @@ public class Swerve {
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
-            auton_active = true;
             x_PID.reset( );
             x_PID.setSetpoint( pose.getX() + distance);
         }
@@ -136,7 +134,6 @@ public class Swerve {
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
-            auton_active = true;
             y_PID.reset( );
             y_PID.setSetpoint(pose.getY() + distance);
         }
