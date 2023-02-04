@@ -113,7 +113,6 @@ public class Swerve {
     //Testing x_PID for HolonomicDriveController
     public boolean move_x( double distance )
     {
-        System.out.println( "move_x");
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
@@ -130,7 +129,6 @@ public class Swerve {
     //Testing y_PID for HolonomicDriveController
     public boolean move_y( double distance )
     {
-        System.out.println( "move_y");
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
@@ -227,5 +225,9 @@ public class Swerve {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+    }
+    public void disable()
+    {
+       auton_active = false; 
     }
 }

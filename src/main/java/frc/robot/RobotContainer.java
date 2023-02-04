@@ -63,4 +63,8 @@ public class RobotContainer {
    {
       _drive.resetOdometry( pose );
    }
+   public void disable()
+   {
+      _drive.disable();
+   }
 }
