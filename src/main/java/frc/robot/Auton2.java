@@ -24,24 +24,30 @@ public class Auton2 implements OpModeInterface
    {
       robot = RobotContainer.getInstance();
 
-      interiorWaypoints.add(new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), new Rotation2d(0.0)));
-      interiorWaypoints.add(new Pose2d(Units.feetToMeters(0), Units.feetToMeters(2), new Rotation2d(0.0)));
-      interiorWaypoints.add(new Pose2d(Units.feetToMeters(2), Units.feetToMeters(2), new Rotation2d(0.0)));
-      interiorWaypoints.add(new Pose2d(Units.feetToMeters(2), Units.feetToMeters(0), new Rotation2d(0.0)));
-      interiorWaypoints.add(new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), new Rotation2d(0.0)));
-
-      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(1), Units.feetToMeters(1)).setKinematics(Constants.Swerve.swerveKinematics);
-      config.setReversed(false);
-
-      trajectory = TrajectoryGenerator.generateTrajectory(
-          interiorWaypoints,
-          config);
+      var x5y5 = new Pose2d(Units.feetToMeters(3), Units.feetToMeters(3),
+            Rotation2d.fromDegrees( 0.0));
+        var x0y0 = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
+            Rotation2d.fromDegrees(0.0));
+    
+        var interiorWaypoints = new ArrayList<Translation2d>();
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(3), Units.feetToMeters(1)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1), Units.feetToMeters(3)));
+    
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2)).setKinematics(Constants.Swerve.swerveKinematics);
+        config.setReversed(false);
+    
+        trajectory = TrajectoryGenerator.generateTrajectory(
+            x5y5,
+            interiorWaypoints,
+            x0y0,
+            config);
  }
    public void Init()
    {
       timer.reset();
       timer.start();
-      robot.resetOdometry(interiorWaypoints.get(0));
+      robot.resetOdometry(new Pose2d(Units.feetToMeters(3), Units.feetToMeters(3),
+      Rotation2d.fromDegrees( 0.0)));
    }
    public void Periodic()
    {

@@ -15,14 +15,14 @@ public class TrajectoryClass {
     public Trajectory testTrajectory1() {
 
         // 2018 cross scale auto waypoints.
-        var x5y5 = new Pose2d(Units.feetToMeters(3), Units.feetToMeters(3),
+        var x5y5 = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
             Rotation2d.fromDegrees( 0.0));
-        var x0y0 = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),
+        var x0y0 = new Pose2d(Units.feetToMeters(3), Units.feetToMeters(3),
             Rotation2d.fromDegrees(0.0));
     
         var interiorWaypoints = new ArrayList<Translation2d>();
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1.5), Units.feetToMeters(1.5)));
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1.5), Units.feetToMeters(1.5)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1.5), Units.feetToMeters(1)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(1), Units.feetToMeters(1.5)));
     
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2)).setKinematics(Constants.Swerve.swerveKinematics);
         config.setReversed(false);

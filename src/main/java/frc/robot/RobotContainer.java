@@ -32,7 +32,7 @@ public class RobotContainer {
    //  The devices this robot uses
    //
    //
-   private final Swerve _drive = new Swerve();
+   public final Swerve _drive = new Swerve();
    private final ManipulatorControl _manipulator = new ManipulatorControl();
    //
    //  The methods used to control the robot... whether teleop or auton

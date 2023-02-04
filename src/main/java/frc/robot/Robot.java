@@ -17,59 +17,67 @@ interface OpModeInterface
 public class Robot extends TimedRobot {
    private OpModeInterface teleop;
    private OpModeInterface auton;
+   private OpModeInterface test;
    private RobotContainer  robot;
 
    private final SendableChooser<OpModeInterface> m_chooser = new SendableChooser<>();
 
-   public  static CTREConfigs ctreConfigs = new CTREConfigs();
+  public  static CTREConfigs ctreConfigs = new CTREConfigs();
 
-   @Override
-   public void robotInit() {
+  @Override
+  public void robotInit() {
       robot = RobotContainer.getInstance();
       m_chooser.setDefaultOption("AutonTest", new AutonTest());
       m_chooser.addOption("Auton2", new Auton2() );
       SmartDashboard.putData("Auto choices", m_chooser);
-    }
-   @Override
-   public void robotPeriodic() {
+  }
+  @Override
+  public void robotPeriodic() {
       robot.periodic();
    }
 
-   @Override
+  @Override
    public void autonomousInit()
    {
       auton = m_chooser.getSelected();
       System.out.println("Auto selected: " + auton.toString());
 
       auton.Init();
-   }
+  }
 
-   @Override
+  @Override
    public void autonomousPeriodic()
    {
       auton.Periodic();
-   }
+  }
 
-   @Override
-   public void teleopInit() {
+  @Override
+  public void teleopInit() {
       teleop = new Teleop();
       teleop.Init();
-   }
+  }
 
-   @Override
-   public void teleopPeriodic() {
+  @Override
+  public void teleopPeriodic() {
       teleop.Periodic();
-   }
+  }
 
-   @Override
-   public void disabledInit() {}
+  @Override
+  public void disabledInit() {}
 
-   @Override
-   public void disabledPeriodic() {}
+  @Override
+  public void disabledPeriodic() {}
 
-   @Override
-   public void testInit() {}
+  @Override
+  public void testInit()
+  {
+     test = new Test1();
+     test.Init();
+  }
 
-   @Override
-   public void testPeriodic() {}
+  @Override
+  public void testPeriodic()
+  {
+    test.Periodic();
+  }
 }

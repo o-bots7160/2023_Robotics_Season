@@ -30,7 +30,7 @@ public class AutonTest implements OpModeInterface
       interiorWaypoints.add(new Pose2d(Units.feetToMeters(2), Units.feetToMeters(0), new Rotation2d(0.0)));
       interiorWaypoints.add(new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0), new Rotation2d(0.0)));
 
-      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(1), Units.feetToMeters(1)).setKinematics(Constants.Swerve.swerveKinematics);
+      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2)).setKinematics(Constants.Swerve.swerveKinematics);
       config.setReversed(false);
 
       trajectory = TrajectoryGenerator.generateTrajectory(

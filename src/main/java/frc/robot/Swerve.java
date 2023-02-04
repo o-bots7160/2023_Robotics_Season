@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
-    private boolean auton_active = false;
+    public boolean auton_active = false;
     public SwerveDriveOdometry swerveOdometry;
     private double rot_ctrl;
     private double rot_err;
@@ -101,44 +101,49 @@ public class Swerve {
     {
         if ( ! auton_active )
         {
+            auton_active = true;
             rotPID.reset(getYaw().getRadians());
         }
         rot_err  = getYaw().getRadians() - Math.toRadians(angle);
         rot_ctrl = rotPID.calculate( Math.toRadians(angle));
         drive( new Translation2d(), rot_ctrl, true, true);
-        auton_active = rotPID.atGoal(); 
+        auton_active = ! rotPID.atGoal(); 
         return auton_active;
     }
 
     //Testing x_PID for HolonomicDriveController
     public boolean move_x( double distance )
     {
+        System.out.println( "move_x");
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
+            auton_active = true;
             x_PID.reset( );
-            x_PID.setSetpoint(pose.getX() + distance);
+            x_PID.setSetpoint( pose.getX() + distance);
         }
         x_err  = pose.getX() - distance;
         x_ctrl = x_PID.calculate( pose.getX() );
         drive( new Translation2d( x_ctrl, 0), 0, true, true);
-        auton_active = x_PID.atSetpoint(); 
+        auton_active = ! x_PID.atSetpoint(); 
         return auton_active;
     }
 
     //Testing y_PID for HolonomicDriveController
     public boolean move_y( double distance )
     {
+        System.out.println( "move_y");
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
+            auton_active = true;
             y_PID.reset( );
             y_PID.setSetpoint(pose.getY() + distance);
         }
         y_err  = pose.getY() - distance;
         y_ctrl = y_PID.calculate( pose.getY() );
         drive( new Translation2d( 0, y_ctrl), 0, true, true);
-        auton_active = y_PID.atSetpoint(); 
+        auton_active = ! y_PID.atSetpoint(); 
         return auton_active;
     }
     public boolean move_Pose2d( Pose2d new_pose)
