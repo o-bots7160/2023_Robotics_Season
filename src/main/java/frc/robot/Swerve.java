@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Swerve {
     public boolean auton_active = false;
     public SwerveDriveOdometry swerveOdometry;
+    private double angle_target;
     private double rot_ctrl;
     private double rot_err;
     private double x_ctrl;
@@ -31,10 +33,10 @@ public class Swerve {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private ProfiledPIDController rotPID = new ProfiledPIDController(3.5, 0.0, 0.0,  //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
-      new TrapezoidProfile.Constraints(3, 5));                   
+    private ProfiledPIDController rotPID = new ProfiledPIDController(0.28125, 0.0, 0.112,  //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
+      new TrapezoidProfile.Constraints(1.5, 5));                   
     private PIDController x_PID = new PIDController(3.7, 0, 0);                      //FIXME
-    private PIDController y_PID = new PIDController(3.4, 0, 0);                      //FIXME
+    private PIDController y_PID = new PIDController(3.45, 0, 0);                      //FIXME
 
     public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotPID );
 
@@ -50,10 +52,10 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        rotPID.setTolerance( Math.toRadians(1.0), 0.25);
+        rotPID.setTolerance( Math.toRadians(8.0), 0.25);
         rotPID.enableContinuousInput(0.0, 2*Math.PI);
-        x_PID.setTolerance( 0.01, 0.01);
-        y_PID.setTolerance( 0.01, 0.01);
+        x_PID.setTolerance( 0.02, 0.01);
+        y_PID.setTolerance( 0.02, 0.01);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
@@ -99,12 +101,23 @@ public class Swerve {
     //Testing rotPID for HolonomicDriveController
     public boolean rotate( double angle )
     {
+        Rotation2d current_yaw = getYaw();
         if ( ! auton_active )
         {
-            rotPID.reset(getYaw().getRadians());
+            // if ( angle_target < 0.0 )
+            // {
+            //     angle_target += 360.0;
+            // }
+            // else
+            // {
+            //     angle_target %= angle_target;
+            // }
+            angle_target = Math.toRadians(current_yaw.getDegrees() + angle);
+            rotPID.reset(current_yaw.getRadians());
+            rotPID.setGoal( angle_target );
         }
-        rot_err  = getYaw().getRadians() - Math.toRadians(angle);
-        rot_ctrl = rotPID.calculate( Math.toRadians(angle));
+        rot_err  = current_yaw.getRadians() - angle_target;
+        rot_ctrl = rotPID.calculate(current_yaw.getRadians());
         drive( new Translation2d(), rot_ctrl, true, true);
         auton_active = ! rotPID.atGoal(); 
         return auton_active;
@@ -216,8 +229,8 @@ public class Swerve {
         SmartDashboard.putNumber("rot_err",  rot_err);  
         SmartDashboard.putNumber("x_err",    x_err);  
         SmartDashboard.putNumber("y_err",    y_err);  
-        SmartDashboard.putNumber("X   ",     pose.getX());
-        SmartDashboard.putNumber("Y   ",     pose.getY());
+        SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
+        SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
         SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
 
         for(SwerveModule mod : mSwerveMods){
