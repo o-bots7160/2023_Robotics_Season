@@ -33,10 +33,10 @@ public class Swerve {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private ProfiledPIDController rotPID = new ProfiledPIDController(0.28125, 0.0, 0.112,  //FIXME for comp bot Kp = 0.25 Ki = 0 Kd = -0.1
-      new TrapezoidProfile.Constraints(1.5, 5));                   
-    private PIDController x_PID = new PIDController(3.7, 0, 0);                      //FIXME
-    private PIDController y_PID = new PIDController(3.45, 0, 0);                      //FIXME
+    private ProfiledPIDController rotPID = new ProfiledPIDController(-13.775, 6, 0.0,  //FIXME for comp bot Kp = -13.775 Ki = 6 Kd = -137.5
+      new TrapezoidProfile.Constraints(5, 12.5));                   
+    private PIDController x_PID = new PIDController(3.75, 0, 0);                      //FIXME
+    private PIDController y_PID = new PIDController(3.7, 0, 0);                      //FIXME
 
     public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotPID );
 
@@ -52,8 +52,9 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        rotPID.setTolerance( Math.toRadians(8.0), 0.25);
-        rotPID.enableContinuousInput(0.0, 2*Math.PI);
+        rotPID.setTolerance( Math.toRadians(1.0), 0.25);
+        rotPID.enableContinuousInput(-Math.PI, Math.PI);
+        rotPID.setIntegratorRange(-0.04, 0.04);
         x_PID.setTolerance( 0.02, 0.01);
         y_PID.setTolerance( 0.02, 0.01);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
@@ -86,9 +87,9 @@ public class Swerve {
         }
     }    
 
-    public boolean drive(Trajectory.State _state ) {
+    public boolean drive(Trajectory.State _state, Rotation2d _final ) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-        controller.calculate(getPose(), _state, new Rotation2d(0.0)));
+        controller.calculate(getPose(), _state, _final));
         SmartDashboard.putNumber("getHeading", _state.poseMeters.getRotation().getDegrees());
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
@@ -99,27 +100,23 @@ public class Swerve {
     }
 
     //Testing rotPID for HolonomicDriveController
-    public boolean rotate( double angle )
+    public boolean rotate( Rotation2d angle )
     {
         Rotation2d current_yaw = getYaw();
         if ( ! auton_active )
         {
-            // if ( angle_target < 0.0 )
-            // {
-            //     angle_target += 360.0;
-            // }
-            // else
-            // {
-            //     angle_target %= angle_target;
-            // }
-            angle_target = Math.toRadians(current_yaw.getDegrees() + angle);
+            angle_target = current_yaw.plus( angle ).getRadians();
             rotPID.reset(current_yaw.getRadians());
             rotPID.setGoal( angle_target );
         }
-        rot_err  = current_yaw.getRadians() - angle_target;
+        rot_err  = current_yaw.minus( new Rotation2d( angle_target)).getRadians();
         rot_ctrl = rotPID.calculate(current_yaw.getRadians());
         drive( new Translation2d(), rot_ctrl, true, true);
-        auton_active = ! rotPID.atGoal(); 
+        auton_active = ! rotPID.atGoal();
+        if ( ! auton_active )
+        {
+            drive( new Translation2d(), 0.0, true, true );
+        } 
         return auton_active;
     }
 
@@ -241,6 +238,7 @@ public class Swerve {
     }
     public void disable()
     {
+        drive( new Translation2d(), 0.0, true, true );
        auton_active = false; 
     }
 }

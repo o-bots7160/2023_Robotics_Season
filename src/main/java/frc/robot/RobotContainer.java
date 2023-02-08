@@ -49,9 +49,9 @@ public class RobotContainer {
       _drive.drive( translation, rotation, fieldRelative, isOpenLoop );
    }    
 
-   public boolean drive( Trajectory.State _state )
+   public boolean drive( Trajectory.State _state, Rotation2d _final )
    {
-      return _drive.drive( _state );
+      return _drive.drive( _state, _final );
    }
    public void periodic()
    {

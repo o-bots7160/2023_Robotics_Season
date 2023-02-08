@@ -56,7 +56,7 @@ public class AutonTest implements OpModeInterface
             else
             {
                Trajectory.State new_state = trajectory.sample( timer.get() );
-               robot.drive( new_state );
+               robot.drive( new_state , new Rotation2d());
             }
             // if(_drive.move_Pose2d(1.0, 0.0, 0.0)) {
             //   step++;
