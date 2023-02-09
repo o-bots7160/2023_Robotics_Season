@@ -26,10 +26,16 @@ public class Swerve {
     private double angle_target;
     private double rot_ctrl;
     private double rot_err;
+    private double rot_ctrlMax = 2;
+    private double rot_ctrlMin = -2;
     private double x_ctrl;
     private double x_err = 0;
+    private double x_ctrlMax = 1;
+    private double x_ctrlMin = -1;
     private double y_ctrl;
     private double y_err = 0;
+    private double y_ctrlMax = 1;
+    private double y_ctrlMin = -1;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
@@ -127,7 +133,7 @@ public class Swerve {
     //Testing x_PID for HolonomicDriveController
     public boolean move_x( double distance )
     {
-        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
             x_PID.reset( );
@@ -143,7 +149,7 @@ public class Swerve {
     //Testing y_PID for HolonomicDriveController
     public boolean move_y( double distance )
     {
-        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
             y_PID.reset( );
@@ -166,7 +172,7 @@ public class Swerve {
     // }
     public boolean move_Pose2d( Pose2d new_pose)
     {
-        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {
             x_PID.reset( );
@@ -178,10 +184,25 @@ public class Swerve {
         }
         rot_err  = getYaw().getRadians() - new_pose.getRotation().getRadians();
         rot_ctrl = rotPID.calculate( pose.getRotation().getRadians());
+        if       (rot_ctrl > rot_ctrlMax) {
+            rot_ctrl = rot_ctrlMax;
+        }else if (rot_ctrl < rot_ctrlMin) {
+            rot_ctrl = rot_ctrlMin;
+        }
         x_err    = pose.getX() - new_pose.getX();
         x_ctrl   = x_PID.calculate( pose.getX() );
+        if       (x_ctrl > x_ctrlMax) {
+            x_ctrl = x_ctrlMax;
+        }else if (x_ctrl < x_ctrlMin) {
+            x_ctrl = x_ctrlMin;
+        }
         y_err    = pose.getY() - new_pose.getY();
         y_ctrl   = y_PID.calculate( pose.getY() );
+        if       (y_ctrl > y_ctrlMax) {
+            y_ctrl = y_ctrlMax;
+        }else if (y_ctrl < y_ctrlMin) {
+            y_ctrl = y_ctrlMin;
+        }
         drive( new Translation2d(x_ctrl, y_ctrl), rot_ctrl, true, true); //fieldRelative: MUST = true
         auton_active = !x_PID.atSetpoint() || !y_PID.atSetpoint() || !rotPID.atSetpoint();
         return auton_active;
@@ -238,7 +259,9 @@ public class Swerve {
         Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
         SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
         SmartDashboard.putNumber("rot_err",  rot_err);  
-        SmartDashboard.putNumber("x_err",    x_err);  
+        SmartDashboard.putNumber("x_ctrl", x_ctrl);
+        SmartDashboard.putNumber("x_err",    x_err); 
+        SmartDashboard.putNumber("y_ctrl", y_ctrl);  
         SmartDashboard.putNumber("y_err",    y_err);  
         SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
         SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));

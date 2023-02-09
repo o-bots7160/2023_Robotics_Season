@@ -19,7 +19,8 @@ public class AutonTest implements OpModeInterface
    private Trajectory trajectory;
    private ArrayList<Pose2d> interiorWaypoints = new ArrayList<Pose2d>();
    private Pose2d startPoint = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(0.0));
-   private Pose2d endPoint = new Pose2d(Units.feetToMeters(12), Units.feetToMeters(0),new Rotation2d(0.0));
+   private Pose2d midPoint = new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(0.0));
+   private Pose2d endPoint = new Pose2d(Units.feetToMeters(14), Units.feetToMeters(5),new Rotation2d(Math.PI));
 
    public AutonTest()
    {
@@ -39,6 +40,13 @@ public class AutonTest implements OpModeInterface
       switch( step )
       {
          case 0:
+            if ( ! robot._drive.move_Pose2d( midPoint ) )
+            {
+               step++;
+               robot.drive(new Translation2d(0,0), 0, true, false);
+            }
+            break;
+         case 1: 
             if ( ! robot._drive.move_Pose2d( endPoint ) )
             {
                step++;
