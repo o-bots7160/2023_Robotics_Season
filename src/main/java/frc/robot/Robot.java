@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit()
   {
-     test = new Test1();
+     test = new TestPose2d();
      test.Init();
   }
 
