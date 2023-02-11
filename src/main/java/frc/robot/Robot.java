@@ -27,9 +27,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
       robot = RobotContainer.getInstance();
-      m_chooser.setDefaultOption("AutonTest", new AutonTest());
-      m_chooser.addOption("Auton2", new Auton2() );
-      m_chooser.addOption("AutonPathTest", new AutonPathTest() );
+      m_chooser.setDefaultOption("Auton3Left", new Auton3Left() );
+      m_chooser.addOption("Auton3Right", new Auton3Right() );
+      m_chooser.addOption("Auton2LeftCS", new Auton2LeftCS());
+      m_chooser.addOption("Auton2RightCS", new Auton2RightCS());
+      m_chooser.addOption("Auton1CoOp", new Auton1CoOp());
       SmartDashboard.putData("Auto choices", m_chooser);
   }
   @Override

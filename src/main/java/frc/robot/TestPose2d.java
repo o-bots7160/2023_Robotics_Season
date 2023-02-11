@@ -11,7 +11,7 @@ public class TestPose2d implements OpModeInterface {
    private RobotContainer robot;
 
    Joystick Joystick; // Joystick
-   Pose2d   control_pose = new Pose2d();
+   Pose2d   control_pose;
    boolean  moving       = false;
 
    public TestPose2d()
@@ -27,6 +27,7 @@ public class TestPose2d implements OpModeInterface {
    }
    public void Init()
    {   
+      control_pose = new Pose2d();
       robot.resetOdometry(control_pose);
       // zero gyro? maybe not... only in Robot.init?
    }

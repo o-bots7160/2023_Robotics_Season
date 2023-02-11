@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
-public class AutonPathTest implements OpModeInterface
+public class Auton2LeftCS implements OpModeInterface
 {
    private RobotContainer robot;
 
@@ -14,16 +14,14 @@ public class AutonPathTest implements OpModeInterface
                     new Pose2d(Units.feetToMeters(10), Units.feetToMeters(0),new Rotation2d(0.0)),
                     new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(Math.PI)),
                     new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(0.0)),
-                    new Pose2d(Units.feetToMeters(1), Units.feetToMeters(0),new Rotation2d(0.0)) };
+                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(0),new Rotation2d(0.0)) };
    private Pose2d Path2[] = {
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(0.0)),
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(5),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(0.0)),
-                    new Pose2d(Units.feetToMeters(1), Units.feetToMeters(0),new Rotation2d(0.0)) };
+                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(-5),new Rotation2d(0.0)),
+                    new Pose2d(Units.feetToMeters(8), Units.feetToMeters(-5),new Rotation2d(Math.PI)) };
     private SwervePath firstPath  = new SwervePath( Path1 );
     private SwervePath secondPath = new SwervePath( Path2 );
 
-   public AutonPathTest()
+   public Auton2LeftCS()
    {
       robot = RobotContainer.getInstance();
    }

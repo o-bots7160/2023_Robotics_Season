@@ -30,20 +30,20 @@ public class Swerve {
     private double rot_ctrlMin = -3;
     private double x_ctrl;
     private double x_err = 0;
-    private double x_ctrlMax = 1.5;
-    private double x_ctrlMin = -1.5;
+    private double x_ctrlMax = 2.5;
+    private double x_ctrlMin = -2.5;
     private double y_ctrl;
     private double y_err = 0;
-    private double y_ctrlMax = 1.5;
-    private double y_ctrlMin = -1.5;
+    private double y_ctrlMax = 2.5;
+    private double y_ctrlMin = -2.5;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
     private ProfiledPIDController rotProPID = new ProfiledPIDController(-13.775, 6, 0.0,  //FIXME for comp bot Kp = -13.775 Ki = 6 Kd = -137.5
       new TrapezoidProfile.Constraints(5, 12.5));                   
-    private PIDController rotPID = new PIDController(-3.80, 0, 0);                      //FIXME
-    private PIDController x_PID  = new PIDController(3.75, 0, 0);                      //FIXME
-    private PIDController y_PID  = new PIDController(3.7, 0, 0);                      //FIXME
+    private PIDController rotPID = new PIDController(-4.8, 0, 0);                      //FIXME
+    private PIDController x_PID  = new PIDController(5.5, 0, 0);                      //FIXME
+    private PIDController y_PID  = new PIDController(5.5, 0, 0);                      //FIXME
 
     public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotProPID );
 

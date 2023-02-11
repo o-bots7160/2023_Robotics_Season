@@ -26,6 +26,7 @@ class SwervePath {
                 robot.drive(new Translation2d(0,0), 0, true, false);
             }
         }
+        System.out.println(done);
         return done;
     }
 }

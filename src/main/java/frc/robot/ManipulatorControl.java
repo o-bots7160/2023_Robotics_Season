@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -16,7 +16,7 @@ public class ManipulatorControl {
    public double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
 
 
-   private TalonSRX extention;
+   private TalonFX extention;
 
    private CANSparkMax wrist;
    private SparkMaxPIDController pid_Wrist;
