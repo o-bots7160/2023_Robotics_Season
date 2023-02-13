@@ -30,12 +30,12 @@ public class Swerve {
     private double rot_ctrlMin = -3;
     private double x_ctrl;
     private double x_err = 0;
-    private double x_ctrlMax = 2.5;
-    private double x_ctrlMin = -2.5;
+    private double x_ctrlMax = .5;
+    private double x_ctrlMin = -.5;
     private double y_ctrl;
     private double y_err = 0;
-    private double y_ctrlMax = 2.5;
-    private double y_ctrlMin = -2.5;
+    private double y_ctrlMax = .5;
+    private double y_ctrlMin = -.5;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
