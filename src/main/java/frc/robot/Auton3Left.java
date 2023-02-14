@@ -11,17 +11,17 @@ public class Auton3Left implements OpModeInterface
    private RobotContainer robot;
 
    private int step = 0;
-   private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(13.17),new Rotation2d(Math.PI));
+   private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(13.17),new Rotation2d(0.0));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(10), Units.feetToMeters(13.17),new Rotation2d(Math.PI)),
+                    new Pose2d(Units.feetToMeters(10), Units.feetToMeters(13.17),new Rotation2d(0.0)),
+                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(Math.PI)),
                     new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(0.0)),
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(13.17),new Rotation2d(Math.PI)) };
+                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(13.17),new Rotation2d(0.0)) };
    private Pose2d Path2[] = {
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(9.17),new Rotation2d(0.0)),
-                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(13.17),new Rotation2d(Math.PI)) };
+                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(0.0)),
+                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(9.17),new Rotation2d(Math.PI)),
+                    new Pose2d(Units.feetToMeters(14), Units.feetToMeters(13.17),new Rotation2d(0.0)),
+                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(13.17),new Rotation2d(0.0)) };
    private SwervePath firstPath  = new SwervePath( Path1 );
    private SwervePath secondPath = new SwervePath( Path2 );
 
