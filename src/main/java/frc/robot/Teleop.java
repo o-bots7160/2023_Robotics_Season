@@ -9,7 +9,7 @@ public class Teleop implements OpModeInterface {
    private RobotContainer robot;
 
    //Speed & Turn reducer
-   private static double speedReducer = 2;
+   private static double speedReducer = -2;
    private static double turnReducer  = .5;
 
    Joystick Joystick = new Joystick(0); // Joystick
@@ -20,9 +20,6 @@ public class Teleop implements OpModeInterface {
    }
    public void Init()
    {
-      if (DriverStation.getAlliance() == Alliance.Red) {
-         speedReducer = -speedReducer;
-      }
       // zero gyro? maybe not... only in Robot.init?
    }
    public void Periodic()

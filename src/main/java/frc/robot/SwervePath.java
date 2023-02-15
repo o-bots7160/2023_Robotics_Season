@@ -36,11 +36,11 @@ class SwervePath {
 
     static Pose2d transform( Pose2d new_item)
     {
-        //double new_x = 16.54 - new_item.getX(); // need half field width
+        double new_x = 16.54 - new_item.getX(); // need half field width
         double new_y = Units.feetToMeters(8.25) + new_item.getY(); // need half field height
-        //Rotation2d new_rotation = new Rotation2d( new_item.getRotation().getRadians() - Math.PI );
+        Rotation2d new_rotation = new Rotation2d( new_item.getRotation().getRadians() - Math.PI );
  
-        return new Pose2d( new_item.getX(), new_y, new_item.getRotation());
+        return new Pose2d( new_x, new_y, new_rotation);
     }
 
     public void swapSides() {

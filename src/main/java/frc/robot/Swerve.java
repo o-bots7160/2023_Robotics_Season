@@ -17,12 +17,15 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
     public boolean auton_active = false;
-    public SwerveDriveOdometry swerveOdometry;
+    private final SwerveDrivePoseEstimator poseEstimator;
+    private final Field2d field2d = new Field2d();
     private double angle_target;
     private double rot_ctrl;
     private double rot_err;
@@ -39,13 +42,9 @@ public class Swerve {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private ProfiledPIDController rotProPID = new ProfiledPIDController(-13.775, 6, 0.0,  //FIXME for comp bot Kp = -13.775 Ki = 6 Kd = -137.5
-      new TrapezoidProfile.Constraints(5, 12.5));                   
     private PIDController rotPID = new PIDController(-4.8, 0, 0);                      //FIXME
     private PIDController x_PID  = new PIDController(5.5, 0, 0);                      //FIXME
     private PIDController y_PID  = new PIDController(5.5, 0, 0);                      //FIXME
-
-    public HolonomicDriveController controller = new HolonomicDriveController( x_PID, y_PID, rotProPID );
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -59,9 +58,6 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        rotProPID.setTolerance( Math.toRadians(1.0), 0.25);
-        rotProPID.enableContinuousInput(-Math.PI, Math.PI);
-        rotProPID.setIntegratorRange(-0.04, 0.04);
         rotPID.setTolerance( Math.toRadians(4.0) );
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
         rotPID.setIntegratorRange(-0.04, 0.04);
@@ -73,7 +69,7 @@ public class Swerve {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -96,18 +92,6 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
-
-    public boolean drive(Trajectory.State _state, Rotation2d _final ) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-        controller.calculate(getPose(), _state, _final));
-        SmartDashboard.putNumber("getHeading", _state.poseMeters.getRotation().getDegrees());
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-
-        for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
-        }
-        return false;
-    }
 
     //Testing rotPID for HolonomicDriveController
     public boolean rotate( Rotation2d angle )
@@ -161,15 +145,6 @@ public class Swerve {
         auton_active = ! y_PID.atSetpoint(); 
         return auton_active;
     }
-    // public void newPose2d( Pose2d new_pose )
-    // {
-    //     x_PID.reset( );
-    //     x_PID.setSetpoint( new_pose.getX());
-    //     y_PID.reset( );
-    //     y_PID.setSetpoint( new_pose.getY());
-    //     rotPID.reset( );
-    //     rotPID.setSetpoint(new_pose.getRotation().getRadians());
-    // }
     public boolean move_Pose2d( Pose2d new_pose)
     {
         Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
@@ -218,11 +193,11 @@ public class Swerve {
     }    
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     public SwerveModuleState[] getModuleStates(){
@@ -256,7 +231,27 @@ public class Swerve {
     }
 
     public void periodic(){
-        Pose2d pose = swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = poseEstimator.update(getYaw(), getModulePositions());
+        /*if (photonPoseEstimator != null) {
+            // Update pose estimator with the best visible target
+            photonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
+              var estimatedPose = estimatedRobotPose.estimatedPose;
+              // Make sure we have a new measurement, and that it's on the field
+              if (estimatedRobotPose.timestampSeconds != previousPipelineTimestamp
+                  && estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
+                  && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
+                previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
+                poseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+              }
+            });
+          }
+      
+          Pose2d dashboardPose = getCurrentPose();
+          if (originPosition == OriginPosition.kRedAllianceWallRightSide) {
+            // Flip the pose when red, since the dashboard field photo cannot be rotated
+            dashboardPose = flipAlliance(dashboardPose);
+          }
+          field2d.setRobotPose(dashboardPose);*/
         SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
         SmartDashboard.putNumber("rot_err",  rot_err);  
         SmartDashboard.putNumber("x_ctrl", x_ctrl);
