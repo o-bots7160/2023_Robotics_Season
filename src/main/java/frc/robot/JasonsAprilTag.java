@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class Robot extends TimedRobot {
+public class JasonsAprilTag extends TimedRobot {
   Transform3d CAMERA_TO_ROBOT =new Transform3d( new Translation3d( 0.0, -0.1375, -0.90), new Rotation3d( 0.0, 0.0, -0.10));
 
   PhotonCamera camera = new PhotonCamera("Cam1");

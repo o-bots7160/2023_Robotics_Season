@@ -47,9 +47,9 @@ public class Vision {
    */
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, 0.9);
 
-  private final SwerveDrivePoseEstimator poseEstimator;
+  private SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field2d = new Field2d();
-  private final PhotonPoseEstimator photonPoseEstimator;
+  private PhotonPoseEstimator photonPoseEstimator;
   private RobotContainer robot;
 
   private double previousPipelineTimestamp = 0;
@@ -58,7 +58,7 @@ public class Vision {
   public Vision(PhotonCamera photonCamera) {
     PhotonPoseEstimator photonPoseEstimator;
     try {
-      var layout = AprilTagFields.//.k2023ChargedUp.loadAprilTagLayoutField();
+      var layout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
       layout.setOrigin(originPosition);
       photonPoseEstimator =
           new PhotonPoseEstimator(layout, PoseStrategy.LOWEST_AMBIGUITY, photonCamera, APRILTAG_CAMERA_TO_ROBOT);
