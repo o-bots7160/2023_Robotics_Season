@@ -17,7 +17,7 @@ public class ManipulatorControl {
    private CANSparkMax lift;
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
-   public double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
+   private double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
 
 
    private TalonFX extention;
@@ -26,15 +26,15 @@ public class ManipulatorControl {
    private CANSparkMax wrist;
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
-   public double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
+   private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
 
    private CANSparkMax claw;
    private SparkMaxPIDController pid_Claw;
    private RelativeEncoder en_Claw;
-   public double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
+   private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
 
-   public void init(){
+   public ManipulatorControl(){
       liftInit();
       extentionInit();
       wristInit();
@@ -64,6 +64,10 @@ public class ManipulatorControl {
        en_Lift = lift.getEncoder();
    }
 
+   
+   /** 
+    * @param pos sets the pos of the lift
+    */
    public void setLiftPos(double pos){
       pid_Lift.setReference(pos, ControlType.kPosition);
    }
@@ -78,6 +82,10 @@ public class ManipulatorControl {
       
    }
 
+   
+   /** 
+    * @param pos sets the length of the arm
+    */
    public void setExtentionPos(double pos){
       extPID.setSetpoint(pos);
    }
@@ -106,6 +114,11 @@ public class ManipulatorControl {
        en_Wrist = wrist.getEncoder();
    }
 
+   
+   
+   /** 
+    * @param pos sets the angle of the wrist
+    */
    public void setWristPos(double pos){
       pid_Wrist.setReference(pos, ControlType.kPosition);
    }
@@ -126,8 +139,13 @@ public class ManipulatorControl {
        pid_Claw.setIZone(kIz_Claw);
        pid_Claw.setFF(kFF_Claw);
        en_Claw = claw.getEncoder();
+       pid_Claw.setOutputRange(kMinOutput_Claw, kMaxOutput_Claw);
    }
 
+   
+   /** 
+    * @param pos determines how far the claw is open
+    */
    public void setClawPos(double pos){
       pid_Claw.setReference(pos, ControlType.kPosition);
    }
