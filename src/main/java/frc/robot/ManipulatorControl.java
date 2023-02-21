@@ -10,20 +10,20 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 public class ManipulatorControl {
 
-   private CANSparkMax lift;
+   private CANSparkMax _lift;
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
    public double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
 
 
-   private TalonFX extention;
+   private TalonFX _extention;
 
-   private CANSparkMax wrist;
+   private CANSparkMax _wrist;
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
    public double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
 
-   private CANSparkMax claw;
+   private CANSparkMax _claw;
    private SparkMaxPIDController pid_Claw;
    private RelativeEncoder en_Claw;
    public double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
