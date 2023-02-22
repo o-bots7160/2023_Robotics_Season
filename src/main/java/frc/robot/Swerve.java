@@ -42,9 +42,9 @@ public class Swerve {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private PIDController rotPID = new PIDController(-4.8, 0, 0);                      //FIXME
-    private PIDController x_PID  = new PIDController(5.5, 0, 0);                      //FIXME
-    private PIDController y_PID  = new PIDController(5.5, 0, 0);                      //FIXME
+    private PIDController rotPID = new PIDController( 6.2, 1.0, 0);                      //FIXME
+    private PIDController x_PID  = new PIDController(15.0, 0.0, 0);                      //FIXME
+    private PIDController y_PID  = new PIDController(15.0, 0.0, 0);                      //FIXME
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -58,11 +58,13 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        rotPID.setTolerance( Math.toRadians(4.0) );
+        rotPID.setTolerance( Math.toRadians(1.0) );
         rotPID.enableContinuousInput(-Math.PI, Math.PI);
-        rotPID.setIntegratorRange(-0.04, 0.04);
-        x_PID.setTolerance( 0.02, 0.01);
-        y_PID.setTolerance( 0.02, 0.01);
+        rotPID.setIntegratorRange(-0.08, 0.08);
+        x_PID.setTolerance( 0.01, 0.01);
+        x_PID.setIntegratorRange(-0.04, 0.04);
+        y_PID.setTolerance( 0.01, 0.01);
+        y_PID.setIntegratorRange(-0.04, 0.04);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
