@@ -84,6 +84,18 @@ public class TestPose2d implements OpModeInterface {
       {
          robot.drive(new Translation2d(0,0), 0, true, false);
       }
+      if ( Joystick.getPOV() == 0 )
+      {
+         robot._drive.disable();
+         Joystick.getRawButtonPressed(1);
+         Joystick.getRawButtonPressed( 4 );
+         Joystick.getRawButtonPressed( 2 );
+         Joystick.getRawButtonPressed( 3 );
+         Joystick.getRawButtonPressed( 5 );
+         Joystick.getRawButtonPressed( 6 );
+         control_pose = robot._drive.getPose();
+         moving = false;
+      }
       //System.out.println("pose: " + control_pose);
    }
 }

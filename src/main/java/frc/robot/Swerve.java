@@ -26,6 +26,9 @@ public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field2d = new Field2d();
+    private double xy_kP =  5.0;
+    private double xy_kI =  0.0;
+    private double xy_kD =  0.0;
     private double angle_target;
     private double rot_ctrl;
     private double rot_err;
@@ -33,18 +36,18 @@ public class Swerve {
     private double rot_ctrlMin = -3;
     private double x_ctrl;
     private double x_err = 0;
-    private double x_ctrlMax = .5;
-    private double x_ctrlMin = -.5;
+    private double x_ctrlMax = 1.5;
+    private double x_ctrlMin = -1.5;
     private double y_ctrl;
     private double y_err = 0;
-    private double y_ctrlMax = .5;
-    private double y_ctrlMin = -.5;
+    private double y_ctrlMax = 1.5;
+    private double y_ctrlMin = -1.5;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private PIDController rotPID = new PIDController( 6.2, 1.0, 0);                      //FIXME
-    private PIDController x_PID  = new PIDController(15.0, 0.0, 0);                      //FIXME
-    private PIDController y_PID  = new PIDController(15.0, 0.0, 0);                      //FIXME
+    private PIDController rotPID = new PIDController( 6.2, 1.0, 0);               //FIXME
+    private PIDController x_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
+    private PIDController y_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -72,6 +75,9 @@ public class Swerve {
         resetModulesToAbsolute();
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d());
+        SmartDashboard.putNumber("xy_kP", xy_kP);  
+        SmartDashboard.putNumber("xy_kI", xy_kI);  
+        SmartDashboard.putNumber("xy_kD", xy_kD);  
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -254,6 +260,11 @@ public class Swerve {
             dashboardPose = flipAlliance(dashboardPose);
           }
           field2d.setRobotPose(dashboardPose);*/
+        xy_kP = SmartDashboard.getNumber("xy_kP", xy_kP);
+        xy_kI = SmartDashboard.getNumber("xy_kI", xy_kI);
+        xy_kD = SmartDashboard.getNumber("xy_kD", xy_kD);
+        x_PID.setPID( xy_kP, xy_kI, xy_kD );
+        y_PID.setPID( xy_kP, xy_kI, xy_kD );
         SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
         SmartDashboard.putNumber("rot_err",  rot_err);  
         SmartDashboard.putNumber("x_ctrl", x_ctrl);
