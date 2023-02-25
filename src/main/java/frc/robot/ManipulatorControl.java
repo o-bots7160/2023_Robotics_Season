@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -16,7 +17,7 @@ public class ManipulatorControl {
    public double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
 
 
-   private TalonFX _extention;
+   private TalonFX _extension;
 
    private CANSparkMax _wrist;
    private SparkMaxPIDController pid_Wrist;
@@ -31,13 +32,18 @@ public class ManipulatorControl {
 
    public void init(){
       liftInit();
-      extentionInit();
+      extensionInit();
       wristInit();
       clawInit();
    }
    public void periodic()
    {
-
+      extensionPeriodic();
+      System.out.println("Moving extension");
+   }
+   public void disable() 
+   {
+      extensionDisable();
    }
 
    private void liftInit(){
@@ -59,8 +65,16 @@ public class ManipulatorControl {
       // en_Lift = lift.getEncoder();
    }
 
-   private void extentionInit(){
-      // extention = new TalonSRX(51);
+   private void extensionInit(){
+      _extension = new TalonFX(51);
+   }
+
+   private void extensionPeriodic() {
+      _extension.set(ControlMode.PercentOutput, -0.1);
+   }
+
+   private void extensionDisable() {
+      _extension.set(ControlMode.PercentOutput, 0.0);
    }
 
    private void wristInit(){

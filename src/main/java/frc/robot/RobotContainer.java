@@ -17,6 +17,7 @@ public class RobotContainer {
 
    private RobotContainer()
    {
+      Init();
    }
 
    public static RobotContainer getInstance()
@@ -25,6 +26,8 @@ public class RobotContainer {
       {
          RobotContainer_instance = new RobotContainer();
       }
+
+
  
       return RobotContainer_instance;
    }
@@ -62,5 +65,6 @@ public class RobotContainer {
    public void disable()
    {
       _drive.disable();
+      _manipulator.disable();
    }
 }
