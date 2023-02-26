@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotPeriodic() {
-      //robot.periodic();
+      robot.periodic();
    }
 
   @Override
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
       teleop.Periodic();
-      robot.periodic(); // take out later
+      //robot.periodic(); // take out later
   }
 
   @Override

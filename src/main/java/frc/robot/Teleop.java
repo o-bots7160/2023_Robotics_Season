@@ -25,9 +25,9 @@ public class Teleop implements OpModeInterface {
    public void Periodic()
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
-      double x = Joystick.getRawAxis(4) / speedReducer;
-      double y = Joystick.getRawAxis(5) / speedReducer;
-      double z = Joystick.getRawAxis(0) / turnReducer;
+      double x = -Joystick.getRawAxis(4) / speedReducer;
+      double y = -Joystick.getRawAxis(5) / speedReducer;
+      double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {
          x = 0;
@@ -41,5 +41,32 @@ public class Teleop implements OpModeInterface {
          z = 0;
       }
       robot.drive( new Translation2d( y, x).times(Constants.Swerve.maxSpeed), z, true, true );
+      //
+      // Manual Manipulator Controls
+      //
+      if ( UI._manualUp() )
+      {
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() + 20);
+      }
+      if ( UI._manualDn() )
+      {
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() - 20);
+      }
+      if ( UI._manualOut() )
+      {
+         robot._manipulator.extSetPose( robot._manipulator.extGetPose() + 10000);
+      }
+      if ( UI._manualIn() )
+      {
+         robot._manipulator.extSetPose( robot._manipulator.extGetPose() - 10000);
+      }
+      if ( UI._manualRotUp() )
+      {
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 2);
+      }
+      if ( UI._manualRotDn() )
+      {
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 2);
+      }
    }
 }
