@@ -44,7 +44,7 @@ public class RobotContainer {
    public void Init()
    {
       _drive.resetOdometry( new Pose2d( Units.feetToMeters( 0 ), Units.feetToMeters(0), new Rotation2d( 0.0)  ) );
-      //_manipulator.init();
+      _manipulator.init();
    }
   
    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) 

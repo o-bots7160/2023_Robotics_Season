@@ -39,7 +39,7 @@ public class ManipulatorControl {
    public void periodic()
    {
       extensionPeriodic();
-      System.out.println("Moving extension");
+      //System.out.println("Moving extension");
    }
    public void disable() 
    {
@@ -70,7 +70,7 @@ public class ManipulatorControl {
    }
 
    private void extensionPeriodic() {
-      _extension.set(ControlMode.PercentOutput, -0.1);
+      _extension.set(ControlMode.PercentOutput, -0.1); // neg = in, pos = out
    }
 
    private void extensionDisable() {
