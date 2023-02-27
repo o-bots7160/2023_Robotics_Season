@@ -45,6 +45,7 @@ public class UI {
          return false;
       }
    }
+
    public static boolean _manualRotDn() {
       if (_buttons1.getRawButton(11)) {
          return true;
@@ -52,4 +53,55 @@ public class UI {
          return false;
       }
    }
+
+   public static boolean _floor() {
+      if (_buttons2.getRawButton(4)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _mid() {
+      if (_buttons2.getRawButton(5)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _top() {
+      if (_buttons2.getRawButton(6)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _wristPlacePos() {
+      if (_buttons2.getRawButton(2)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _wristTravelPos() {
+      if (_buttons2.getRawButton(1)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _clawGrabRel() {
+      if (_buttons2.getRawButton(3)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+   public static boolean _coneCube() {
+      if (_buttons1.getRawButton(5)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+
 }

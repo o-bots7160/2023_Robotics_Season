@@ -17,10 +17,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ManipulatorControl {
 
+   // Mid lift pos cone = 182
+   // Mid lift pos cube = 128
+
+   // Top lift pos cone = 235
+   // Top lift pos cube = 200
+
    private CANSparkMax _lift;
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
-   public double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
+   private double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
 
 
    private TalonFX _extension;
@@ -28,12 +34,12 @@ public class ManipulatorControl {
    private CANSparkMax _wrist;
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
-   public double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
+   private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
 
    private CANSparkMax _claw;
    private SparkMaxPIDController pid_Claw;
    private RelativeEncoder en_Claw;
-   public double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
+   private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
 
    public void init(){
@@ -65,8 +71,8 @@ public class ManipulatorControl {
       kD_Lift         =  0;
       kIz_Lift        =  0;
       kFF_Lift        =  0;
-      kMaxOutput_Lift =  0.3;
-      kMinOutput_Lift = -0.3;
+      kMaxOutput_Lift =  0.85;
+      kMinOutput_Lift = -0.85;
       pid_Lift = _lift.getPIDController();
       //pid_Lift.setFeedbackDevice()
       pid_Lift.setP(kP_Lift);
@@ -90,7 +96,7 @@ public class ManipulatorControl {
       _extension = new TalonFX(51);
       _extension.configFactoryDefault();
     _extension.configReverseSoftLimitThreshold( 0.0, 0);      //lower limit
-    _extension.configForwardSoftLimitThreshold( 275000.0, 0); //upper limit
+    _extension.configForwardSoftLimitThreshold( 265000.0, 0); //upper limit
     _extension.configForwardSoftLimitEnable(true, 0);
     _extension.configReverseSoftLimitEnable(true, 0);
     _extension.config_kP( 0, 0.06, 30);

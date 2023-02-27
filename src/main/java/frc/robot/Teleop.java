@@ -68,5 +68,35 @@ public class Teleop implements OpModeInterface {
       {
          robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 2);
       }
+
+      if(UI._floor()){
+         robot._manipulator.liftSetPose(0);
+      }else if(UI._mid()){
+         if(UI._coneCube()){// if true cube is selected
+            robot._manipulator.liftSetPose(128);
+         }else{
+            robot._manipulator.liftSetPose(182);
+         }
+      }else if(UI._top()){
+         if(UI._coneCube()){// if true cube is selected
+            robot._manipulator.liftSetPose(200);
+         }else{
+            robot._manipulator.liftSetPose(235);
+         }
+      }
+
+      if(UI._wristTravelPos()){
+
+      }else if(UI._wristPlacePos()){
+         if(UI._coneCube()){// if true cube is selected
+
+         }else{
+
+         }
+      }
+
+      //if(UI._wristPlacePos())
+
+      System.out.println("Lift pos:" + robot._manipulator.liftGetPose());
    }
 }
