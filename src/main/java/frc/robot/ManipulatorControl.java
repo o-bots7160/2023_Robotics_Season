@@ -156,22 +156,30 @@ public class ManipulatorControl {
       pid_Wrist.setReference(new_target, ControlType.kPosition);
    }
 
+   // 9.5 Cube
+   // 18.5 Cone
+
    private void clawInit(){
-      // claw = new CANSparkMax(53, MotorType.kBrushless);
-      // kP_Claw         = 0;
-      // kI_Claw         = 0;
-      // kD_Claw         = 0;
-      // kIz_Claw        = 0;
-      // kFF_Claw        = 0;
-      // kMaxOutput_Claw = 0;
-      // kMinOutput_Claw = 0;
-      // pid_Claw = claw.getPIDController();
-      // pid_Claw.setP(kP_Claw);
-      // pid_Claw.setI(kI_Claw);
-      // pid_Claw.setD(kD_Claw);
-      // pid_Claw.setIZone(kIz_Claw);
-      // pid_Claw.setFF(kFF_Claw);
-      // en_Claw = claw.getEncoder();
+      _claw = new CANSparkMax(53, MotorType.kBrushless);
+      _claw.setInverted(false);
+      _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
+      _claw.setSoftLimit(SoftLimitDirection.kReverse, 4);
+      _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
+      _claw.setSoftLimit(SoftLimitDirection.kForward, 19);
+      kP_Claw         = 0.8;
+      kI_Claw         = 0;
+      kD_Claw         = 0;
+      kIz_Claw        = 0;
+      kFF_Claw        = 0;
+      kMaxOutput_Claw = 0.01;
+      kMinOutput_Claw = -0.01;
+      pid_Claw = _claw.getPIDController();
+      pid_Claw.setP(kP_Claw);
+      pid_Claw.setI(kI_Claw);
+      pid_Claw.setD(kD_Claw);
+      pid_Claw.setIZone(kIz_Claw);
+      pid_Claw.setFF(kFF_Claw);
+      en_Claw = _claw.getEncoder();
    }
 
    public double clawGetPose() {
