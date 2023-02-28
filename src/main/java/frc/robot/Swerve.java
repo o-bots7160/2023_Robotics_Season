@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
@@ -10,16 +11,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
-
+    private final Field2d field2d = new Field2d();
+    private double xy_kP  =  5.5; // 5.5
+    private double xy_kI  =  0.15; // .015
+    private double xy_kD  =  0.0;
     private double rot_kP =  5.1;
     private double rot_kI =  0.0;       
     private double rot_kD =  0.0;
@@ -28,11 +37,6 @@ public class Swerve {
     private double rot_err;
     private double rot_ctrlMax = 3;
     private double rot_ctrlMin = -3;
-
-    private double xy_kP  =  5.5; // 5.5
-    private double xy_kI  =  0.15; // .015
-    private double xy_kD  =  0.0;
-
     private double x_ctrl;
     private double x_err = 0;
     private double x_ctrlMax = 1.5;
@@ -41,12 +45,12 @@ public class Swerve {
     private double y_err = 0;
     private double y_ctrlMax = 1.5;
     private double y_ctrlMin = -1.5;
-    private SwerveModule[] mSwerveMods;
-    private Pigeon2 gyro;
+    public SwerveModule[] mSwerveMods;
+    public Pigeon2 gyro;
     
-    private PIDController rot_PID = new PIDController( rot_kP, rot_kI, rot_kD );      //FIXME
-    private PIDController x_PID   = new PIDController( xy_kP,  xy_kI,  xy_kD  );      //FIXME
-    private PIDController y_PID   = new PIDController( xy_kP,  xy_kI,  xy_kD  );      //FIXME
+    private PIDController rot_PID = new PIDController( rot_kP, rot_kI, rot_kD);               //FIXME
+    private PIDController x_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
+    private PIDController y_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -140,6 +144,7 @@ public class Swerve {
     //Testing y_PID for HolonomicDriveController
     public boolean move_y( double distance )
     {
+        
         Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
         if ( ! auton_active )
         {

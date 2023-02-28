@@ -1,8 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Teleop implements OpModeInterface {
@@ -25,8 +25,9 @@ public class Teleop implements OpModeInterface {
    public void Periodic()
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
-      double x = Joystick.getRawAxis(4) / speedReducer;
-      double y = Joystick.getRawAxis(5) / speedReducer;
+      
+      double x = -Joystick.getRawAxis(4) / speedReducer;
+      double y = -Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {
@@ -40,6 +41,7 @@ public class Teleop implements OpModeInterface {
       {
          z = 0;
       }
+     
       robot.drive( new Translation2d( y, x).times(Constants.Swerve.maxSpeed), z, true, true );
       //
       // Manual Manipulator Controls
@@ -70,7 +72,7 @@ public class Teleop implements OpModeInterface {
       }
 
       if(UI._floor()){
-         robot._manipulator.liftSetPose(0);
+         robot._manipulator.liftSetPose(1);
       }else if(UI._mid()){
          if(UI._coneCube()){// if true cube is selected
             robot._manipulator.liftSetPose(128);
@@ -79,7 +81,12 @@ public class Teleop implements OpModeInterface {
          }
       }else if(UI._top()){
          if(UI._coneCube()){// if true cube is selected
+            
             robot._manipulator.liftSetPose(200);
+            robot._manipulator.wristSetPose(-27);
+            robot._manipulator.extSetPose(295000.0);
+            
+            
          }else{
             robot._manipulator.liftSetPose(235);
          }
@@ -102,7 +109,8 @@ public class Teleop implements OpModeInterface {
       }
 
       //if(UI._wristPlacePos())
-
-      System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
+      System.out.println("Ext pos:" + robot._manipulator.extGetPose());
+      //System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
+      //System.out.println("Lift pos:" + robot._manipulator.liftGetPose());
    }
 }

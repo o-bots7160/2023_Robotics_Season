@@ -96,15 +96,16 @@ public class ManipulatorControl {
    private void extensionInit(){
       _extension = new TalonFX(51);
       _extension.configFactoryDefault();
-    _extension.configReverseSoftLimitThreshold( 0.0, 0);      //lower limit
-    _extension.configForwardSoftLimitThreshold( 265000.0, 0); //upper limit
+    _extension.configReverseSoftLimitThreshold( 3000.0);      //lower limit
+    
+    _extension.configForwardSoftLimitThreshold( 300000.0); //upper limit
     _extension.configForwardSoftLimitEnable(true, 0);
     _extension.configReverseSoftLimitEnable(true, 0);
     _extension.config_kP( 0, 0.06, 30);
     //_extension.config_kI( 0, 0.0, 0);
     //_extension.config_kD( 0, 0.0, 0);
     //_extension.config_IntegralZone( 0, 0.0, 0);
-    _extension.setNeutralMode( NeutralMode.Coast);
+    _extension.setNeutralMode( NeutralMode.Brake);
 
    }
 
@@ -137,8 +138,8 @@ public class ManipulatorControl {
       kD_Wrist         =  0;
       kIz_Wrist        =  0;
       kFF_Wrist        =  0;
-      kMaxOutput_Wrist =  0.07;
-      kMinOutput_Wrist = -0.07;
+      kMaxOutput_Wrist =  0.15;
+      kMinOutput_Wrist = -0.15;
       pid_Wrist = _wrist.getPIDController();
       pid_Wrist.setP(kP_Wrist);
       pid_Wrist.setI(kI_Wrist);
