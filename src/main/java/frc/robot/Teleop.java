@@ -26,8 +26,8 @@ public class Teleop implements OpModeInterface {
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
       
-      double x = -Joystick.getRawAxis(4) / speedReducer;
-      double y = -Joystick.getRawAxis(5) / speedReducer;
+      double y = -Joystick.getRawAxis(4) / speedReducer;
+      double x = -Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {
@@ -42,7 +42,7 @@ public class Teleop implements OpModeInterface {
          z = 0;
       }
      
-      robot.drive( new Translation2d( y, x).times(Constants.Swerve.maxSpeed), z, true, true );
+      robot.drive( new Translation2d( x, y).times(Constants.Swerve.maxSpeed), z, true, true );
       //
       // Manual Manipulator Controls
       //
