@@ -42,18 +42,87 @@ public class ManipulatorControl {
    private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
 
+   public static enum MANIPPOS {
+      TOP,
+      MID,
+      FLOOR,
+      STOW,
+      MANUAL
+   };
+
+   private MANIPPOS manipPos;
+
    public void init(){
       liftInit();
       extensionInit();
       wristInit();
       clawInit();
+      manipPos = MANIPPOS.MANUAL;
    }
+
+   public void setManipPos(MANIPPOS pos){
+      manipPos = pos;
+   }
+
    public void periodic()
    {
-      //extensionPeriodic();
-      //System.out.println("Moving extension");
+      switch(manipPos){
+         case TOP:
+         liftSetPose(1);
+         break;
+         case MID:
+         if(UI._coneCube()){// if true cube is selected
+            liftSetPose(128);
+         }else{
+            liftSetPose(182);
+         }
+         break;
+         case FLOOR:
+         if(UI._coneCube()){// if true cube is selected
+            
+            liftSetPose(200);
+            wristSetPose(-27);
+            extSetPose(295000.0);
+            
+            
+         }else{
+            liftSetPose(235);
+         }
+         break;
+         case MANUAL:
+         manualCont();
+         break;
+      }
       
    }
+
+   private void manualCont(){
+      if ( UI._manualUp() )
+       {
+          liftSetPose( liftGetPose() + 20);
+       }
+       if ( UI._manualDn() )
+       {
+          liftSetPose( liftGetPose() - 20);
+       }
+       if ( UI._manualOut() )
+       {
+          extSetPose( extGetPose() + 10000);
+       }
+       if ( UI._manualIn() )
+       {
+          extSetPose( extGetPose() - 10000);
+       }
+       if ( UI._manualRotUp() )
+       {
+          wristSetPose( wristGetPose() + 2);
+       }
+       if ( UI._manualRotDn() )
+       {
+          wristSetPose( wristGetPose() - 2);
+       }
+   }
+
    public void disable() 
    {
       extensionDisable();

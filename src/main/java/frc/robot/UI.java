@@ -76,14 +76,14 @@ public class UI {
          return false;
       }
    }
-   public static boolean _wristPlacePos() {
+   public static boolean _PlacePos() {
       if (_buttons2.getRawButton(2)) {
          return true;
       }else {
          return false;
       }
    }
-   public static boolean _wristTravelPos() {
+   public static boolean _stow() {
       if (_buttons2.getRawButton(1)) {
          return true;
       }else {
