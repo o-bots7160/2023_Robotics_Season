@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
       m_chooser.addOption("Auton2LeftCS", new Auton2LeftCS());
       m_chooser.addOption("Auton2RightCS", new Auton2RightCS());
       m_chooser.addOption("Auton1CoOp", new Auton1CoOp());
+      m_chooser.addOption("AutonPose", new AutonPose());
       SmartDashboard.putData("Auto choices", m_chooser);
   }
   @Override

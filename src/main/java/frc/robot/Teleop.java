@@ -9,7 +9,7 @@ public class Teleop implements OpModeInterface {
    private RobotContainer robot;
 
    //Speed & Turn reducer
-   private static double speedReducer = -4;
+   private static double speedReducer = 4;
    private static double turnReducer  = 1;
 
    Joystick Joystick = new Joystick(0); // Joystick
@@ -21,13 +21,14 @@ public class Teleop implements OpModeInterface {
    public void Init()
    {
       // zero gyro? maybe not... only in Robot.init?
+
    }
    public void Periodic()
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
       
-      double y = -Joystick.getRawAxis(4) / speedReducer;
-      double x = -Joystick.getRawAxis(5) / speedReducer;
+      double y = Joystick.getRawAxis(4) / speedReducer;
+      double x = Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {

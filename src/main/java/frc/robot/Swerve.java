@@ -26,8 +26,8 @@ public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field2d = new Field2d();
-    private double xy_kP  =  5.5; // 5.5
-    private double xy_kI  =  0.15; // .015
+    private double xy_kP  =  -5.5; // 5.5
+    private double xy_kI  =  -0.15; // .015
     private double xy_kD  =  0.0;
     private double rot_kP =  5.1;
     private double rot_kI =  0.0;       
@@ -35,16 +35,16 @@ public class Swerve {
     private double angle_target;
     private double rot_ctrl;
     private double rot_err;
-    private double rot_ctrlMax = 3;
-    private double rot_ctrlMin = -3;
+    private double rot_ctrlMax = 1.5;//3
+    private double rot_ctrlMin = -1.5;//-3
     private double x_ctrl;
     private double x_err = 0;
-    private double x_ctrlMax = 1.5;
-    private double x_ctrlMin = -1.5;
+    private double x_ctrlMax = 1.0;//1.5
+    private double x_ctrlMin = -1.0;//-1.5
     private double y_ctrl;
     private double y_err = 0;
-    private double y_ctrlMax = 1.5;
-    private double y_ctrlMin = -1.5;
+    private double y_ctrlMax = 1.0;//1.5
+    private double y_ctrlMin = -1.0;//-1.5
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
@@ -190,7 +190,7 @@ public class Swerve {
         }else if (y_ctrl < y_ctrlMin) {
             y_ctrl = y_ctrlMin;
         }
-        drive( new Translation2d(x_ctrl, y_ctrl), rot_ctrl, true, true); //fieldRelative: MUST = true
+        drive( new Translation2d(-x_ctrl, -y_ctrl), rot_ctrl, true, true); //fieldRelative: MUST = true
         auton_active = !x_PID.atSetpoint() || !y_PID.atSetpoint() || !rot_PID.atSetpoint();
         return auton_active;
     }
