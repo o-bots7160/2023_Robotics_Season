@@ -52,6 +52,7 @@ public class ManipulatorControl {
    {
       //extensionPeriodic();
       //System.out.println("Moving extension");
+      
    }
    public void disable() 
    {

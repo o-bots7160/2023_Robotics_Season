@@ -25,8 +25,8 @@ public class Teleop implements OpModeInterface {
    public void Periodic()
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
-      double x = -Joystick.getRawAxis(4) / speedReducer;
-      double y = -Joystick.getRawAxis(5) / speedReducer;
+      double x = Joystick.getRawAxis(4) / speedReducer;
+      double y = Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {

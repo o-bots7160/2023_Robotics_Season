@@ -22,6 +22,7 @@ class SwervePath {
     public boolean atDestination()
     {
         boolean done = false;
+        System.out.println("Driving to: " + this_list[index]);
         if ( ! robot._drive.move_Pose2d( this_list[index] ) )
         {
             index++;
