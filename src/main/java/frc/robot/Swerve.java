@@ -1,31 +1,24 @@
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.math.util.Units;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private final Field2d field2d = new Field2d();
     private double xy_kP  =  -5.5; // 5.5
     private double xy_kI  =  -0.15; // .015
     private double xy_kD  =  0.0;
@@ -34,23 +27,23 @@ public class Swerve {
     private double rot_kD =  0.0;
     private double angle_target;
     private double rot_ctrl;
-    private double rot_err;
+    //private double rot_err;
     private double rot_ctrlMax = 1.5;//3
     private double rot_ctrlMin = -1.5;//-3
     private double x_ctrl;
-    private double x_err = 0;
+    //private double x_err = 0;
     private double x_ctrlMax = 1.0;//1.5
     private double x_ctrlMin = -1.0;//-1.5
     private double y_ctrl;
-    private double y_err = 0;
+    //private double y_err = 0;
     private double y_ctrlMax = 1.0;//1.5
     private double y_ctrlMin = -1.0;//-1.5
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     
-    private PIDController rot_PID = new PIDController( rot_kP, rot_kI, rot_kD);               //FIXME
-    private PIDController x_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
-    private PIDController y_PID  = new PIDController( xy_kP, xy_kI, xy_kD );      //FIXME
+    private PIDController rot_PID = new PIDController( rot_kP, rot_kI, rot_kD );      //FIXME
+    private PIDController x_PID   = new PIDController( xy_kP,   xy_kI, xy_kD  );      //FIXME
+    private PIDController y_PID   = new PIDController( xy_kP,   xy_kI, xy_kD  );      //FIXME
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -78,9 +71,9 @@ public class Swerve {
         resetModulesToAbsolute();
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d());
-        SmartDashboard.putNumber("rot_kP", rot_kP);  
-        SmartDashboard.putNumber("rot_kI", rot_kI);  
-        SmartDashboard.putNumber("rot_kD", rot_kD);  
+        // SmartDashboard.putNumber("rot_kP", rot_kP);  
+        // SmartDashboard.putNumber("rot_kI", rot_kI);  
+        // SmartDashboard.putNumber("rot_kD", rot_kD);  
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -114,7 +107,7 @@ public class Swerve {
             rot_PID.reset( );
             rot_PID.setSetpoint( angle_target );
         }
-        rot_err  = current_yaw.minus( new Rotation2d( angle_target)).getRadians();
+        //rot_err  = current_yaw.minus( new Rotation2d( angle_target)).getRadians();
         rot_ctrl = rot_PID.calculate(current_yaw.getRadians());
         drive( new Translation2d(), rot_ctrl, true, true);
         auton_active = ! rot_PID.atSetpoint();
@@ -128,13 +121,13 @@ public class Swerve {
     //Testing x_PID for HolonomicDriveController
     public boolean move_x( double distance )
     {
-        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose();
         if ( ! auton_active )
         {
             x_PID.reset( );
             x_PID.setSetpoint( pose.getX() + distance);
         }
-        x_err  = pose.getX() - distance;
+        //x_err  = pose.getX() - distance;
         x_ctrl = x_PID.calculate( pose.getX() );
         drive( new Translation2d( x_ctrl, 0), 0, true, true);
         auton_active = ! x_PID.atSetpoint(); 
@@ -145,13 +138,13 @@ public class Swerve {
     public boolean move_y( double distance )
     {
         
-        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose();
         if ( ! auton_active )
         {
             y_PID.reset( );
             y_PID.setSetpoint(pose.getY() + distance);
         }
-        y_err  = pose.getY() - distance;
+        //y_err  = pose.getY() - distance;
         y_ctrl = y_PID.calculate( pose.getY() );
         drive( new Translation2d( 0, y_ctrl), 0, true, true);
         auton_active = ! y_PID.atSetpoint(); 
@@ -159,7 +152,7 @@ public class Swerve {
     }
     public boolean move_Pose2d( Pose2d new_pose)
     {
-        Pose2d pose = getPose(); //swerveOdometry.update(getYaw(), getModulePositions());
+        Pose2d pose = getPose();
         if ( ! auton_active )
         {
             x_PID.reset( );
@@ -169,21 +162,21 @@ public class Swerve {
             rot_PID.reset( );
             rot_PID.setSetpoint(new_pose.getRotation().getRadians());
         }
-        rot_err  = getYaw().getRadians() - new_pose.getRotation().getRadians();
+        //rot_err  = getYaw().getRadians() - new_pose.getRotation().getRadians();
         rot_ctrl = rot_PID.calculate( pose.getRotation().getRadians());
         if       (rot_ctrl > rot_ctrlMax) {
             rot_ctrl = rot_ctrlMax;
         }else if (rot_ctrl < rot_ctrlMin) {
             rot_ctrl = rot_ctrlMin;
         }
-        x_err    = pose.getX() - new_pose.getX();
+        //x_err    = pose.getX() - new_pose.getX();
         x_ctrl   = x_PID.calculate( pose.getX() );
         if       (x_ctrl > x_ctrlMax) {
             x_ctrl = x_ctrlMax;
         }else if (x_ctrl < x_ctrlMin) {
             x_ctrl = x_ctrlMin;
         }
-        y_err    = pose.getY() - new_pose.getY();
+        //y_err    = pose.getY() - new_pose.getY();
         y_ctrl   = y_PID.calculate( pose.getY() );
         if       (y_ctrl > y_ctrlMax) {
             y_ctrl = y_ctrlMax;
@@ -209,6 +202,12 @@ public class Swerve {
     }
 
     public void resetOdometry(Pose2d pose) {
+        //
+        //   Resetting gyro is not needed for poseEstimator... however it is needed for
+        //   ChassisSpeeds.
+        //
+        //
+        gyro.setYaw( pose.getRotation().getDegrees() );
         poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
@@ -243,7 +242,7 @@ public class Swerve {
     }
 
     public void periodic(){
-        Pose2d pose = poseEstimator.update(getYaw(), getModulePositions());
+        /*Pose2d pose = */poseEstimator.update(getYaw(), getModulePositions());
         /*if (photonPoseEstimator != null) {
             // Update pose estimator with the best visible target
             photonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
@@ -264,26 +263,26 @@ public class Swerve {
             dashboardPose = flipAlliance(dashboardPose);
           }
           field2d.setRobotPose(dashboardPose);*/
-        rot_kP = SmartDashboard.getNumber("rot_kP", rot_kP);
-        rot_kI = SmartDashboard.getNumber("rot_kI", rot_kI);
-        rot_kD = SmartDashboard.getNumber("rot_kD", rot_kD);
-        rot_PID.setPID( rot_kP, rot_kI, rot_kD );
-        SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
-        SmartDashboard.putNumber("rot_err",  rot_err);  
-        SmartDashboard.putNumber("x_ctrl", x_ctrl);
-        SmartDashboard.putNumber("x_err",    x_err); 
-        SmartDashboard.putNumber("y_ctrl", y_ctrl);  
-        SmartDashboard.putNumber("y_err",    y_err);  
-        SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
-        SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
-        SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
-        SmartDashboard.putBoolean("autonActive", auton_active);
+        // rot_kP = SmartDashboard.getNumber("rot_kP", rot_kP);
+        // rot_kI = SmartDashboard.getNumber("rot_kI", rot_kI);
+        // rot_kD = SmartDashboard.getNumber("rot_kD", rot_kD);
+        // rot_PID.setPID( rot_kP, rot_kI, rot_kD );
+        // SmartDashboard.putNumber("rot_ctrl", rot_ctrl);  
+        // SmartDashboard.putNumber("rot_err",  rot_err);  
+        // SmartDashboard.putNumber("x_ctrl", x_ctrl);
+        // SmartDashboard.putNumber("x_err",    x_err); 
+        // SmartDashboard.putNumber("y_ctrl", y_ctrl);  
+        // SmartDashboard.putNumber("y_err",    y_err);  
+        // SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
+        // SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
+        // SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
+        // SmartDashboard.putBoolean("autonActive", auton_active);
 
-        for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
-        }
+        // for(SwerveModule mod : mSwerveMods){
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
+        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        // }
     }
     public void disable()
     {
