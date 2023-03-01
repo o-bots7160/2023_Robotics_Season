@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class UI {
     
-   private static final Joystick _joystick        = new Joystick(0);
+   //private static final Joystick _joystick        = new Joystick(0);
    private static final Joystick _buttons1        = new Joystick(1);
    private static final Joystick _buttons2        = new Joystick(2);
-   private static final Joystick _joystick2       = new Joystick(3);
+   //private static final Joystick _joystick2       = new Joystick(3);
    private static boolean closed = false;
 
    public static boolean _manualUp() {
@@ -105,21 +105,4 @@ public class UI {
       }
       return closed;
    }
-
-   public static boolean _clawIn() {
-      if (_joystick2.getRawButton(3)) {
-         return true;
-      }else {
-         return false;
-      }
-   }
-
-   public static boolean _clawOut() {
-      if (_joystick2.getRawButton(4)) {
-         return true;
-      }else {
-         return false;
-      }
-   }
-
 }

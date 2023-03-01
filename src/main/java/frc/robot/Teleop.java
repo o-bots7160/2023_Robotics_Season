@@ -21,7 +21,6 @@ public class Teleop implements OpModeInterface {
    public void Init()
    {
       // zero gyro? maybe not... only in Robot.init?
-
    }
    public void Periodic()
    {
@@ -103,27 +102,22 @@ public class Teleop implements OpModeInterface {
          }
       }
 
-      if(UI._clawIn()){
-         robot._manipulator.clawSetPose(robot._manipulator.clawGetPose() + .5);
-      }else if(UI._clawOut()){
-         robot._manipulator.clawSetPose(robot._manipulator.clawGetPose() - .5);
-      }
-
       if ( UI._grabRelease() )
       {
          if (!UI._coneCube()) //yes cone
          {
-            robot._manipulator.clawSetPose(18);
+            robot._manipulator.clawGrabCone();
          } else {
-            robot._manipulator.clawSetPose(2.0);
+            robot._manipulator.clawGrabCube();
          }
-      }  else{
-         robot._manipulator.clawSetPose(13.0);
+      } else {
+         robot._manipulator.clawRelease();;
       }
+         
+   }
 
       //if(UI._wristPlacePos())
       //System.out.println("Ext pos:" + robot._manipulator.extGetPose());
-      System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
+      //System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
       //System.out.println("Lift pos:" + robot._manipulator.liftGetPose());
-   }
 }

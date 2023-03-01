@@ -15,10 +15,10 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     //public static final double stickDeadband = 0.1;
-    public static final double JOYSTICK_X_POSITIVE_DEADBAND =  0.2;
-    public static final double JOYSTICK_X_NEGATIVE_DEADBAND = -0.2;
-    public static final double JOYSTICK_Y_POSITIVE_DEADBAND =  0.2;
-    public static final double JOYSTICK_Y_NEGATIVE_DEADBAND = -0.2;
+    public static final double JOYSTICK_X_POSITIVE_DEADBAND =  0.05;
+    public static final double JOYSTICK_X_NEGATIVE_DEADBAND = -0.05;
+    public static final double JOYSTICK_Y_POSITIVE_DEADBAND =  0.05;
+    public static final double JOYSTICK_Y_NEGATIVE_DEADBAND = -0.05;
     public static final double JOYSTICK_Z_POSITIVE_DEADBAND =  0.35;
     public static final double JOYSTICK_Z_NEGATIVE_DEADBAND = -0.35;
 

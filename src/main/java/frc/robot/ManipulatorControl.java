@@ -3,7 +3,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import edu.wpi.first.wpilibj.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.RelativeEncoder;
@@ -190,7 +189,16 @@ public class ManipulatorControl {
       return en_Claw.getPosition();
    }
 
-   public void clawSetPose( double new_target) {
+   private void clawSetPose( double new_target) {
       pid_Claw.setReference(new_target, ControlType.kPosition);
+   }
+   public void clawGrabCone( ){
+      clawSetPose(18.0);
+   }
+   public void clawGrabCube( ){
+      clawSetPose(13.0);
+   }
+   public void clawRelease( ) {
+      clawSetPose(2.0);
    }
 }
