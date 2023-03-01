@@ -49,11 +49,11 @@ public class Teleop implements OpModeInterface {
       //
       if ( UI._manualUp() )
       {
-         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() + 20);
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() + 5);
       }
       if ( UI._manualDn() )
       {
-         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() - 20);
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() - 5);
       }
       if ( UI._manualOut() )
       {
@@ -65,11 +65,11 @@ public class Teleop implements OpModeInterface {
       }
       if ( UI._manualRotUp() )
       {
-         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 2);
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 1);
       }
       if ( UI._manualRotDn() )
       {
-         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 2);
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 1);
       }
 
       if(UI._floor()){
@@ -109,9 +109,21 @@ public class Teleop implements OpModeInterface {
          robot._manipulator.clawSetPose(robot._manipulator.clawGetPose() - .5);
       }
 
+      if ( UI._grabRelease() )
+      {
+         if (!UI._coneCube()) //yes cone
+         {
+            robot._manipulator.clawSetPose(18);
+         } else {
+            robot._manipulator.clawSetPose(2.0);
+         }
+      }  else{
+         robot._manipulator.clawSetPose(13.0);
+      }
+
       //if(UI._wristPlacePos())
-      System.out.println("Ext pos:" + robot._manipulator.extGetPose());
-      //System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
+      //System.out.println("Ext pos:" + robot._manipulator.extGetPose());
+      System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
       //System.out.println("Lift pos:" + robot._manipulator.liftGetPose());
    }
 }

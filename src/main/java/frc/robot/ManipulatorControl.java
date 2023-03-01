@@ -98,7 +98,7 @@ public class ManipulatorControl {
       _extension.configFactoryDefault();
     _extension.configReverseSoftLimitThreshold( 3000.0);      //lower limit
     
-    _extension.configForwardSoftLimitThreshold( 300000.0); //upper limit
+    _extension.configForwardSoftLimitThreshold( 290000.0); //upper limit  300000.0
     _extension.configForwardSoftLimitEnable(true, 0);
     _extension.configReverseSoftLimitEnable(true, 0);
     _extension.config_kP( 0, 0.06, 30);
@@ -165,22 +165,24 @@ public class ManipulatorControl {
       _claw = new CANSparkMax(53, MotorType.kBrushless);
       _claw.setInverted(false);
       _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _claw.setSoftLimit(SoftLimitDirection.kReverse, 4);
+      _claw.setSoftLimit(SoftLimitDirection.kReverse, 1);
       _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _claw.setSoftLimit(SoftLimitDirection.kForward, 19);
+      _claw.setSoftLimit(SoftLimitDirection.kForward, 18);
+      _claw.setIdleMode(IdleMode.kBrake);
       kP_Claw         = 0.8;
       kI_Claw         = 0;
       kD_Claw         = 0;
       kIz_Claw        = 0;
       kFF_Claw        = 0;
-      kMaxOutput_Claw = 0.01;
-      kMinOutput_Claw = -0.01;
+      kMaxOutput_Claw = 0.75;
+      kMinOutput_Claw = -0.75;
       pid_Claw = _claw.getPIDController();
       pid_Claw.setP(kP_Claw);
       pid_Claw.setI(kI_Claw);
       pid_Claw.setD(kD_Claw);
       pid_Claw.setIZone(kIz_Claw);
       pid_Claw.setFF(kFF_Claw);
+      pid_Claw.setOutputRange(kMinOutput_Claw, kMaxOutput_Claw);
       en_Claw = _claw.getEncoder();
    }
 
