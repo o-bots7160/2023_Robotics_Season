@@ -105,4 +105,20 @@ public class UI {
       }
       return closed;
    }
+
+   public static boolean _substation() {
+      if (_buttons1.getRawButton(1)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+
+   public static boolean _lock() {
+      if (_buttons2.getRawButton(7)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
 }

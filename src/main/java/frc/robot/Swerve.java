@@ -13,8 +13,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.math.util.Units;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve {
     public boolean auton_active = false;
@@ -60,9 +60,9 @@ public class Swerve {
         rot_PID.setTolerance( Math.toRadians(1.0) );
         rot_PID.enableContinuousInput(-Math.PI, Math.PI);
         rot_PID.setIntegratorRange(-0.08, 0.08);
-        x_PID.setTolerance( 0.01, 0.01);
+        x_PID.setTolerance( 0.03, 0.03);
         x_PID.setIntegratorRange(-0.04, 0.04);
-        y_PID.setTolerance( 0.01, 0.01);
+        y_PID.setTolerance( 0.03, 0.03);
         y_PID.setIntegratorRange(-0.04, 0.04);
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
@@ -208,6 +208,7 @@ public class Swerve {
         //
         //
         gyro.setYaw( pose.getRotation().getDegrees() );
+        Timer.delay(1.0);
         poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
@@ -242,7 +243,7 @@ public class Swerve {
     }
 
     public void periodic(){
-        /*Pose2d pose = */poseEstimator.update(getYaw(), getModulePositions());
+        Pose2d pose = poseEstimator.update(getYaw(), getModulePositions());
         /*if (photonPoseEstimator != null) {
             // Update pose estimator with the best visible target
             photonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
@@ -273,9 +274,9 @@ public class Swerve {
         // SmartDashboard.putNumber("x_err",    x_err); 
         // SmartDashboard.putNumber("y_ctrl", y_ctrl);  
         // SmartDashboard.putNumber("y_err",    y_err);  
-        // SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
-        // SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
-        // SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
+        SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
+        SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
+        SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
         // SmartDashboard.putBoolean("autonActive", auton_active);
 
         // for(SwerveModule mod : mSwerveMods){
@@ -287,6 +288,20 @@ public class Swerve {
     public void disable()
     {
         drive( new Translation2d(), 0.0, true, true );
-       auton_active = false; 
+        auton_active = false; 
+    }
+    public void lock()
+    {
+        SwerveModuleState[] swerveModuleStates = { new SwerveModuleState( 0.1, new Rotation2d( Math.PI/4) ),
+                                                   new SwerveModuleState( 0.1, new Rotation2d(-Math.PI/4) ),
+                                                   new SwerveModuleState( 0.1, new Rotation2d(-Math.PI/4) ),
+                                                   new SwerveModuleState( 0.1, new Rotation2d( Math.PI/4) )
+        };
+
+        disable();
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+        }
     }
 }

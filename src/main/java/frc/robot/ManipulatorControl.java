@@ -17,26 +17,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 //import edu.wpi.first.wpilibj.;
 
 public class ManipulatorControl {
-
-   // Mid lift pos cone = 182
-   // Mid lift pos cube = 128
-
-   // Top lift pos cone = 235
-   // Top lift pos cube = 200
+   private boolean haveCone = false;
 
    private CANSparkMax _lift;
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
    private double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
-   private boolean haveCone = false;
-
+   private double lift_target = 0.0;
 
    private TalonFX _extension;
+   private double  ext_target = 0.0;
 
    private CANSparkMax _wrist;
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
    private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
+   private double wrist_target = 0.0;
 
    private CANSparkMax _claw;
    private SparkMaxPIDController pid_Claw;
@@ -48,6 +44,7 @@ public class ManipulatorControl {
       MID,
       FLOOR,
       TRAVEL,
+      SUBSTATION,
       MANUAL
    };
 
@@ -62,7 +59,10 @@ public class ManipulatorControl {
 
    public void disable() 
    {
+      //liftDisable();
       extensionDisable();
+      //wristDisable();
+      //clawDisable();
    }
 
    public void setManipPos(MANIPPOS pos){
@@ -74,13 +74,13 @@ public class ManipulatorControl {
       switch(manipPos){
          case TOP:
             if( haveCone ){
-               liftSetPose(200);
+               liftSetPose(235);
             }else{
                liftSetPose(235);
             }
             if ( liftGetPose() > 150)
             {
-               wristSetPose(-27);
+               wristSetPose(-23);
             } else {
                wristSetPose(-10);
             }
@@ -89,13 +89,13 @@ public class ManipulatorControl {
          case MID:
             extSetPose(0.0);
             if(haveCone){// if true cube is selected
-               liftSetPose(128);
+               liftSetPose(170);
             }else{
-               liftSetPose(182);
+               liftSetPose(155);
             }
             if ( liftGetPose() > 100 )
             {
-               wristSetPose(-27);
+               wristSetPose(-23);
             } else {
                wristSetPose(-10);
             }
@@ -105,21 +105,35 @@ public class ManipulatorControl {
             extSetPose(0.0);
             if ( ( liftGetPose() < 50 ) && ( extGetPose() < 3000 ) )
             {
-               wristSetPose(-27);
+               wristSetPose(-25);
             }
             break;
          case TRAVEL:
             wristSetPose( 0 );
-            if ( wristGetPose( ) < -10 )
+            if ( wristGetPose( ) < -20 )
             {
                extSetPose( 0.0 );
                liftSetPose( 0 );
+            }
+            break;
+         case SUBSTATION:
+            clawRelease();
+            liftSetPose(235);
+            extSetPose(0.0);
+            if ( liftGetPose() > 150)
+            {
+               wristSetPose(-25);
+            } else {
+               wristSetPose(-10);
             }
             break;
          case MANUAL:
             break;
       }
       
+   }
+   public boolean atPosition() {
+      return ( liftAtPosition() && extAtPosition() && wristAtPosition() );
    }
 
    private void liftInit(){
@@ -152,8 +166,28 @@ public class ManipulatorControl {
       return en_Lift.getPosition();
    }
 
+   private boolean liftAtPosition() {
+      double error = lift_target - en_Lift.getPosition();
+      if ( ( error < 3.0 ) && ( error > -3.0 ) ) {
+         return true;
+      } else {
+         //System.out.println( "lift "+ lift_target + " "+ error );
+         return false;
+      }
+   }
+
    public void liftSetPose( double new_target) {
+      if (new_target < 0.0 ) {
+         new_target = 0.0;
+      } else if ( new_target > 235.0 ) {
+         new_target = 235.0;
+      }
+      lift_target = new_target;
       pid_Lift.setReference(new_target, ControlType.kPosition);
+   }
+
+   public void liftDisable() {
+      _lift.set(0.0);
    }
 
    private void extensionInit(){
@@ -172,10 +206,6 @@ public class ManipulatorControl {
 
    }
 
-   private void extensionPeriodic() {
-      //_extension.set(ControlMode.PercentOutput, -0.1); // neg = in, pos = out
-   }
-
    private void extensionDisable() {
       _extension.set(ControlMode.PercentOutput, 0.0);
    }
@@ -185,7 +215,23 @@ public class ManipulatorControl {
    }
 
    public void extSetPose( double new_target) {
+      if (new_target < 3000.0 ) {
+         new_target = 3000.0;
+      } else if ( new_target > 290000.0 ) {
+         new_target = 290000.0;
+      }
+      ext_target = new_target;
       _extension.set(ControlMode.Position, new_target);
+   }
+
+   private boolean extAtPosition() {
+      double error = ext_target - _extension.getSelectedSensorPosition();
+      if ( ( error < 4000.0 ) && ( error > -4000.0 ) ) {
+         return true;
+      } else {
+         //System.out.println( "ext "+ ext_target + " "+ error );
+         return false;
+      }
    }
 
    private void wristInit(){
@@ -218,11 +264,28 @@ public class ManipulatorControl {
    }
 
    public void wristSetPose( double new_target) {
+      if (new_target < -30.0 ) {
+         new_target = -30.0;
+      } else if ( new_target > 0.0 ) {
+         new_target = 0.0;
+      }
+      wrist_target = new_target;
       pid_Wrist.setReference(new_target, ControlType.kPosition);
    }
 
-   // 9.5 Cube
-   // 18.5 Cone
+   private boolean wristAtPosition() {
+      double error = wrist_target - en_Wrist.getPosition();
+      if ( ( error < 1.0 ) && ( error > -1.0 ) ) {
+         return true;
+      } else {
+         //System.out.println( "wrst "+ wrist_target + " "+ error );
+         return false;
+      }
+   }
+
+   public void wristDisable() {
+      _wrist.set(0.0);
+   }
 
    private void clawInit(){
       _claw = new CANSparkMax(53, MotorType.kBrushless);
@@ -237,8 +300,8 @@ public class ManipulatorControl {
       kD_Claw         = 0;
       kIz_Claw        = 0;
       kFF_Claw        = 0;
-      kMaxOutput_Claw = 0.75;
-      kMinOutput_Claw = -0.75;
+      kMaxOutput_Claw = 0.55;
+      kMinOutput_Claw = -0.55;
       pid_Claw = _claw.getPIDController();
       pid_Claw.setP(kP_Claw);
       pid_Claw.setI(kI_Claw);
@@ -258,13 +321,17 @@ public class ManipulatorControl {
    }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(18.0);
+      clawSetPose(17.0);
    }
    public void clawGrabCube( ){
       haveCone = false;
-      clawSetPose(13.0);
+      clawSetPose(12.0);
    }
    public void clawRelease( ) {
       clawSetPose(2.0);
    }
+   public void clawDisable() {
+      _claw.set(0.0);
+   }
+
 }

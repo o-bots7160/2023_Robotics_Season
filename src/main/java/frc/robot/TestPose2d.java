@@ -37,29 +37,25 @@ public class TestPose2d implements OpModeInterface {
       if ( Joystick.getRawButtonPressed(1) )
       {
          System.out.println( "Got A button");
-         control_pose = control_pose.plus(new Transform2d( new Translation2d(Units.feetToMeters( -2), 0 ), new Rotation2d()));
-         //robot._drive.newPose2d(control_pose);
+         control_pose = new Pose2d( new Translation2d( control_pose.getX() - 0.5, control_pose.getY()), control_pose.getRotation());
          moving = true;
       }
       if ( Joystick.getRawButtonPressed( 4 ) )
       {
          System.out.println( "Got Y button");
-         control_pose = control_pose.plus(new Transform2d( new Translation2d(Units.feetToMeters( 2), 0 ), new Rotation2d()));
-         //robot._drive.newPose2d(control_pose);
+         control_pose = new Pose2d( new Translation2d( control_pose.getX() + 0.5, control_pose.getY()), control_pose.getRotation());
          moving = true;
       }
       if ( Joystick.getRawButtonPressed( 2 ) )
       {
          System.out.println( "Got B button");
-         control_pose = control_pose.plus(new Transform2d( new Translation2d( 0, Units.feetToMeters( -2) ), new Rotation2d()));
-         //robot._drive.newPose2d(control_pose);
+         control_pose = new Pose2d( new Translation2d( control_pose.getX(), control_pose.getY() - 0.5), control_pose.getRotation());
          moving = true;
       }
       if ( Joystick.getRawButtonPressed( 3 ) )
       {
          System.out.println( "Got X button");
-         control_pose = control_pose.plus(new Transform2d( new Translation2d( 0, Units.feetToMeters( 2) ), new Rotation2d()));
-         //robot._drive.newPose2d(control_pose);
+         control_pose = new Pose2d( new Translation2d( control_pose.getX(), control_pose.getY() + 0.5), control_pose.getRotation());
          moving = true;
       }
       if ( Joystick.getRawButtonPressed(5) )

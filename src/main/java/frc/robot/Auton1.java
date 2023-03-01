@@ -6,19 +6,18 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ManipulatorControl.MANIPPOS;
 
-public class Auton1CoOp implements OpModeInterface
+public class Auton1 implements OpModeInterface
 {
    private RobotContainer robot;
 
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(15), Units.feetToMeters(0),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(7.25), Units.feetToMeters(0),new Rotation2d(Math.PI))
+                    new Pose2d(Units.feetToMeters(12), Units.feetToMeters(0),new Rotation2d(Math.PI))
                      };
     private SwervePath firstPath  = new SwervePath( Path1 );
 
-   public Auton1CoOp()
+   public Auton1()
    {
       
       robot = RobotContainer.getInstance();

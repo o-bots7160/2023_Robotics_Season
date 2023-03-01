@@ -27,8 +27,8 @@ public class Teleop implements OpModeInterface {
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
       
-      double y = Joystick.getRawAxis(4) / speedReducer;
-      double x = Joystick.getRawAxis(5) / speedReducer;
+      double y = -Joystick.getRawAxis(4) / speedReducer;
+      double x = -Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;
       if (x < Constants.JOYSTICK_X_POSITIVE_DEADBAND && x > Constants.JOYSTICK_X_NEGATIVE_DEADBAND)
       {
@@ -99,11 +99,18 @@ public class Teleop implements OpModeInterface {
       } else {
          robot._manipulator.clawRelease();;
       }
-         
+      robot._manipulator.atPosition();   
+
+      if ( UI._substation() )
+         {
+            robot._manipulator.setManipPos( MANIPPOS.SUBSTATION);
+         }
+
+      if ( UI._lock() )
+      {
+          robot._drive.lock();
+       }
    }
 
-      //if(UI._wristPlacePos())
-      //System.out.println("Ext pos:" + robot._manipulator.extGetPose());
-      //System.out.println("Claw pos:" + robot._manipulator.clawGetPose());
-      //System.out.println("Lift pos:" + robot._manipulator.liftGetPose());
+      
 }
