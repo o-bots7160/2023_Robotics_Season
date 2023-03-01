@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.ManipulatorControl.MANIPPOS;
 
 public class Teleop implements OpModeInterface {
    private RobotContainer robot;
@@ -48,58 +49,43 @@ public class Teleop implements OpModeInterface {
       //
       if ( UI._manualUp() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() + 5);
       }
       if ( UI._manualDn() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() - 5);
       }
       if ( UI._manualOut() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.extSetPose( robot._manipulator.extGetPose() + 10000);
       }
       if ( UI._manualIn() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.extSetPose( robot._manipulator.extGetPose() - 10000);
       }
       if ( UI._manualRotUp() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 1);
       }
       if ( UI._manualRotDn() )
       {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
          robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 1);
       }
 
       if(UI._floor()){
-         robot._manipulator.liftSetPose(1);
+         robot._manipulator.setManipPos( MANIPPOS.FLOOR);
       }else if(UI._mid()){
-         if(UI._coneCube()){// if true cube is selected
-            robot._manipulator.liftSetPose(128);
-         }else{
-            robot._manipulator.liftSetPose(182);
-         }
+         robot._manipulator.setManipPos( MANIPPOS.MID);
       }else if(UI._top()){
-         if(UI._coneCube()){// if true cube is selected
-            
-            robot._manipulator.liftSetPose(200);
-            robot._manipulator.wristSetPose(-27);
-            robot._manipulator.extSetPose(295000.0);
-            
-            
-         }else{
-            robot._manipulator.liftSetPose(235);
-         }
-      }
-
-      if(UI._wristTravelPos()){
-
-      }else if(UI._wristPlacePos()){
-         if(UI._coneCube()){// if true cube is selected
-
-         }else{
-
-         }
+         robot._manipulator.setManipPos( MANIPPOS.TOP);
+      } else if(UI._wristTravelPos()){
+         robot._manipulator.setManipPos( MANIPPOS.TRAVEL);
       }
 
       if ( UI._grabRelease() )

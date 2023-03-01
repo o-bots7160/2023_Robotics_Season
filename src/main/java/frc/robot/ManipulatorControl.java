@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.lang.model.util.ElementScanner14;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -26,6 +28,7 @@ public class ManipulatorControl {
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
    private double kP_Lift, kI_Lift, kD_Lift, kIz_Lift, kFF_Lift, kMaxOutput_Lift, kMinOutput_Lift;
+   private boolean haveCone = false;
 
 
    private TalonFX _extension;
@@ -40,6 +43,15 @@ public class ManipulatorControl {
    private RelativeEncoder en_Claw;
    private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
+   public static enum MANIPPOS {
+      TOP,
+      MID,
+      FLOOR,
+      TRAVEL,
+      MANUAL
+   };
+
+   private MANIPPOS manipPos = MANIPPOS.MANUAL;
 
    public void init(){
       liftInit();
@@ -47,15 +59,67 @@ public class ManipulatorControl {
       wristInit();
       clawInit();
    }
-   public void periodic()
-   {
-      //extensionPeriodic();
-      //System.out.println("Moving extension");
-      
-   }
+
    public void disable() 
    {
       extensionDisable();
+   }
+
+   public void setManipPos(MANIPPOS pos){
+      manipPos = pos;
+   }
+
+   public void periodic()
+   {
+      switch(manipPos){
+         case TOP:
+            if( haveCone ){
+               liftSetPose(200);
+            }else{
+               liftSetPose(235);
+            }
+            if ( liftGetPose() > 150)
+            {
+               wristSetPose(-27);
+            } else {
+               wristSetPose(-10);
+            }
+            extSetPose(295000.0);
+            break;
+         case MID:
+            extSetPose(0.0);
+            if(haveCone){// if true cube is selected
+               liftSetPose(128);
+            }else{
+               liftSetPose(182);
+            }
+            if ( liftGetPose() > 100 )
+            {
+               wristSetPose(-27);
+            } else {
+               wristSetPose(-10);
+            }
+            break;
+         case FLOOR:
+            liftSetPose( 0);
+            extSetPose(0.0);
+            if ( ( liftGetPose() < 50 ) && ( extGetPose() < 3000 ) )
+            {
+               wristSetPose(-27);
+            }
+            break;
+         case TRAVEL:
+            wristSetPose( 0 );
+            if ( wristGetPose( ) < -10 )
+            {
+               extSetPose( 0.0 );
+               liftSetPose( 0 );
+            }
+            break;
+         case MANUAL:
+            break;
+      }
+      
    }
 
    private void liftInit(){
@@ -193,9 +257,11 @@ public class ManipulatorControl {
       pid_Claw.setReference(new_target, ControlType.kPosition);
    }
    public void clawGrabCone( ){
+      haveCone = true;
       clawSetPose(18.0);
    }
    public void clawGrabCube( ){
+      haveCone = false;
       clawSetPose(13.0);
    }
    public void clawRelease( ) {
