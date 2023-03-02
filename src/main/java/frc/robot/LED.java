@@ -19,7 +19,7 @@ public class LED{
    }
 
    public void Periodic() {
-      if (endGameTimer.get() < 238.0d) {
+      if (endGameTimer.get() < 138.0d) {
          if (UI._coneCube() == true) {
             _LED.set(0.91);
          } else if (UI._coneCube() == false) {
