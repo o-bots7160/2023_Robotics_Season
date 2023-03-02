@@ -115,11 +115,18 @@ public class Teleop implements OpModeInterface {
       {
          speedReducer = 2;
          turnReducer = .6;
+      }else{
+         speedReducer = 4;
+         turnReducer = .75;
       }
 
       if ( UI._slow() )
       {
          speedReducer = 6;
+         turnReducer = 1;
+      }else{
+         speedReducer = 4;
+         turnReducer = .75;
       }
    }
 
