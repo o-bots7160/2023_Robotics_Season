@@ -237,7 +237,7 @@ public class ManipulatorControl {
       _wrist = new CANSparkMax(52, MotorType.kBrushless);
       _wrist.setInverted(false);
       _wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -30);        //lower limit
+      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -28);        //lower limit
       _wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
       _wrist.setSoftLimit(SoftLimitDirection.kForward, 0);      //upper limit
       _wrist.setIdleMode(IdleMode.kBrake);
