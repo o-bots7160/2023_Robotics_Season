@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
    private OpModeInterface auton;
    private OpModeInterface test;
    private RobotContainer  robot;
+   private LED             _LED = new LED();
 
    private final SendableChooser<OpModeInterface> m_chooser = new SendableChooser<>();
 
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotPeriodic() {
-      robot.periodic();
+      robot.periodic(); 
    }
 
   @Override
@@ -51,12 +52,14 @@ public class Robot extends TimedRobot {
       System.out.println("Auto selected: " + auton.toString());
 
       auton.Init();
+      _LED.Init();
   }
 
   @Override
    public void autonomousPeriodic()
    {
       auton.Periodic();
+      _LED.Periodic();
   }
 
   @Override
@@ -68,6 +71,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
       teleop.Periodic();
+      _LED.Periodic();
       //robot.periodic(); // take out later
   }
 

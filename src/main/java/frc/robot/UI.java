@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class UI {
     
-   //private static final Joystick _joystick        = new Joystick(0);
+   private static final Joystick _joystick        = new Joystick(0);
    private static final Joystick _buttons1        = new Joystick(1);
    private static final Joystick _buttons2        = new Joystick(2);
    //private static final Joystick _joystick2       = new Joystick(3);
@@ -116,6 +116,22 @@ public class UI {
 
    public static boolean _lock() {
       if (_buttons2.getRawButton(7)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+
+   public static boolean _turbo() {
+      if (_joystick.getRawButton(6)) {
+         return true;
+      }else {
+         return false;
+      }
+   }
+
+   public static boolean _slow() {
+      if (_joystick.getRawButton(5)) {
          return true;
       }else {
          return false;

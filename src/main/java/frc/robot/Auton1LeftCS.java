@@ -23,24 +23,16 @@ public class Auton1LeftCS implements OpModeInterface
 
    public Auton1LeftCS()
    {
-      
       robot = RobotContainer.getInstance();
    }
    public void Init()
    {
-      // if (DriverStation.getAlliance() == Alliance.Red ) {
-      //    System.out.println("RED");
-      //    startPoint = SwervePath.transform(startPoint);
-      //    firstPath.swapSides();
-
-      //    //secondPath.swapSides();
-      // }
       step = 0;
       robot.resetOdometry(startPoint);
       robot._manipulator.clawGrabCone();
       robot._manipulator.setManipPos( MANIPPOS.TOP );
-      robot._manipulator.periodic();
-}
+      robot._manipulator.periodic();   
+   }
    public void Periodic()
    {
       switch( step )

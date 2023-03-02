@@ -48,7 +48,6 @@ public class Auton1RightCS implements OpModeInterface
          case 0:
             if (robot._manipulator.atPosition() )
             {
-               //System.out.println( "")
                step++;
                robot._manipulator.clawRelease();
                robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
