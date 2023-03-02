@@ -105,7 +105,7 @@ public class ManipulatorControl {
             extSetPose(0.0);
             if ( ( liftGetPose() < 50 ) && ( extGetPose() < 3000 ) )
             {
-               wristSetPose(-25);
+               wristSetPose(-28);
             }
             break;
          case TRAVEL:
@@ -117,7 +117,6 @@ public class ManipulatorControl {
             }
             break;
          case SUBSTATION:
-            clawRelease();
             liftSetPose(235);
             extSetPose(0.0);
             if ( liftGetPose() > 150)
@@ -325,7 +324,7 @@ public class ManipulatorControl {
    }
    public void clawGrabCube( ){
       haveCone = false;
-      clawSetPose(12.0);
+      clawSetPose(10.0);
    }
    public void clawRelease( ) {
       clawSetPose(2.0);
