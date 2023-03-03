@@ -114,13 +114,8 @@ public class Teleop implements OpModeInterface {
       if ( UI._turbo() )
       {
          speedReducer = 1.5;
-         turnReducer = .6;
-      }else{
-         speedReducer = 3;
-         turnReducer = .7;
-      }
-
-      if ( UI._slow() )
+         turnReducer = .5;
+      }else if ( UI._slow() )
       {
          speedReducer = 8;
          turnReducer = 1.25;
@@ -128,6 +123,7 @@ public class Teleop implements OpModeInterface {
          speedReducer = 3;
          turnReducer = .7;
       }
+      
    }
 
 
