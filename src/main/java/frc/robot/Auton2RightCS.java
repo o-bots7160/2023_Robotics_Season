@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 public class Auton2RightCS implements OpModeInterface
 {
    private RobotContainer robot;
-
+//*****************************************THIS AUTON NOT CURRENTLY USED************************************************* */
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(0.0));
    private Pose2d Path1[] = {

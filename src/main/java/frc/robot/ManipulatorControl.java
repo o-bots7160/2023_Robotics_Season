@@ -103,7 +103,7 @@ public class ManipulatorControl {
          case FLOOR:
             liftSetPose( 0);
             extSetPose(0.0);
-            if ( ( liftGetPose() < 50 ) && ( extGetPose() < 3000 ) )
+            if ( ( liftGetPose() < 50 ) && ( extGetPose() < 4000 ) )
             {
                wristSetPose(-26);
             }
@@ -121,9 +121,13 @@ public class ManipulatorControl {
             extSetPose(0.0);
             if ( liftGetPose() > 150)
             {
-               wristSetPose(-25);
-            } else {
-               wristSetPose(-10);
+               if(haveCone){
+                  wristSetPose(-25);
+               } else {
+                  wristSetPose(-25);
+               }
+            }else{
+                  wristSetPose(-10);
             }
             break;
          case MANUAL:
@@ -299,8 +303,8 @@ public class ManipulatorControl {
       kD_Claw         = 0;
       kIz_Claw        = 0;
       kFF_Claw        = 0;
-      kMaxOutput_Claw = 0.55;
-      kMinOutput_Claw = -0.55;
+      kMaxOutput_Claw = 0.6;
+      kMinOutput_Claw = -0.6;
       pid_Claw = _claw.getPIDController();
       pid_Claw.setP(kP_Claw);
       pid_Claw.setI(kI_Claw);
@@ -320,7 +324,7 @@ public class ManipulatorControl {
    }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(18.5);
+      clawSetPose(17.0);
    }
    public void clawGrabCube( ){
       haveCone = false;

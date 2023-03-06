@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class Auton3Left implements OpModeInterface
 {
    private RobotContainer robot;
-
+//*****************************************THIS AUTON NOT CURRENTLY USED************************************************* */
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(13.17),new Rotation2d(0.0));
    private Pose2d Path1[] = {

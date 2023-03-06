@@ -10,7 +10,7 @@ public class Teleop implements OpModeInterface {
    private RobotContainer robot;
 
    //Speed & Turn reducer
-   private double speedReducer = 3;
+   private double speedReducer = 2.25;
    private double turnReducer  = .7;
 
    Joystick Joystick = new Joystick(0); // Joystick
@@ -120,7 +120,7 @@ public class Teleop implements OpModeInterface {
          speedReducer = 8;
          turnReducer = 1.25;
       }else{
-         speedReducer = 3;
+         speedReducer = 2.25;
          turnReducer = .7;
       }
       

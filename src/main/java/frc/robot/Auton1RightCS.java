@@ -14,8 +14,8 @@ public class Auton1RightCS implements OpModeInterface
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(12), Units.feetToMeters(0),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(12), Units.feetToMeters(6),new Rotation2d(Math.PI)),
+                    new Pose2d(Units.feetToMeters(13), Units.feetToMeters(0),new Rotation2d(Math.PI)),
+                    new Pose2d(Units.feetToMeters(13), Units.feetToMeters(6),new Rotation2d(Math.PI)),
                     new Pose2d(Units.feetToMeters(5.25), Units.feetToMeters(6),new Rotation2d(Math.PI))
                   
                      };

@@ -274,9 +274,9 @@ public class Swerve {
         // SmartDashboard.putNumber("x_err",    x_err); 
         // SmartDashboard.putNumber("y_ctrl", y_ctrl);  
         // SmartDashboard.putNumber("y_err",    y_err);  
-        SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
-        SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
-        SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
+        //SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
+        //SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
+        //SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
         // SmartDashboard.putBoolean("autonActive", auton_active);
 
         // for(SwerveModule mod : mSwerveMods){
