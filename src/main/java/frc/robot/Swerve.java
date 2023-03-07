@@ -40,6 +40,12 @@ public class Swerve {
     private double y_ctrlMin = -1.0;//-1.5
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    private SwerveDriveKinematics currentKinematics = Constants.Swerve.swerveKinematics;
+    private SwerveDriveKinematics rotationFront = new SwerveDriveKinematics(
+        new Translation2d( -Units.inchesToMeters(32.5), Constants.Swerve.trackWidth / 2.0),
+        new Translation2d( -Units.inchesToMeters(32), -Constants.Swerve.trackWidth / 2.0),
+        new Translation2d(-Constants.Swerve.wheelBase - Units.inchesToMeters(32), Constants.Swerve.trackWidth / 2.0),
+        new Translation2d(-Constants.Swerve.wheelBase - Units.inchesToMeters(32), -Constants.Swerve.trackWidth / 2.0));
     
     private PIDController rot_PID = new PIDController( rot_kP, rot_kI, rot_kD );      //FIXME
     private PIDController x_PID   = new PIDController( xy_kP,   xy_kI, xy_kD  );      //FIXME
@@ -78,7 +84,7 @@ public class Swerve {
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+            currentKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
@@ -96,6 +102,17 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
+
+    public void setRotCenter(boolean rotCenter)
+    {
+        if(!rotCenter)
+        {
+            currentKinematics = Constants.Swerve.swerveKinematics;
+        }else
+        {
+            currentKinematics = rotationFront;
+        }
+    }
 
     //Testing rotPID for HolonomicDriveController
     public boolean rotate( Rotation2d angle )

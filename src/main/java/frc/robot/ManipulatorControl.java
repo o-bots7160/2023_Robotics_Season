@@ -80,7 +80,7 @@ public class ManipulatorControl {
             }
             if ( liftGetPose() > 150)
             {
-               wristSetPose(-23);
+               wristSetPose(-21);
             } else {
                wristSetPose(-10);
             }
@@ -89,23 +89,27 @@ public class ManipulatorControl {
          case MID:
             extSetPose(0.0);
             if(haveCone){// if true cube is selected
-               liftSetPose(170);
+               liftSetPose(160);
             }else{
-               liftSetPose(155);
+               liftSetPose(140);
             }
             if ( liftGetPose() > 100 )
             {
-               wristSetPose(-23);
+               wristSetPose(-21);
             } else {
                wristSetPose(-10);
             }
             break;
          case FLOOR:
-            liftSetPose( 0);
+            liftSetPose( 5);
             extSetPose(0.0);
             if ( ( liftGetPose() < 50 ) && ( extGetPose() < 4000 ) )
             {
-               wristSetPose(-26);
+               if(haveCone){
+                  wristSetPose(-25);
+               } else {
+                  wristSetPose(-24);
+               }
             }
             break;
          case TRAVEL:
@@ -113,18 +117,18 @@ public class ManipulatorControl {
             if ( wristGetPose( ) < -20 )
             {
                extSetPose( 0.0 );
-               liftSetPose( 0 );
+               liftSetPose( 5 );
             }
             break;
          case SUBSTATION:
-            liftSetPose(235);
+            liftSetPose(225);
             extSetPose(0.0);
-            if ( liftGetPose() > 150)
+            if ( liftGetPose() > 155)
             {
                if(haveCone){
-                  wristSetPose(-25);
+                  wristSetPose(-12);
                } else {
-                  wristSetPose(-25);
+                  wristSetPose(-24);
                }
             }else{
                   wristSetPose(-10);
@@ -143,9 +147,9 @@ public class ManipulatorControl {
       _lift = new CANSparkMax(50, MotorType.kBrushless);
       _lift.setInverted(true);
       _lift.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _lift.setSoftLimit(SoftLimitDirection.kReverse, 0);        //lower limit
+      _lift.setSoftLimit(SoftLimitDirection.kReverse, 5);        //lower limit
       _lift.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _lift.setSoftLimit(SoftLimitDirection.kForward, 235);      //upper limit
+      _lift.setSoftLimit(SoftLimitDirection.kForward, 230);      //upper limit
       _lift.setIdleMode(IdleMode.kCoast);
       kP_Lift         =  0.8;
       kI_Lift         =  0;
@@ -182,8 +186,8 @@ public class ManipulatorControl {
    public void liftSetPose( double new_target) {
       if (new_target < 0.0 ) {
          new_target = 0.0;
-      } else if ( new_target > 235.0 ) {
-         new_target = 235.0;
+      } else if ( new_target > 230.0 ) {
+         new_target = 230.0;
       }
       lift_target = new_target;
       pid_Lift.setReference(new_target, ControlType.kPosition);
@@ -245,7 +249,7 @@ public class ManipulatorControl {
       _wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
       _wrist.setSoftLimit(SoftLimitDirection.kForward, 0);      //upper limit
       _wrist.setIdleMode(IdleMode.kBrake);
-      kP_Wrist         =  0.1;
+      kP_Wrist         =  0.75;
       kI_Wrist         =  0;
       kD_Wrist         =  0;
       kIz_Wrist        =  0;

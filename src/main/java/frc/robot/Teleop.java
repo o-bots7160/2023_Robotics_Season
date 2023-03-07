@@ -42,6 +42,8 @@ public class Teleop implements OpModeInterface {
       {
          z = 0;
       }
+
+      robot._drive.setRotCenter(UI._changeRotPoint());
      
       robot.drive( new Translation2d( x, y).times(Constants.Swerve.maxSpeed), z, true, true );
       //
@@ -117,7 +119,7 @@ public class Teleop implements OpModeInterface {
          turnReducer = .5;
       }else if ( UI._slow() )
       {
-         speedReducer = 8;
+         speedReducer = 6;
          turnReducer = 1.25;
       }else{
          speedReducer = 2.25;

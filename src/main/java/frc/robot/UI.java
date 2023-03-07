@@ -9,6 +9,7 @@ public class UI {
    private static final Joystick _buttons2        = new Joystick(2);
    //private static final Joystick _joystick2       = new Joystick(3);
    private static boolean closed = false;
+   private static boolean spinCenter = false;
 
    public static boolean _manualUp() {
       if (_buttons1.getRawButton(3)) {
@@ -136,5 +137,12 @@ public class UI {
       }else {
          return false;
       }
+   }
+
+   public static boolean _changeRotPoint() {
+      if (_joystick.getRawButtonPressed(4)) {
+         spinCenter = ! spinCenter;
+      }
+      return spinCenter;
    }
 }
