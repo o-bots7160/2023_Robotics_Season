@@ -86,13 +86,12 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit()
   {
-     test = new TestPose2d();
-     test.Init();
+    teleop = new Teleop();
   }
 
   @Override
   public void testPeriodic()
   {
-    test.Periodic();
+    
   }
 }

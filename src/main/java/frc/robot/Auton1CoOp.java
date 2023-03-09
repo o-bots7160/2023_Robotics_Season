@@ -60,6 +60,10 @@ public class Auton1CoOp implements OpModeInterface
                step++;
             }
             break;
+
+         case 2:
+            
+            break;
          default:
             break;
       }
