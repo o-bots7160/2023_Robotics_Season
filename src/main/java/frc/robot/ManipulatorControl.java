@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
 //import edu.wpi.first.wpilibj.;
 
@@ -29,6 +30,10 @@ public class ManipulatorControl {
    private double  ext_target = 0.0;
 
    private CANSparkMax _wrist;
+   private double wristTop = -3.0;
+   private double wristLevel = -21.0;
+   private double wrist_fV  = -0.15;
+   private double wrist2Radians = Math.PI/(( wristTop - wristLevel) * 2.0);
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
    private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
@@ -73,39 +78,39 @@ public class ManipulatorControl {
    {
       switch(manipPos){
          case TOP:
-            if( haveCone ){
-               liftSetPose(235);
+            if( !UI._coneCube() ){
+               liftSetPose(170);
             }else{
-               liftSetPose(235);
+               liftSetPose(160);
             }
-            if ( liftGetPose() > 150)
+            if ( liftGetPose() > 120)
             {
-               wristSetPose(-21);
+               wristSetPose(-19);
             } else {
-               wristSetPose(-10);
+               wristSetPose(-9);
             }
             extSetPose(295000.0);
             break;
          case MID:
             extSetPose(0.0);
-            if(haveCone){// if true cube is selected
-               liftSetPose(160);
+            if( !UI._coneCube() ){// if true cube is selected
+               liftSetPose(120);
             }else{
-               liftSetPose(140);
+               liftSetPose(105);
             }
-            if ( liftGetPose() > 100 )
+            if ( liftGetPose() > 75 )
             {
-               wristSetPose(-21);
+               wristSetPose(-20);
             } else {
                wristSetPose(-10);
             }
             break;
          case FLOOR:
-            liftSetPose( 5);
+            liftSetPose( 2);
             extSetPose(0.0);
-            if ( ( liftGetPose() < 50 ) && ( extGetPose() < 4000 ) )
+            if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )
             {
-               if(haveCone){
+               if( !UI._coneCube() ){
                   wristSetPose(-25);
                } else {
                   wristSetPose(-24);
@@ -114,21 +119,23 @@ public class ManipulatorControl {
             break;
          case TRAVEL:
             wristSetPose( 0 );
-            if ( wristGetPose( ) < -20 )
+            if ( wristGetPose( ) > -18 )
             {
                extSetPose( 0.0 );
-               liftSetPose( 5 );
+               liftSetPose( 2 );
             }
             break;
          case SUBSTATION:
-            liftSetPose(225);
+            liftSetPose(170);
             extSetPose(0.0);
-            if ( liftGetPose() > 155)
+            if ( liftGetPose() > 116)
             {
-               if(haveCone){
-                  wristSetPose(-12);
+               if( !UI._coneCube() ){
+                  wristSetPose(-23.25);
+                  System.out.println("cone");
                } else {
-                  wristSetPose(-24);
+                  wristSetPose(-23);
+                  System.out.println("cube");
                }
             }else{
                   wristSetPose(-10);
@@ -147,17 +154,17 @@ public class ManipulatorControl {
       _lift = new CANSparkMax(50, MotorType.kBrushless);
       _lift.setInverted(true);
       _lift.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _lift.setSoftLimit(SoftLimitDirection.kReverse, 5);        //lower limit
+      _lift.setSoftLimit(SoftLimitDirection.kReverse, 2);        //lower limit
       _lift.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _lift.setSoftLimit(SoftLimitDirection.kForward, 230);      //upper limit
-      _lift.setIdleMode(IdleMode.kCoast);
+      _lift.setSoftLimit(SoftLimitDirection.kForward, 172);      //upper limit
+      _lift.setIdleMode(IdleMode.kBrake);
       kP_Lift         =  0.8;
       kI_Lift         =  0;
       kD_Lift         =  0;
       kIz_Lift        =  0;
       kFF_Lift        =  0;
-      kMaxOutput_Lift =  0.85;
-      kMinOutput_Lift = -0.85;
+      kMaxOutput_Lift =  0.7;
+      kMinOutput_Lift = -0.7;
       pid_Lift = _lift.getPIDController();
       //pid_Lift.setFeedbackDevice()
       pid_Lift.setP(kP_Lift);
@@ -175,12 +182,14 @@ public class ManipulatorControl {
 
    private boolean liftAtPosition() {
       double error = lift_target - en_Lift.getPosition();
+      //System.out.println( "lift "+ lift_target + " "+ error );
       if ( ( error < 3.0 ) && ( error > -3.0 ) ) {
          return true;
       } else {
          //System.out.println( "lift "+ lift_target + " "+ error );
          return false;
       }
+      
    }
 
    public void liftSetPose( double new_target) {
@@ -270,6 +279,12 @@ public class ManipulatorControl {
       return en_Wrist.getPosition();
    }
 
+   private double getFeedForward( double new_target )
+   {
+      double target_rad = (new_target - wristLevel) * wrist2Radians;
+      return wrist_fV * Math.cos( target_rad); 
+   }
+
    public void wristSetPose( double new_target) {
       if (new_target < -30.0 ) {
          new_target = -30.0;
@@ -278,10 +293,12 @@ public class ManipulatorControl {
       }
       wrist_target = new_target;
       pid_Wrist.setReference(new_target, ControlType.kPosition);
+      //pid_Wrist.setReference(new_target, ControlType.kPosition, 0, getFeedForward(new_target), ArbFFUnits.kVoltage);
    }
 
    private boolean wristAtPosition() {
       double error = wrist_target - en_Wrist.getPosition();
+      //System.out.println( "wrst "+ wrist_target + " "+ error );
       if ( ( error < 1.0 ) && ( error > -1.0 ) ) {
          return true;
       } else {

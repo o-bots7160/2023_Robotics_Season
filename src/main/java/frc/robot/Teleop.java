@@ -72,12 +72,12 @@ public class Teleop implements OpModeInterface {
       if ( UI._manualRotUp() )
       {
          robot._manipulator.setManipPos( MANIPPOS.MANUAL);
-         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 1);
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() + 0.75);
       }
       if ( UI._manualRotDn() )
       {
          robot._manipulator.setManipPos( MANIPPOS.MANUAL);
-         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 1);
+         robot._manipulator.wristSetPose( robot._manipulator.wristGetPose() - 0.75);
       }
 
       if(UI._floor()){

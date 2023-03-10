@@ -20,10 +20,10 @@ public class LED{
 
    public void Periodic() {
       if (endGameTimer.get() < 138.0d) {
-         if (UI._coneCube() == true) {
-            _LED.set(0.91);
-         } else if (UI._coneCube() == false) {
-            _LED.set(0.69);
+         if (UI._coneCube()) {
+            _LED.set(0.91);  //purple
+         } else if (!UI._coneCube()) {
+            _LED.set(0.69);  //yellow
          } else {
             _LED.set(-0.49);
           } 
