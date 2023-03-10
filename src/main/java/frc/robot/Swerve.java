@@ -259,6 +259,38 @@ public class Swerve {
         }
     }
 
+    private double prevPitch = 0;
+
+    public boolean chargeStationAutoLevel(){
+
+        final double pitch = gyro.getRoll();
+        final double pitch_P = 0.00005;
+        final double current_yaw = gyro.getYaw();
+        double delta = Math.abs(Math.abs(pitch) - prevPitch);
+        final double maxDelta = 3;
+        double driveCommand = pitch*pitch_P;
+        if(pitch > 4 && delta < maxDelta){
+            if(current_yaw > 135 && current_yaw < 225){
+                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }
+            
+        }else if(pitch < -4 && delta < maxDelta){
+            if(current_yaw > 135 && current_yaw < 225){
+                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }
+            
+        }else{
+            return true;
+        }
+        
+        prevPitch = Math.abs(pitch);
+        return false;
+    }
+
     public void periodic(){
         Pose2d pose = poseEstimator.update(getYaw(), getModulePositions());
         /*if (photonPoseEstimator != null) {
@@ -280,7 +312,7 @@ public class Swerve {
             // Flip the pose when red, since the dashboard field photo cannot be rotated
             dashboardPose = flipAlliance(dashboardPose);
           }
-          field2d.setRobotPose(dashboardPose);*/
+          field2d.setRobotPose(dashboardPose);
         // rot_kP = SmartDashboard.getNumber("rot_kP", rot_kP);
         // rot_kI = SmartDashboard.getNumber("rot_kI", rot_kI);
         // rot_kD = SmartDashboard.getNumber("rot_kD", rot_kD);
@@ -300,7 +332,7 @@ public class Swerve {
         //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
         //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
         //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
-        // }
+        // }*/
     }
     public void disable()
     {

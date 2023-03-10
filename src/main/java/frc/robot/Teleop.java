@@ -129,5 +129,18 @@ public class Teleop implements OpModeInterface {
    }
 
 
+   public void testPeriodic(){
+      if ( UI._manualUp() )
+      {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() + 5);
+      }
+      if ( UI._manualDn() )
+      {
+         robot._manipulator.setManipPos( MANIPPOS.MANUAL);
+         robot._manipulator.liftSetPose( robot._manipulator.liftGetPose() - 5);
+      }
+   }
+
       
 }
