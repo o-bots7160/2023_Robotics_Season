@@ -113,7 +113,7 @@ public class ManipulatorControl {
                if( !UI._coneCube() ){
                   wristSetPose(-25);
                } else {
-                  wristSetPose(-24);
+                  wristSetPose(-25);
                }
             }
             break;
