@@ -264,23 +264,23 @@ public class Swerve {
     public boolean chargeStationAutoLevel(){
 
         final double pitch = gyro.getRoll();
-        final double pitch_P = 0.00005;
+        final double pitch_P = .014;      //0.00005
         final double current_yaw = gyro.getYaw();
         double delta = Math.abs(Math.abs(pitch) - prevPitch);
         final double maxDelta = 3;
         double driveCommand = pitch*pitch_P;
-        if(pitch > 4 && delta < maxDelta){
+        if(pitch > 4 ){
             if(current_yaw > 135 && current_yaw < 225){
-                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
-            }else{
                 drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
             }
             
-        }else if(pitch < -4 && delta < maxDelta){
+        }else if(pitch < -4 ){
             if(current_yaw > 135 && current_yaw < 225){
-                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
-            }else{
                 drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
             }
             
         }else{

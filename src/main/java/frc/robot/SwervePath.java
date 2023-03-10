@@ -15,12 +15,12 @@ class SwervePath {
         robot = RobotContainer.getInstance();
         this_list = new_list;
         index = 0;
-        System.out.println("Next Pose: " + index + this_list[index]);
+        //System.out.println("Next Pose: " + index + this_list[index]);
     }
     public boolean atDestination()
     {
         boolean done = false;
-        System.out.println("Driving to: " + this_list[index]);
+        //System.out.println("Driving to: " + this_list[index]);
         if ( ! robot._drive.move_Pose2d( this_list[index] ) )
         {
             index++;

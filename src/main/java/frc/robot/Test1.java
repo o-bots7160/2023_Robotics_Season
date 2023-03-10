@@ -30,7 +30,7 @@ public class Test1 implements OpModeInterface {
    {
       if ( robot._drive.auton_active )
       {
-         System.out.println( "auton_active: "+ direction);
+         //System.out.println( "auton_active: "+ direction);
          switch ( direction )
          {
             case 1:

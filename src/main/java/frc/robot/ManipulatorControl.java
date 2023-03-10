@@ -132,10 +132,10 @@ public class ManipulatorControl {
             {
                if( !UI._coneCube() ){
                   wristSetPose(-23.25);
-                  System.out.println("cone");
+                  //System.out.println("cone");
                } else {
                   wristSetPose(-23);
-                  System.out.println("cube");
+                  //System.out.println("cube");
                }
             }else{
                   wristSetPose(-10);
