@@ -15,6 +15,8 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 //import edu.wpi.first.wpilibj.;
 
 public class ManipulatorControl {
@@ -76,6 +78,7 @@ public class ManipulatorControl {
 
    public void periodic()
    {
+      SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
       switch(manipPos){
          case TOP:
             if( !UI._coneCube() ){
@@ -85,7 +88,11 @@ public class ManipulatorControl {
             }
             if ( liftGetPose() > 120)
             {
-               wristSetPose(-19);
+               if( !UI._coneCube() ){
+                  wristSetPose(-20);
+               }else{
+                  wristSetPose(-22);
+               }   
             } else {
                wristSetPose(-9);
             }
@@ -111,9 +118,9 @@ public class ManipulatorControl {
             if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-25);
+                  wristSetPose(-27.5);
                } else {
-                  wristSetPose(-25);
+                  wristSetPose(-27.5);
                }
             }
             break;
@@ -131,10 +138,10 @@ public class ManipulatorControl {
             if ( liftGetPose() > 116)
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-23.25);
+                  wristSetPose(-25.5);
                   //System.out.println("cone");
                } else {
-                  wristSetPose(-23);
+                  wristSetPose(-25);
                   //System.out.println("cube");
                }
             }else{
@@ -152,6 +159,7 @@ public class ManipulatorControl {
 
    private void liftInit(){
       _lift = new CANSparkMax(50, MotorType.kBrushless);
+      _lift.setSmartCurrentLimit(35);
       _lift.setInverted(true);
       _lift.enableSoftLimit(SoftLimitDirection.kReverse, true);
       _lift.setSoftLimit(SoftLimitDirection.kReverse, 2);        //lower limit
@@ -163,8 +171,8 @@ public class ManipulatorControl {
       kD_Lift         =  0;
       kIz_Lift        =  0;
       kFF_Lift        =  0;
-      kMaxOutput_Lift =  0.7;
-      kMinOutput_Lift = -0.7;
+      kMaxOutput_Lift =  0.80;
+      kMinOutput_Lift = -0.80;
       pid_Lift = _lift.getPIDController();
       //pid_Lift.setFeedbackDevice()
       pid_Lift.setP(kP_Lift);
@@ -317,7 +325,7 @@ public class ManipulatorControl {
       _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
       _claw.setSoftLimit(SoftLimitDirection.kReverse, 1);
       _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _claw.setSoftLimit(SoftLimitDirection.kForward, 18);
+      _claw.setSoftLimit(SoftLimitDirection.kForward, 22);
       _claw.setIdleMode(IdleMode.kBrake);
       kP_Claw         = 0.8;
       kI_Claw         = 0;
@@ -345,11 +353,11 @@ public class ManipulatorControl {
    }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(17.0);
+      clawSetPose(20.0);
    }
    public void clawGrabCube( ){
       haveCone = false;
-      clawSetPose(12.0);
+      clawSetPose(14.0);
    }
    public void clawRelease( ) {
       clawSetPose(2.0);

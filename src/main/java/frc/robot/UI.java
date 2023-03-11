@@ -140,7 +140,7 @@ public class UI {
    }
 
    public static boolean _changeRotPoint() {
-      if (_joystick.getRawButtonPressed(4)) {
+      if (_joystick.getRawButtonPressed(7)) {
          spinCenter = ! spinCenter;
       }
       return spinCenter;

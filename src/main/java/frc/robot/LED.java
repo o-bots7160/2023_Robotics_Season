@@ -27,8 +27,8 @@ public class LED{
          } else {
             _LED.set(-0.49);
           } 
-       } //else {
-      //    _LED.set(-0.25);
-      // }
+       } else {
+          _LED.set(-0.25);
+       }
    }
 }

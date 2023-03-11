@@ -43,7 +43,7 @@ public class Auton1CoOp implements OpModeInterface
       robot._manipulator.periodic();
 }
    public void Periodic()
-   { System.out.println("Pitch " + robot._drive.gyro.getRoll() );
+   {
       switch( step )
       {
          case 0:
@@ -56,6 +56,12 @@ public class Auton1CoOp implements OpModeInterface
             }
              break;
          case 1:
+            if(robot._manipulator.clawGetPose() < 10){
+               robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+               step++;
+            }
+            break;
+         case 2:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
             {
                robot._drive.chargeStationAutoLevel();
@@ -63,7 +69,7 @@ public class Auton1CoOp implements OpModeInterface
             }
             break;
 
-         case 2:
+         case 3:
             if (robot._drive.chargeStationAutoLevel())
             {
                robot._drive.lock();
