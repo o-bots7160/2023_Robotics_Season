@@ -9,13 +9,13 @@ public class LED{
    private Timer endGameTimer   = new Timer();
 
    public void disable() {
-      _LED.set(-0.49);
+      _LED.set(-0.49);  //rainbow
    }
 
    public void Init() {
       endGameTimer.reset();
       endGameTimer.start();
-      _LED.set(-0.49);
+      _LED.set(-0.49);  //rainbow
    }
 
    public void Periodic() {
@@ -27,7 +27,7 @@ public class LED{
          }
        } else {
          if ( (Math.round(endGameTimer.get()) & 1) == 0 ) {//If timer is even
-           _LED.set(-0.25);
+           _LED.set(-0.25);  //red
          } else {//If the timer is odd
             if (UI._coneCube()) {
                   _LED.set(0.91);  //purple
