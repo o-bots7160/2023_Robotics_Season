@@ -22,13 +22,18 @@ public class LED{
       if (endGameTimer.get() < 138.0d) {
          if (UI._coneCube()) {
             _LED.set(0.91);  //purple
-         } else if (!UI._coneCube()) {
+         } else (!UI._coneCube()) {
             _LED.set(0.69);  //yellow
-         } else {
-            _LED.set(-0.49);
-          } 
+         }
        } else {
-          _LED.set(-0.25);
-       }
+         if ( (Math.round(endGameTimer.get()) & 1) == 0 ) {//If timer is even
+           _LED.set(-0.25);
+         } else {//If the timer is odd
+            if (UI._coneCube()) {
+                  _LED.set(0.91);  //purple
+            } else (!UI._coneCube()) {
+                  _LED.set(0.69);  //yellow
+            }
+          }
    }
 }
