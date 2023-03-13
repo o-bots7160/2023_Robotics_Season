@@ -78,20 +78,22 @@ public class ManipulatorControl {
 
    public void periodic()
    {
+      SmartDashboard.putNumber("Lift pos:", en_Lift.getPosition());
       SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
+      System.out.println(_lift.getMotorTemperature());
       switch(manipPos){
          case TOP:
             if( !UI._coneCube() ){
-               liftSetPose(170);
+               liftSetPose(170);      // FIXME
             }else{
-               liftSetPose(160);
+               liftSetPose(160);      //FIXME
             }
-            if ( liftGetPose() > 120)
+            if ( liftGetPose() > 120)  //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-20);
+                  wristSetPose(-19);   
                }else{
-                  wristSetPose(-22);
+                  wristSetPose(-21.5);    
                }   
             } else {
                wristSetPose(-9);
@@ -101,11 +103,11 @@ public class ManipulatorControl {
          case MID:
             extSetPose(0.0);
             if( !UI._coneCube() ){// if true cube is selected
-               liftSetPose(120);
+               liftSetPose(120);    //FIXME
             }else{
-               liftSetPose(105);
+               liftSetPose(105);    //FIXME
             }
-            if ( liftGetPose() > 75 )
+            if ( liftGetPose() > 75 )    //FIXME
             {
                wristSetPose(-20);
             } else {
@@ -113,35 +115,36 @@ public class ManipulatorControl {
             }
             break;
          case FLOOR:
-            liftSetPose( 2);
+            liftSetPose( 7);     //FIXME
             extSetPose(0.0);
-            if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )
+            if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-27.5);
+                  wristSetPose(-25.5);     //Cone
                } else {
-                  wristSetPose(-27.5);
+                  wristSetPose(-25.5);     //Cube
                }
             }
             break;
          case TRAVEL:
+            LED.liftTimer.reset();
             wristSetPose( 0 );
-            if ( wristGetPose( ) > -18 )
+            if ( wristGetPose( ) > -20 )   //FIXME timing
             {
                extSetPose( 0.0 );
                liftSetPose( 2 );
             }
             break;
          case SUBSTATION:
-            liftSetPose(170);
+            liftSetPose(170);      //FIXME
             extSetPose(0.0);
-            if ( liftGetPose() > 116)
+            if ( liftGetPose() > 116)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-25.5);
+                  wristSetPose(-23.0);     
                   //System.out.println("cone");
                } else {
-                  wristSetPose(-25);
+                  wristSetPose(-23.0);
                   //System.out.println("cube");
                }
             }else{
@@ -162,9 +165,9 @@ public class ManipulatorControl {
       _lift.setSmartCurrentLimit(35);
       _lift.setInverted(true);
       _lift.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _lift.setSoftLimit(SoftLimitDirection.kReverse, 2);        //lower limit
+      _lift.setSoftLimit(SoftLimitDirection.kReverse, 6);        //lower limit //FIXME
       _lift.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _lift.setSoftLimit(SoftLimitDirection.kForward, 172);      //upper limit
+      _lift.setSoftLimit(SoftLimitDirection.kForward, 170);      //upper limit //FIXME
       _lift.setIdleMode(IdleMode.kBrake);
       kP_Lift         =  0.8;
       kI_Lift         =  0;
@@ -182,6 +185,7 @@ public class ManipulatorControl {
       pid_Lift.setFF(kFF_Lift);
       pid_Lift.setOutputRange(kMinOutput_Lift, kMaxOutput_Lift);
       en_Lift = _lift.getEncoder();
+      _lift.burnFlash();
    }
 
    public double liftGetPose() {
@@ -262,7 +266,7 @@ public class ManipulatorControl {
       _wrist = new CANSparkMax(52, MotorType.kBrushless);
       _wrist.setInverted(false);
       _wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -28);        //lower limit
+      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -28);        //lower limit  //FIXME
       _wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
       _wrist.setSoftLimit(SoftLimitDirection.kForward, 0);      //upper limit
       _wrist.setIdleMode(IdleMode.kBrake);
@@ -271,7 +275,7 @@ public class ManipulatorControl {
       kD_Wrist         =  0;
       kIz_Wrist        =  0;
       kFF_Wrist        =  0;
-      kMaxOutput_Wrist =  0.15;
+      kMaxOutput_Wrist =  0.25;
       kMinOutput_Wrist = -0.15;
       pid_Wrist = _wrist.getPIDController();
       pid_Wrist.setP(kP_Wrist);
