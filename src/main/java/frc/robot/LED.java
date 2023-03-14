@@ -1,27 +1,25 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class LED{
    
    public static ManipulatorControl _manipulator = new ManipulatorControl();
    public static Spark _LED         = new Spark(0);
-   public static Timer liftTimer    = new Timer();
-   private Timer endGameTimer       = new Timer();
-
+   long _endGameTimer
+   long _liftTimer
    public void disable() {
       _LED.set(-0.49);
    }
 
    public void Init() {
-      endGameTimer.reset();
-      endGameTimer.start();
-      _LED.set(-0.49);
+     _endGameTimer = System.currentTimeMillis();
+     _liftTimer = System.currentTimeMillis();
+      _LED.set(-0.49); //Rainbow
    }
 
    public void Periodic() {
-      if (endGameTimer.get() < 50.0d) { //138
+      if (System.currentTimeMillis() - (_endGameTimer /1000) > 138.0d) { //System Time is in Milliseconds We divide by 1000 to convert to seconds
          if (UI._coneCube()) 
          {
             _LED.set(0.91);  //purple
@@ -55,7 +53,7 @@ public class LED{
       } 
       else 
       {
-         if ( (Math.round(endGameTimer.get()) & 1) == 0 ) 
+         if ( (Math.round(_endGameTimer/1000) & 1) == 0 ) 
          {//If timer is even
             _LED.set(-0.25);  //red
          } 
