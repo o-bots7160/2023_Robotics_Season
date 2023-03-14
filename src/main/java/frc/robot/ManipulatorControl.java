@@ -78,8 +78,8 @@ public class ManipulatorControl {
 
    public void periodic()
    {
-      SmartDashboard.putNumber("Lift pos:", en_Lift.getPosition());
-      SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
+      //SmartDashboard.putNumber("Lift pos:", en_Lift.getPosition());
+      //SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
       System.out.println("Lift Motor Temp: " + _lift.getMotorTemperature());
       switch(manipPos){
          case TOP:
