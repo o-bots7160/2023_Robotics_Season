@@ -80,40 +80,76 @@ public class ManipulatorControl {
    {
       SmartDashboard.putNumber("Lift pos:", en_Lift.getPosition());
       SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
-      System.out.println(_lift.getMotorTemperature());
+      System.out.println("Lift Motor Temp: " + _lift.getMotorTemperature());
       switch(manipPos){
          case TOP:
-            if( !UI._coneCube() ){
-               liftSetPose(170);      // FIXME
-            }else{
-               liftSetPose(160);      //FIXME
-            }
-            if ( liftGetPose() > 120)  //FIXME
+            liftSetPose(170);      //FIXME
+            if ( liftGetPose() > 120)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-19);   
-               }else{
-                  wristSetPose(-21.5);    
-               }   
-            } else {
-               wristSetPose(-9);
+                  wristSetPose(-19.0); //Cone     
+                  
+               } else {
+                  wristSetPose(-21.5); //Cube
+                 
+               }
+            }else{
+                  wristSetPose(-10);
             }
             extSetPose(295000.0);
             break;
+            
+            
+            //if( !UI._coneCube() ){
+            //   liftSetPose(170);      // FIXME
+            //}else{
+            //   liftSetPose(160);      //FIXME
+            //}
+            //if ( liftGetPose() > 120)  //FIXME
+            //{
+            //   if( !UI._coneCube() ){
+            //      wristSetPose(-19);   
+            //  }else{
+            //      wristSetPose(-21.5);    
+            //   }   
+            //} else {
+            //  wristSetPose(-9);
+            //}
+            //extSetPose(295000.0);
+            //break;
+            
          case MID:
             extSetPose(0.0);
-            if( !UI._coneCube() ){// if true cube is selected
-               liftSetPose(120);    //FIXME
-            }else{
-               liftSetPose(105);    //FIXME
-            }
-            if ( liftGetPose() > 75 )    //FIXME
+            liftSetPose(105);      //FIXME
+            if ( liftGetPose() > 75)   //FIXME
             {
-               wristSetPose(-20);
-            } else {
-               wristSetPose(-10);
+               if( !UI._coneCube() ){
+                  wristSetPose(-20.0); //Cone     
+                  
+               } else {
+                  wristSetPose(-15.5); //Cube
+                 
+               }
+            }else{
+                  wristSetPose(-10);
             }
-            break;
+            extSetPose(295000.0);
+            
+            
+            //extSetPose(0.0);
+            //if( !UI._coneCube() ){// if true cube is selected
+            //   liftSetPose(120);    //FIXME
+            //}else{
+            //   liftSetPose(105);    //FIXME
+            // }
+            //if ( liftGetPose() > 75 )    //FIXME
+            //{
+            //   wristSetPose(-20);
+            //} else {
+            //   wristSetPose(-10);
+            //}
+            //break;
+            
          case FLOOR:
             liftSetPose( 7);     //FIXME
             extSetPose(0.0);
