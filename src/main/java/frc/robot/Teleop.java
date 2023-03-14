@@ -86,7 +86,7 @@ public class Teleop implements OpModeInterface {
          robot._manipulator.setManipPos( MANIPPOS.MID);
       }else if(UI._top()){
          robot._manipulator.setManipPos( MANIPPOS.TOP);
-      } else if(UI._wristTravelPos()){
+      } else if(UI._travel()){
          robot._manipulator.setManipPos( MANIPPOS.TRAVEL);
       }
 
@@ -119,7 +119,7 @@ public class Teleop implements OpModeInterface {
          turnReducer = .5;
       }else if ( UI._slow() )
       {
-         speedReducer = 6;
+         speedReducer = 7;
          turnReducer = 1.25;
       }else{
          speedReducer = 1.5;

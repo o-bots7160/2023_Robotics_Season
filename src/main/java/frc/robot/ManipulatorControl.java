@@ -87,7 +87,7 @@ public class ManipulatorControl {
             if ( liftGetPose() > 120)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-19.0); //Cone     
+                  wristSetPose(-17.75); //Cone     
                   
                } else {
                   wristSetPose(-21.5); //Cube
@@ -98,42 +98,24 @@ public class ManipulatorControl {
             }
             extSetPose(295000.0);
             break;
-            
-            
-            //if( !UI._coneCube() ){
-            //   liftSetPose(170);      // FIXME
-            //}else{
-            //   liftSetPose(160);      //FIXME
-            //}
-            //if ( liftGetPose() > 120)  //FIXME
-            //{
-            //   if( !UI._coneCube() ){
-            //      wristSetPose(-19);   
-            //  }else{
-            //      wristSetPose(-21.5);    
-            //   }   
-            //} else {
-            //  wristSetPose(-9);
-            //}
-            //extSetPose(295000.0);
-            //break;
-            
+                     
          case MID:
+            
+            liftSetPose(110);      //FIXME
             extSetPose(0.0);
-            liftSetPose(105);      //FIXME
             if ( liftGetPose() > 75)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-20.0); //Cone     
+                  wristSetPose(-17.75); //Cone     
                   
                } else {
-                  wristSetPose(-15.5); //Cube
+                  wristSetPose(-19.0); //Cube
                  
                }
             }else{
                   wristSetPose(-10);
             }
-            extSetPose(295000.0);
+            break;
             
             
             //extSetPose(0.0);
@@ -163,7 +145,6 @@ public class ManipulatorControl {
             }
             break;
          case TRAVEL:
-            LED.liftTimer.reset();
             wristSetPose( 0 );
             if ( wristGetPose( ) > -20 )   //FIXME timing
             {

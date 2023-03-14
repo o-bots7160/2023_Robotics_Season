@@ -85,7 +85,7 @@ public class UI {
          return false;
       }
    }
-   public static boolean _wristTravelPos() {
+   public static boolean _travel() {
       if (_buttons2.getRawButton(1)) {
          return true;
       }else {

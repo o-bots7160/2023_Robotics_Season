@@ -3,69 +3,59 @@ package frc.robot;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class LED{
+   private RobotContainer robot;
    
-   public static ManipulatorControl _manipulator = new ManipulatorControl();
+   
    public static Spark _LED         = new Spark(0);
-   long _endGameTimer
-   long _liftTimer
+   private long _endGameTimer;
+   private long _liftTimer;
+
+   private boolean travelPressed = false;
+   public LED(){
+      robot = RobotContainer.getInstance();
+   }
+
    public void disable() {
       _LED.set(-0.49);
    }
 
    public void Init() {
-     _endGameTimer = System.currentTimeMillis();
-     _liftTimer = System.currentTimeMillis();
+      _endGameTimer = ( System.currentTimeMillis() / 1000 ) + 138; //138
       _LED.set(-0.49); //Rainbow
+      _liftTimer = 0;
+      travelPressed = false;
    }
 
    public void Periodic() {
-      if (System.currentTimeMillis() - (_endGameTimer /1000) > 138.0d) { //System Time is in Milliseconds We divide by 1000 to convert to seconds
-         if (UI._coneCube()) 
+      if (UI._travel()) 
+      {
+         travelPressed = true;
+      }
+
+      if ( travelPressed && (robot._manipulator.liftGetPose() < 75) ) 
+      {
+         _liftTimer = System.currentTimeMillis() + 1500;
+         travelPressed = false;
+      }
+
+      if ( System.currentTimeMillis() < _liftTimer ) 
+      {
+         _LED.set(0.75);  //green
+      }
+      else if ( ( (System.currentTimeMillis()/1000)  > _endGameTimer ) &&
+                ( ( (System.currentTimeMillis()/1000) % 2) == 0 ) ) 
+      {
+         _LED.set(0.61);  //red
+      }
+      else
+      {
+         if ( UI._coneCube() )
          {
             _LED.set(0.91);  //purple
-            // if (_manipulator.liftGetPose() < 50)   //FIXME
-            // {
-            //    liftTimer.start();
-            //    if (liftTimer.get() > 0.0) 
-            //    {
-            //       if (liftTimer.get() < 1.5) 
-            //       {
-            //          _LED.set(0.77);
-            //       }
-            //    }
-            // }
-         } 
-         else if (!UI._coneCube()) 
-         {
-            _LED.set(0.69);  //yellow
-            // if (_manipulator.liftGetPose() < 50)   //FIXME
-            // {
-            //    liftTimer.start();
-            //    if (liftTimer.get() > 0.0) 
-            //    {
-            //       if (liftTimer.get() < 1.5) 
-            //       {
-            //          _LED.set(0.77);
-            //       }
-            //    }
-            // }
-         } 
-      } 
-      else 
-      {
-         if ( (Math.round(_endGameTimer/1000) & 1) == 0 ) 
-         {//If timer is even
-            _LED.set(-0.25);  //red
-         } 
+         }
          else 
-         {//If the timer is odd
-            if (UI._coneCube()) {
-               _LED.set(0.91);  //purple
-            } 
-            else if (!UI._coneCube()) 
-            {
-               _LED.set(0.69);  //yellow
-            }
+         {
+            _LED.set(0.67);  //yellow
          }
       }
    }
