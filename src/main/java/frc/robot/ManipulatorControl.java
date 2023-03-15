@@ -44,6 +44,7 @@ public class ManipulatorControl {
    private CANSparkMax _claw;
    private SparkMaxPIDController pid_Claw;
    private RelativeEncoder en_Claw;
+   private long _SysPntTimer;
    private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
    public static enum MANIPPOS {
@@ -62,6 +63,7 @@ public class ManipulatorControl {
       extensionInit();
       wristInit();
       clawInit();
+      _SysPntTimer =  (System.currentTimeMillis() + 1000); //Used to print the Motors Status every 3 seconds
    }
 
    public void disable() 
@@ -78,19 +80,19 @@ public class ManipulatorControl {
 
    public void periodic()
    {
-      //SmartDashboard.putNumber("Lift pos:", en_Lift.getPosition());
-      //SmartDashboard.putNumber("Current draw: ", _lift.getOutputCurrent());
-      System.out.println("Lift Motor Temp: " + _lift.getMotorTemperature());
+      if ( System.currentTimeMillis() > _SysPntTimer ){
+         sysPrints();
+       }
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME
             if ( liftGetPose() > 120)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-17.75); //Cone     
+                  wristSetPose(-17.25); //Cone     
                   
                } else {
-                  wristSetPose(-21.5); //Cube
+                  wristSetPose(-21.0); //Cube
                  
                }
             }else{
@@ -101,73 +103,60 @@ public class ManipulatorControl {
                      
          case MID:
             
-            liftSetPose(110);      //FIXME
+            liftSetPose(110);      
             extSetPose(0.0);
-            if ( liftGetPose() > 75)   //FIXME
+            if ( liftGetPose() > 75)   
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-17.75); //Cone     
+                  wristSetPose(-17.25); //Cone     
                   
                } else {
-                  wristSetPose(-19.0); //Cube
+                  wristSetPose(-21.0); //Cube
                  
                }
             }else{
                   wristSetPose(-10);
             }
             break;
-            
-            
-            //extSetPose(0.0);
-            //if( !UI._coneCube() ){// if true cube is selected
-            //   liftSetPose(120);    //FIXME
-            //}else{
-            //   liftSetPose(105);    //FIXME
-            // }
-            //if ( liftGetPose() > 75 )    //FIXME
-            //{
-            //   wristSetPose(-20);
-            //} else {
-            //   wristSetPose(-10);
-            //}
-            //break;
-            
+                      
          case FLOOR:
-            liftSetPose( 7);     //FIXME
+            liftSetPose( 7);     
             extSetPose(0.0);
-            if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )   //FIXME
+            if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )  
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-25.5);     //Cone
+                  wristSetPose(-25.0);     //Cone
                } else {
-                  wristSetPose(-25.5);     //Cube
+                  wristSetPose(-25.0);     //Cube
                }
             }
             break;
+
          case TRAVEL:
             wristSetPose( 0 );
-            if ( wristGetPose( ) > -20 )   //FIXME timing
+            if ( wristGetPose( ) > -20 )   
             {
                extSetPose( 0.0 );
                liftSetPose( 2 );
             }
             break;
+
          case SUBSTATION:
-            liftSetPose(170);      //FIXME
+            liftSetPose(170);      
             extSetPose(0.0);
-            if ( liftGetPose() > 116)   //FIXME
+            if ( liftGetPose() > 116)   
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-23.0);     
-                  //System.out.println("cone");
+                  wristSetPose(-22.5); //cone    
+                  
                } else {
-                  wristSetPose(-23.0);
-                  //System.out.println("cube");
+                  wristSetPose(-22.0); //cube
                }
             }else{
                   wristSetPose(-10);
             }
             break;
+
          case MANUAL:
             break;
       }
@@ -191,8 +180,8 @@ public class ManipulatorControl {
       kD_Lift         =  0;
       kIz_Lift        =  0;
       kFF_Lift        =  0;
-      kMaxOutput_Lift =  0.80;
-      kMinOutput_Lift = -0.80;
+      kMaxOutput_Lift =  0.85;
+      kMinOutput_Lift = -0.85;
       pid_Lift = _lift.getPIDController();
       //pid_Lift.setFeedbackDevice()
       pid_Lift.setP(kP_Lift);
@@ -346,7 +335,7 @@ public class ManipulatorControl {
       _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
       _claw.setSoftLimit(SoftLimitDirection.kReverse, 1);
       _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _claw.setSoftLimit(SoftLimitDirection.kForward, 22);
+      _claw.setSoftLimit(SoftLimitDirection.kForward, 19);
       _claw.setIdleMode(IdleMode.kBrake);
       kP_Claw         = 0.8;
       kI_Claw         = 0;
@@ -374,7 +363,7 @@ public class ManipulatorControl {
    }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(20.0);
+      clawSetPose(18.0);
    }
    public void clawGrabCube( ){
       haveCone = false;
@@ -385,6 +374,21 @@ public class ManipulatorControl {
    }
    public void clawDisable() {
       _claw.set(0.0);
+   }
+   private void sysPrints(){
+      System.out.println("Lift Motor Temp: " + _lift.getMotorTemperature());
+      System.out.println("Lift Motor Pos.: " + en_Lift.getPosition());
+      System.out.println("Lift Motor Cur.: " + _lift.getOutputCurrent());
+      System.out.println("---");
+      System.out.println("Wrst Motor Temp: " + _wrist.getMotorTemperature());
+      System.out.println("Wrst Motor Pos.: " + en_Wrist.getPosition());
+      System.out.println("Wrst Motor Cur.: " + _wrist.getOutputCurrent());
+      System.out.println("---");
+      System.out.println("Claw Motor Temp: " + _claw.getMotorTemperature());
+      System.out.println("Claw Motor Pos.: " + en_Claw.getPosition());
+      System.out.println("Claw Motor Cur.: " + _claw.getOutputCurrent());
+      System.out.println("---");
+      _SysPntTimer =  (System.currentTimeMillis() + 1000);
    }
 
 }

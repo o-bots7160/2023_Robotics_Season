@@ -20,7 +20,7 @@ public class LED{
    }
 
    public void Init() {
-      _endGameTimer = ( System.currentTimeMillis() / 1000 ) + 138; //138
+      _endGameTimer = ( System.currentTimeMillis() / 1000 ) + 122; //138
       _LED.set(-0.49); //Rainbow
       _liftTimer = 0;
       travelPressed = false;
