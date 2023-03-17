@@ -63,7 +63,7 @@ public class ManipulatorControl {
       extensionInit();
       wristInit();
       clawInit();
-      _SysPntTimer =  (System.currentTimeMillis() + 1000); //Used to print the Motors Status every 3 seconds
+      _SysPntTimer =  (System.currentTimeMillis() + 2000); //Used to print the Motors Status every 3 seconds
    }
 
    public void disable() 
@@ -80,9 +80,9 @@ public class ManipulatorControl {
 
    public void periodic()
    {
-      if ( System.currentTimeMillis() > _SysPntTimer ){
-         sysPrints();
-       }
+      // if ( System.currentTimeMillis() > _SysPntTimer ){
+      //    sysPrints();
+      //  }
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME
@@ -388,7 +388,7 @@ public class ManipulatorControl {
       System.out.println("Claw Motor Pos.: " + en_Claw.getPosition());
       System.out.println("Claw Motor Cur.: " + _claw.getOutputCurrent());
       System.out.println("---");
-      _SysPntTimer =  (System.currentTimeMillis() + 1000);
+      _SysPntTimer =  (System.currentTimeMillis() + 2000);
    }
 
 }
