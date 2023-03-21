@@ -33,8 +33,8 @@ public class Robot extends TimedRobot {
       //m_chooser.addOption("Auton3Right", new Auton3Right() );
       //m_chooser.addOption("Auton2LeftCS", new Auton2LeftCS());
       //m_chooser.addOption("Auton2RightCS", new Auton2RightCS());
-      m_chooser.addOption("Auton1RightCS", new Auton1RightCS());
-      m_chooser.addOption("Auton1LeftCS", new Auton1LeftCS());
+      //m_chooser.addOption("Auton1RightCS", new Auton1RightCS());
+      //m_chooser.addOption("Auton1LeftCS", new Auton1LeftCS());
       m_chooser.addOption("AutonPose", new AutonPose()); 
       m_chooser.addOption("Auton1", new Auton1()); 
       m_chooser.addOption("AutonCone", new AutonCone()); 
@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
       robot.periodic(); 
+      SmartDashboard.putData("Auto choices", m_chooser);
    }
 
   @Override
@@ -87,12 +88,13 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit()
   {
-    teleop = new Teleop();
+    test = new TestPose2d();
+    test.Init();
   }
 
   @Override
   public void testPeriodic()
   {
-    
+    test.Periodic();
   }
 }

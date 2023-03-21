@@ -9,11 +9,12 @@ import frc.robot.ManipulatorControl.MANIPPOS;
 public class Auton1CoOp implements OpModeInterface
 {
    private RobotContainer robot;
+   private long _releaseTimer = 0;
 
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(16), Units.feetToMeters(0),new Rotation2d(Math.PI)),
+                    new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(0),new Rotation2d(Math.PI)),
                     //new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(Math.PI)),
                     //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(0),new Rotation2d(0)),
                     //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(-1.5),new Rotation2d(0)),
@@ -52,11 +53,12 @@ public class Auton1CoOp implements OpModeInterface
                //System.out.println( "")
                robot._manipulator.clawRelease();
                //robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+               _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //One second delay
                step++;
             }
              break;
          case 1:
-            if(robot._manipulator.clawGetPose() < 10){
+            if(System.currentTimeMillis() > _releaseTimer){
                robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
                step++;
             }
@@ -65,8 +67,7 @@ public class Auton1CoOp implements OpModeInterface
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
             {
                robot._drive.chargeStationAutoLevel();
-               robot._drive.lock();
-               //step++;
+               step++;
             }
             break;
          case 3:

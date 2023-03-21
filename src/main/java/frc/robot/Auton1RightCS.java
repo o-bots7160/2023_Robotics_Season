@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ManipulatorControl.MANIPPOS;
 
 public class Auton1RightCS implements OpModeInterface
@@ -43,15 +44,16 @@ public class Auton1RightCS implements OpModeInterface
 }
    public void Periodic()
    {
+      SmartDashboard.putNumber("Gyro: ", robot._drive.getYaw().getDegrees());
       switch( step )
       {
          case 0:
-            if (robot._manipulator.atPosition() )
-            {
-               step++;
-               robot._manipulator.clawRelease();
-               robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
-            }
+             if (robot._manipulator.atPosition() )
+             {
+                robot._manipulator.clawRelease();
+                robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+                step++;
+             }
              break;
          case 1:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())

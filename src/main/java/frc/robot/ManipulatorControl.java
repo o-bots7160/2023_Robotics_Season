@@ -80,9 +80,9 @@ public class ManipulatorControl {
 
    public void periodic()
    {
-      // if ( System.currentTimeMillis() > _SysPntTimer ){
-      //    sysPrints();
-      //  }
+       if ( System.currentTimeMillis() > _SysPntTimer ){
+          sysPrints();
+       }
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME
@@ -125,7 +125,7 @@ public class ManipulatorControl {
             if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )  
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-25.0);     //Cone
+                  wristSetPose(-25.25);     //Cone
                } else {
                   wristSetPose(-25.0);     //Cube
                }
@@ -137,7 +137,7 @@ public class ManipulatorControl {
             if ( wristGetPose( ) > -20 )   
             {
                extSetPose( 0.0 );
-               liftSetPose( 2 );
+               liftSetPose( 6 );
             }
             break;
 
@@ -147,10 +147,10 @@ public class ManipulatorControl {
             if ( liftGetPose() > 116)   
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-22.5); //cone    
+                  wristSetPose(-22.75); //cone    
                   
                } else {
-                  wristSetPose(-22.0); //cube
+                  wristSetPose(-22.5); //cube
                }
             }else{
                   wristSetPose(-10);

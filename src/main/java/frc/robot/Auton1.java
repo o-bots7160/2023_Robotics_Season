@@ -10,6 +10,7 @@ import frc.robot.ManipulatorControl.MANIPPOS;
 public class Auton1 implements OpModeInterface
 {
    private RobotContainer robot;
+   private long _releaseTimer = 0;
 
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
@@ -43,6 +44,7 @@ public class Auton1 implements OpModeInterface
       switch( step )
       {
          case 0:
+<<<<<<< Updated upstream
             if (robot._manipulator.atPosition() )
             {
                //System.out.println( "")
@@ -57,6 +59,23 @@ public class Auton1 implements OpModeInterface
                 step++;
              }
              break;
+=======
+         if (robot._manipulator.atPosition() )
+         {
+            //System.out.println( "")
+            robot._manipulator.clawRelease();
+            //robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+            _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //One second delay
+            step++;
+         }
+          break;
+          case 1:
+          if(System.currentTimeMillis() > _releaseTimer){
+             robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+             step++;
+          }
+          break;
+>>>>>>> Stashed changes
          case 2:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
             {
