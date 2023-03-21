@@ -51,6 +51,12 @@ public class Auton1 implements OpModeInterface
             }
              break;
          case 1:
+             if(robot._manipulator.clawGetPose() < 10){
+                robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+                step++;
+             }
+             break;
+         case 2:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
             {
                robot._drive.lock();

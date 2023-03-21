@@ -18,7 +18,7 @@ public class Auton1CoOp implements OpModeInterface
                     //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(0),new Rotation2d(0)),
                     //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(-1.5),new Rotation2d(0)),
                     //new Pose2d(Units.feetToMeters(6.75), Units.feetToMeters(-1.5),new Rotation2d(0))
-                    new Pose2d(Units.feetToMeters(6.75), Units.feetToMeters(0),new Rotation2d(Math.PI))
+                    new Pose2d(Units.feetToMeters(7.25), Units.feetToMeters(0),new Rotation2d(Math.PI))
                      };
     private SwervePath firstPath  = new SwervePath( Path1 );
 
@@ -68,7 +68,6 @@ public class Auton1CoOp implements OpModeInterface
                step++;
             }
             break;
-
          case 3:
             if (robot._drive.chargeStationAutoLevel())
             {

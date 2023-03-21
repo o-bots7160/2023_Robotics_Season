@@ -335,7 +335,7 @@ public class ManipulatorControl {
       _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
       _claw.setSoftLimit(SoftLimitDirection.kReverse, 1);
       _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _claw.setSoftLimit(SoftLimitDirection.kForward, 19);
+      _claw.setSoftLimit(SoftLimitDirection.kForward, 20);
       _claw.setIdleMode(IdleMode.kBrake);
       kP_Claw         = 0.8;
       kI_Claw         = 0;
@@ -363,7 +363,7 @@ public class ManipulatorControl {
    }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(18.0);
+      clawSetPose(19.0);
    }
    public void clawGrabCube( ){
       haveCone = false;
