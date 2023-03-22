@@ -44,7 +44,6 @@ public class Auton1 implements OpModeInterface
       switch( step )
       {
          case 0:
-<<<<<<< Updated upstream
             if (robot._manipulator.atPosition() )
             {
                //System.out.println( "")
@@ -59,24 +58,23 @@ public class Auton1 implements OpModeInterface
                 step++;
              }
              break;
-=======
-         if (robot._manipulator.atPosition() )
-         {
-            //System.out.println( "")
-            robot._manipulator.clawRelease();
-            //robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
-            _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //One second delay
-            step++;
-         }
-          break;
-          case 1:
+         case 2:
+            if (robot._manipulator.atPosition() )
+            {
+               //System.out.println( "")
+               robot._manipulator.clawRelease();
+               //robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+               _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //One second delay
+               step++;
+            }
+            break;
+          case 3:
           if(System.currentTimeMillis() > _releaseTimer){
              robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
              step++;
           }
           break;
->>>>>>> Stashed changes
-         case 2:
+         case 4:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
             {
                robot._drive.lock();
