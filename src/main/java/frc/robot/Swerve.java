@@ -22,7 +22,7 @@ public class Swerve {
     private double xy_kP  =  -5.5; // 5.5
     private double xy_kI  =  -0.15; // .015
     private double xy_kD  =  0.0;
-    private double rot_kP =  5.1;
+    private double rot_kP =  5.0; //5.1
     private double rot_kI =  0.0;       
     private double rot_kD =  0.0;
     private double angle_target;
@@ -32,12 +32,12 @@ public class Swerve {
     private double rot_ctrlMin = -1.5;//-3
     private double x_ctrl;
     //private double x_err = 0;
-    private double x_ctrlMax = 1.0;//1.5
-    private double x_ctrlMin = -1.0;//-1.5
+    private double x_ctrlMax = 0.5;//1.0
+    private double x_ctrlMin = -0.5;//-1.0
     private double y_ctrl;
     //private double y_err = 0;
-    private double y_ctrlMax = 1.0;//1.5
-    private double y_ctrlMin = -1.0;//-1.5
+    private double y_ctrlMax = 0.5;//1.0
+    private double y_ctrlMin = -0.5;//-1.0
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private SwerveDriveKinematics currentKinematics = Constants.Swerve.swerveKinematics;

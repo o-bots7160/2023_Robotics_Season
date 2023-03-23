@@ -33,6 +33,7 @@ public class TestPose2d implements OpModeInterface {
    }
    public void Periodic()
    {
+      System.out.println("Rotation: " + robot._drive.gyro.getYaw());
       //System.out.println( "Getting button");
       if ( Joystick.getRawButtonPressed(1) )
       {
