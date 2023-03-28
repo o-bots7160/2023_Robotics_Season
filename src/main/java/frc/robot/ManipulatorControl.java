@@ -125,7 +125,7 @@ public class ManipulatorControl {
             if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )  
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-25.25);     //Cone
+                  wristSetPose(-24.5);     //Cone
                } else {
                   wristSetPose(-25.0);     //Cube
                }
@@ -180,8 +180,8 @@ public class ManipulatorControl {
       kD_Lift         =  0;
       kIz_Lift        =  0;
       kFF_Lift        =  0;
-      kMaxOutput_Lift =  0.85;
-      kMinOutput_Lift = -0.85;
+      kMaxOutput_Lift =  0.90;
+      kMinOutput_Lift = -0.90;
       pid_Lift = _lift.getPIDController();
       //pid_Lift.setFeedbackDevice()
       pid_Lift.setP(kP_Lift);
@@ -342,8 +342,8 @@ public class ManipulatorControl {
       kD_Claw         = 0;
       kIz_Claw        = 0;
       kFF_Claw        = 0;
-      kMaxOutput_Claw = 0.6;
-      kMinOutput_Claw = -0.6;
+      kMaxOutput_Claw = 0.65;
+      kMinOutput_Claw = -0.65;
       pid_Claw = _claw.getPIDController();
       pid_Claw.setP(kP_Claw);
       pid_Claw.setI(kI_Claw);

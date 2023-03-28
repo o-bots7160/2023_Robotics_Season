@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private double xy_kP  =  -5.5; // 5.5
+    private double xy_kP  =  -2.0; // 5.5
     private double xy_kI  =  -0.15; // .015
     private double xy_kD  =  0.0;
-    private double rot_kP =  5.0; //5.1
+    private double rot_kP =  3.5; //5.1
     private double rot_kI =  0.0;       
     private double rot_kD =  0.0;
     private double angle_target;
@@ -32,12 +32,12 @@ public class Swerve {
     private double rot_ctrlMin = -1.5;//-3
     private double x_ctrl;
     //private double x_err = 0;
-    private double x_ctrlMax = 0.5;//1.0
-    private double x_ctrlMin = -0.5;//-1.0
+    private double x_ctrlMax = 1.5;//1.0
+    private double x_ctrlMin = -1.5;//-1.0
     private double y_ctrl;
     //private double y_err = 0;
-    private double y_ctrlMax = 0.5;//1.0
-    private double y_ctrlMin = -0.5;//-1.0
+    private double y_ctrlMax = 0.75;//1.0
+    private double y_ctrlMin = -0.75;//-1.0
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private SwerveDriveKinematics currentKinematics = Constants.Swerve.swerveKinematics;
@@ -312,7 +312,7 @@ public class Swerve {
             // Flip the pose when red, since the dashboard field photo cannot be rotated
             dashboardPose = flipAlliance(dashboardPose);
           }
-          field2d.setRobotPose(dashboardPose);
+          field2d.setRobotPose(dashboardPose); */
         // rot_kP = SmartDashboard.getNumber("rot_kP", rot_kP);
         // rot_kI = SmartDashboard.getNumber("rot_kI", rot_kI);
         // rot_kD = SmartDashboard.getNumber("rot_kD", rot_kD);
@@ -322,10 +322,10 @@ public class Swerve {
         // SmartDashboard.putNumber("x_ctrl", x_ctrl);
         // SmartDashboard.putNumber("x_err",    x_err); 
         // SmartDashboard.putNumber("y_ctrl", y_ctrl);  
-        // SmartDashboard.putNumber("y_err",    y_err);  
-        //SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
-        //SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
-        //SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
+        // SmartDashboard.putNumber("y_err",    y_err); 
+        SmartDashboard.putNumber("X   ",     Units.metersToFeet(pose.getX()));
+        SmartDashboard.putNumber("Y   ",     Units.metersToFeet(pose.getY()));
+        SmartDashboard.putNumber("ROT ",     pose.getRotation().getDegrees());    
         // SmartDashboard.putBoolean("autonActive", auton_active);
 
         // for(SwerveModule mod : mSwerveMods){

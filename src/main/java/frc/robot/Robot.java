@@ -35,8 +35,8 @@ public class Robot extends TimedRobot {
       m_chooser.addOption("AutonPose", new AutonPose()); 
       m_chooser.addOption("Auton1", new Auton1()); 
       m_chooser.addOption("AutonCone", new AutonCone()); 
-      //m_chooser.addOption("Auton3Left", new Auton3Left() );
-      //m_chooser.addOption("Auton3Right", new Auton3Right() );
+      m_chooser.addOption("Auton3Left", new Auton3Left() );
+      m_chooser.addOption("Auton3Right", new Auton3Right() );
       SmartDashboard.putData("Auto choices", m_chooser);
   }
   @Override

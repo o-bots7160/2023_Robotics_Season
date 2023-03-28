@@ -15,19 +15,20 @@ public class Auton2RightCS implements OpModeInterface
    private Pose2d Path1[] = {
                     new Pose2d(Units.feetToMeters(11.0), Units.feetToMeters(-1.0),new Rotation2d(Math.PI)) }; //TODO test points only
    private Pose2d Path2[] = {
-                    new Pose2d(Units.feetToMeters(13.0), Units.feetToMeters(-1.0),new Rotation2d(Units.degreesToRadians(3.0))) };
+                    new Pose2d(Units.feetToMeters(13.0), Units.feetToMeters(-1.0),new Rotation2d(Units.degreesToRadians(2.0))) };
    private Pose2d Path3[] = {
-                    new Pose2d(Units.feetToMeters(14.0), Units.feetToMeters(-1.0),new Rotation2d(Units.degreesToRadians(3.0))) };
+                    new Pose2d(Units.feetToMeters(14.5), Units.feetToMeters(-1.0),new Rotation2d(Units.degreesToRadians(2.0))) };
    private Pose2d Path4[] = {
-                    new Pose2d(Units.feetToMeters(0.1), Units.feetToMeters(-1.5),new Rotation2d(Units.degreesToRadians(179.0))) };
+                    new Pose2d(Units.feetToMeters(14.5), Units.feetToMeters(-1.0),new Rotation2d(Units.degreesToRadians(179.0))),
+                    new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(-2.75),new Rotation2d(Units.degreesToRadians(179.0))) };
    private Pose2d Path5[] = {
                     new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(5),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(6.5), Units.feetToMeters(5),new Rotation2d(Math.PI)) };
+                    new Pose2d(Units.feetToMeters(8.25), Units.feetToMeters(5),new Rotation2d(Math.PI)) };
    private SwervePath firstPath  = new SwervePath( Path1 );
    private SwervePath secondPath = new SwervePath( Path2 );
    private SwervePath thirdPath  = new SwervePath( Path3 );
    private SwervePath fourthPath = new SwervePath( Path4 );
-   private SwervePath fifthPath = new SwervePath( Path5 );
+   //private SwervePath fifthPath  = new SwervePath( Path5 );
 
    public Auton2RightCS()
    {
@@ -49,7 +50,7 @@ public class Auton2RightCS implements OpModeInterface
             if (robot._manipulator.atPosition() )
             {
                robot._manipulator.clawRelease();
-               _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //750 millisecond delay
+               _releaseTimer = ( System.currentTimeMillis() + 250 ) ; //750 millisecond delay
                step++;
             }
              break;
@@ -76,7 +77,7 @@ public class Auton2RightCS implements OpModeInterface
             if( thirdPath.atDestination() ) 
                {
                   robot._manipulator.clawGrabCone();
-                  _releaseTimer = ( System.currentTimeMillis() + 1000 ); //750 millisecond delay
+                  _releaseTimer = ( System.currentTimeMillis() + 250 ); //750 millisecond delay
                   step++;
                }
             break;
@@ -108,11 +109,11 @@ public class Auton2RightCS implements OpModeInterface
             }
             break;
          case 9:
-            if ( fifthPath.atDestination() )
-            {
-               robot._drive.chargeStationAutoLevel();
+            //if ( fifthPath.atDestination() )
+            //{
+            //   robot._drive.chargeStationAutoLevel();
                step++;
-            }
+            //}
             break;
          case 10:
             if (robot._drive.chargeStationAutoLevel())
