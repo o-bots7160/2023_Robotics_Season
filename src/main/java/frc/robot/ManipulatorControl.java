@@ -41,11 +41,9 @@ public class ManipulatorControl {
    private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
    private double wrist_target = 0.0;
 
-   private CANSparkMax _claw;
-   private SparkMaxPIDController pid_Claw;
-   private RelativeEncoder en_Claw;
+   private GrabberClaw _claw = new GrabberClaw();
+
    private long _SysPntTimer;
-   private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
 
    public static enum MANIPPOS {
       TOP,
@@ -62,7 +60,7 @@ public class ManipulatorControl {
       liftInit();
       extensionInit();
       wristInit();
-      clawInit();
+      //clawInit();
       _SysPntTimer =  (System.currentTimeMillis() + 2000); //Used to print the Motors Status every 3 seconds
    }
 
@@ -71,7 +69,7 @@ public class ManipulatorControl {
       //liftDisable();
       extensionDisable();
       //wristDisable();
-      //clawDisable();
+      //_claw.disable();
    }
 
    public void setManipPos(MANIPPOS pos){
@@ -83,6 +81,7 @@ public class ManipulatorControl {
        if ( System.currentTimeMillis() > _SysPntTimer ){
           sysPrints();
        }
+       _claw.periodic();
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME
@@ -329,51 +328,23 @@ public class ManipulatorControl {
       _wrist.set(0.0);
    }
 
-   private void clawInit(){
-      _claw = new CANSparkMax(53, MotorType.kBrushless);
-      _claw.setInverted(false);
-      _claw.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _claw.setSoftLimit(SoftLimitDirection.kReverse, 1);
-      _claw.enableSoftLimit(SoftLimitDirection.kForward, true);
-      _claw.setSoftLimit(SoftLimitDirection.kForward, 20);
-      _claw.setIdleMode(IdleMode.kBrake);
-      kP_Claw         = 0.8;
-      kI_Claw         = 0;
-      kD_Claw         = 0;
-      kIz_Claw        = 0;
-      kFF_Claw        = 0;
-      kMaxOutput_Claw = 0.65;
-      kMinOutput_Claw = -0.65;
-      pid_Claw = _claw.getPIDController();
-      pid_Claw.setP(kP_Claw);
-      pid_Claw.setI(kI_Claw);
-      pid_Claw.setD(kD_Claw);
-      pid_Claw.setIZone(kIz_Claw);
-      pid_Claw.setFF(kFF_Claw);
-      pid_Claw.setOutputRange(kMinOutput_Claw, kMaxOutput_Claw);
-      en_Claw = _claw.getEncoder();
-   }
-
    public double clawGetPose() {
-      return en_Claw.getPosition();
+      return _claw.getPose();
    }
 
-   private void clawSetPose( double new_target) {
-      pid_Claw.setReference(new_target, ControlType.kPosition);
-   }
    public void clawGrabCone( ){
       haveCone = true;
-      clawSetPose(19.0);
+      _claw.grabCone();
    }
    public void clawGrabCube( ){
       haveCone = false;
-      clawSetPose(14.0);
+      _claw.grabCube();;
    }
    public void clawRelease( ) {
-      clawSetPose(2.0);
+      _claw.release();;
    }
    public void clawDisable() {
-      _claw.set(0.0);
+      _claw.disable();
    }
    private void sysPrints(){
       System.out.println("Lift Motor Temp: " + _lift.getMotorTemperature());
@@ -384,10 +355,7 @@ public class ManipulatorControl {
       System.out.println("Wrst Motor Pos.: " + en_Wrist.getPosition());
       System.out.println("Wrst Motor Cur.: " + _wrist.getOutputCurrent());
       System.out.println("---");
-      System.out.println("Claw Motor Temp: " + _claw.getMotorTemperature());
-      System.out.println("Claw Motor Pos.: " + en_Claw.getPosition());
-      System.out.println("Claw Motor Cur.: " + _claw.getOutputCurrent());
-      System.out.println("---");
+      _claw.sysPrints();
       _SysPntTimer =  (System.currentTimeMillis() + 2000);
    }
 
