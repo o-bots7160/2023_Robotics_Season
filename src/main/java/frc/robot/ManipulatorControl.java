@@ -32,9 +32,9 @@ public class ManipulatorControl {
    private double  ext_target = 0.0;
 
    private CANSparkMax _wrist;
-   private double wristTop = -3.0;
-   private double wristLevel = -21.0;
-   private double wrist_fV  = -0.15;
+   private double wristTop = -0.238095;
+   private double wristLevel = -19.761831;
+   private double wrist_fV  =  0.45;
    private double wrist2Radians = Math.PI/(( wristTop - wristLevel) * 2.0);
    private SparkMaxPIDController pid_Wrist;
    private RelativeEncoder en_Wrist;
@@ -310,8 +310,8 @@ public class ManipulatorControl {
          new_target = 0.0;
       }
       wrist_target = new_target;
-      pid_Wrist.setReference(new_target, ControlType.kPosition);
-      //pid_Wrist.setReference(new_target, ControlType.kPosition, 0, getFeedForward(new_target), ArbFFUnits.kVoltage);
+      //pid_Wrist.setReference(new_target, ControlType.kPosition);
+      pid_Wrist.setReference(new_target, ControlType.kPosition, 0, getFeedForward(new_target), ArbFFUnits.kVoltage);
    }
 
    private boolean wristAtPosition() {
