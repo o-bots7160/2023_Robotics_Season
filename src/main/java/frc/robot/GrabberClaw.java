@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 public class GrabberClaw
 {
@@ -16,6 +18,7 @@ public class GrabberClaw
    private SparkMaxPIDController pid_Claw;
    private RelativeEncoder en_Claw;
    private double kP_Claw, kI_Claw, kD_Claw, kIz_Claw, kFF_Claw, kMaxOutput_Claw, kMinOutput_Claw;
+   private TimeOfFlight sensor = new TimeOfFlight(101);
 
    public GrabberClaw()
    {
@@ -41,6 +44,7 @@ public class GrabberClaw
       pid_Claw.setFF(kFF_Claw);
       pid_Claw.setOutputRange(kMinOutput_Claw, kMaxOutput_Claw);
       en_Claw = _claw.getEncoder();
+      sensor.setRangingMode(RangingMode.Short, 24);
    }
    public double getPose() {
       return en_Claw.getPosition();
@@ -49,7 +53,7 @@ public class GrabberClaw
    {
       // close claw if grabbing and something in fron of sensor
       // open claw if not grabbing
-      if ( grabbing )
+      if ( grabbing && sensor.getRange() > 45 )
       {
          if ( setCone )
          {
