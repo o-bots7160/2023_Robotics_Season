@@ -41,7 +41,8 @@ public class ManipulatorControl {
    private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
    private double wrist_target = 0.0;
 
-   private GrabberClaw _claw = new GrabberClaw();
+   //private GrabberClaw _claw = new GrabberClaw();
+   private GrabberIntake _claw = new GrabberIntake();
 
    private long _SysPntTimer;
 
@@ -309,27 +310,20 @@ public class ManipulatorControl {
          new_target = 0.0;
       }
       wrist_target = new_target;
-      //pid_Wrist.setReference(new_target, ControlType.kPosition);
       pid_Wrist.setReference(new_target, ControlType.kPosition, 0, getFeedForward(new_target), ArbFFUnits.kVoltage);
    }
 
    private boolean wristAtPosition() {
       double error = wrist_target - en_Wrist.getPosition();
-      //System.out.println( "wrst "+ wrist_target + " "+ error );
       if ( ( error < 1.0 ) && ( error > -1.0 ) ) {
          return true;
       } else {
-         //System.out.println( "wrst "+ wrist_target + " "+ error );
          return false;
       }
    }
 
    public void wristDisable() {
       _wrist.set(0.0);
-   }
-
-   public double clawGetPose() {
-      return _claw.getPose();
    }
 
    public void clawGrabCone( ){

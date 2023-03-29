@@ -53,7 +53,7 @@ public class GrabberClaw
    {
       // close claw if grabbing and something in fron of sensor
       // open claw if not grabbing
-      if ( grabbing && sensor.getRange() > 45 )
+      if ( grabbing ) // && sensor.getRange() > 45 )
       {
          if ( setCone )
          {
