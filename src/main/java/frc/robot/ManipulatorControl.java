@@ -125,7 +125,7 @@ public class ManipulatorControl {
             if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )  
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-24.5);     //Cone
+                  wristSetPose(-24.0);     //Cone
                } else {
                   wristSetPose(-25.0);     //Cube
                }
@@ -332,10 +332,10 @@ public class ManipulatorControl {
    }
    public void clawGrabCube( ){
       haveCone = false;
-      _claw.grabCube();;
+      _claw.grabCube();
    }
    public void clawRelease( ) {
-      _claw.release();;
+      _claw.release();
    }
    public void clawDisable() {
       _claw.disable();

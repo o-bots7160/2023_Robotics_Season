@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private double xy_kP  =  -2.0; // 5.5
+    private double xy_kP  =  -2.3; // 5.5
     private double xy_kI  =  -0.15; // .015
     private double xy_kD  =  0.0;
-    private double rot_kP =  3.5; //5.1
+    private double rot_kP =  3.3; //5.1
     private double rot_kI =  0.0;       
     private double rot_kD =  0.0;
     private double angle_target;

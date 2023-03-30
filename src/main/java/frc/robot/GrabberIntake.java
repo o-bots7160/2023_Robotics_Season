@@ -28,25 +28,33 @@ public class GrabberIntake
       //System.out.println("Distance: " + sensor.getRange());
       if ( grabbing )
       {
-         if ( setCone && sensor.getRange() < 45 )
+         if ( setCone && sensor.getRange() < 60 )
          {
             _intake.set( 0.0 );
          }
-         else if ( !setCone && sensor.getRange() < 70)
+         else if ( !setCone && sensor.getRange() < 85)
+         {
+            _intake.set( 0.0 );
+         }
+         else if ( sensor.getRange() > 275)
          {
             _intake.set( 0.0 );
          }
       }
       else
       {
-         // if ( setCone && sensor.getRange() > 50 )
-         // {
-         //    _intake.set(0.0);
-         // }
-         // else if ( !setCone && sensor.getRange() > 70 )
-         // {
-            _intake.set(0.0);
-         //}
+         if ( setCone && sensor.getRange() > 200 )
+         {
+            _intake.set( 0.0 );
+         }
+         else if ( !setCone && sensor.getRange() > 400 )
+         {
+            _intake.set( 0.0 );
+         }
+         else if ( sensor.getRange() < 30 )
+         {
+            _intake.set( 0.0 );
+         }
       }
    }
 
@@ -67,7 +75,7 @@ public class GrabberIntake
    public void release( )
    {
       grabbing = false;
-      _intake.set( -0.5 );
+      _intake.set( -1.0 );
       
       System.out.println("Release");
    }
