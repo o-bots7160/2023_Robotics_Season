@@ -1,12 +1,16 @@
-package frc.robot;
+package frc.robot.Autons;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.OpModeInterface;
+import frc.robot.RobotContainer;
+import frc.robot.SwervePath;
 import frc.robot.ManipulatorControl.MANIPPOS;
 
-public class Auton1CoOp implements OpModeInterface
+public class Auton1 implements OpModeInterface
 {
    private RobotContainer robot;
    private long _releaseTimer = 0;
@@ -14,16 +18,11 @@ public class Auton1CoOp implements OpModeInterface
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(0),new Rotation2d(Math.PI)),
-                    //new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(Math.PI)),
-                    //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(0),new Rotation2d(0)),
-                    //new Pose2d(Units.feetToMeters(15), Units.feetToMeters(-1.5),new Rotation2d(0)),
-                    //new Pose2d(Units.feetToMeters(6.75), Units.feetToMeters(-1.5),new Rotation2d(0))
-                    new Pose2d(Units.feetToMeters(6.75), Units.feetToMeters(0),new Rotation2d(Math.PI))
-                    };
+                    new Pose2d(Units.feetToMeters(13), Units.feetToMeters(0),new Rotation2d(Math.PI))
+                     };
     private SwervePath firstPath  = new SwervePath( Path1 );
 
-   public Auton1CoOp()
+   public Auton1()
    {
       
       robot = RobotContainer.getInstance();
@@ -51,27 +50,35 @@ public class Auton1CoOp implements OpModeInterface
             if (robot._manipulator.atPosition() )
             {
                //System.out.println( "")
+               step++;
+               robot._manipulator.clawRelease();
+               robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+            }
+             break;
+         case 1:
+             //if(robot._manipulator.clawGetPose() < 10){
+                robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+                step++;
+             //}
+             break;
+         case 2:
+            if (robot._manipulator.atPosition() )
+            {
+               //System.out.println( "")
                robot._manipulator.clawRelease();
                //robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
                _releaseTimer = ( System.currentTimeMillis() + 750 ) ; //One second delay
                step++;
             }
-             break;
-         case 1:
-            if(System.currentTimeMillis() > _releaseTimer){
-               robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
-               step++;
-            }
             break;
-         case 2:
+          case 3:
+          if(System.currentTimeMillis() > _releaseTimer){
+             robot._manipulator.setManipPos(MANIPPOS.TRAVEL);
+             step++;
+          }
+          break;
+         case 4:
             if ( robot._manipulator.atPosition() && firstPath.atDestination())
-            {
-               robot._drive.chargeStationAutoLevel();
-               step++;
-            }
-            break;
-         case 3:
-            if (robot._drive.chargeStationAutoLevel())
             {
                robot._drive.lock();
                step++;

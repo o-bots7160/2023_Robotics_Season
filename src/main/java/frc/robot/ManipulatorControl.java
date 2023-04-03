@@ -1,12 +1,9 @@
 package frc.robot;
 
-import javax.lang.model.util.ElementScanner14;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -15,13 +12,10 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//import edu.wpi.first.wpilibj.;
-
-public class ManipulatorControl {
-   private boolean haveCone = false;
-
+public class ManipulatorControl
+{
    private CANSparkMax _lift;
    private SparkMaxPIDController pid_Lift;
    private RelativeEncoder en_Lift;
@@ -89,10 +83,10 @@ public class ManipulatorControl {
             if ( liftGetPose() > 120)   //FIXME
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-17.25); //Cone     
+                  wristSetPose(-21.25); //Cone     
                   
                } else {
-                  wristSetPose(-21.0); //Cube
+                  wristSetPose(-23.0); //Cube
                  
                }
             }else{
@@ -108,10 +102,10 @@ public class ManipulatorControl {
             if ( liftGetPose() > 75)   
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-17.25); //Cone     
+                  wristSetPose(-21.25); //Cone     
                   
                } else {
-                  wristSetPose(-21.0); //Cube
+                  wristSetPose(-23.0); //Cube
                  
                }
             }else{
@@ -125,16 +119,16 @@ public class ManipulatorControl {
             if ( ( liftGetPose() < 38 ) && ( extGetPose() < 4000 ) )  
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-24.0);     //Cone
+                  wristSetPose(-28.5);     //Cone
                } else {
-                  wristSetPose(-25.0);     //Cube
+                  wristSetPose(-28.5);     //Cube
                }
             }
             break;
 
          case TRAVEL:
             wristSetPose( 0 );
-            if ( wristGetPose( ) > -20 )   
+            if ( wristGetPose( ) > -25 )   
             {
                extSetPose( 0.0 );
                liftSetPose( 6 );
@@ -147,10 +141,10 @@ public class ManipulatorControl {
             if ( liftGetPose() > 116)   
             {
                if( !UI._coneCube() ){
-                  wristSetPose(-22.75); //cone    
+                  wristSetPose(-26.75); //cone    
                   
                } else {
-                  wristSetPose(-22.5); //cube
+                  wristSetPose(-26.5); //cube
                }
             }else{
                   wristSetPose(-10);
@@ -272,7 +266,7 @@ public class ManipulatorControl {
       _wrist = new CANSparkMax(52, MotorType.kBrushless);
       _wrist.setInverted(false);
       _wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -28);        //lower limit  //FIXME
+      _wrist.setSoftLimit(SoftLimitDirection.kReverse, -29);        //lower limit  //FIXME
       _wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
       _wrist.setSoftLimit(SoftLimitDirection.kForward, 0);      //upper limit
       _wrist.setIdleMode(IdleMode.kBrake);
@@ -282,7 +276,7 @@ public class ManipulatorControl {
       kIz_Wrist        =  0;
       kFF_Wrist        =  0;
       kMaxOutput_Wrist =  0.25;
-      kMinOutput_Wrist = -0.15;
+      kMinOutput_Wrist = -0.25;
       pid_Wrist = _wrist.getPIDController();
       pid_Wrist.setP(kP_Wrist);
       pid_Wrist.setI(kI_Wrist);
@@ -325,13 +319,17 @@ public class ManipulatorControl {
    public void wristDisable() {
       _wrist.set(0.0);
    }
+   public void wristWindUp()
+   {
+      _wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
+      _wrist.set( 0.10 );
+      en_Wrist.setPosition( 0.0 );
+   }
 
    public void clawGrabCone( ){
-      haveCone = true;
       _claw.grabCone();
    }
    public void clawGrabCube( ){
-      haveCone = false;
       _claw.grabCube();
    }
    public void clawRelease( ) {
@@ -352,5 +350,4 @@ public class ManipulatorControl {
       _claw.sysPrints();
       _SysPntTimer =  (System.currentTimeMillis() + 2000);
    }
-
 }

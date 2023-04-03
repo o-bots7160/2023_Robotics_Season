@@ -4,16 +4,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Autons.Auton1;
+import frc.robot.Autons.Auton1CoOp;
+import frc.robot.Autons.Auton2LeftCS;
+import frc.robot.Autons.Auton2RightCS;
+import frc.robot.Autons.Auton3Left;
+import frc.robot.Autons.Auton3Right;
+import frc.robot.Autons.AutonCone;
+import frc.robot.Autons.AutonPose;
+import frc.robot.Autons.AutonPrep;
 
-//
-// Any Operation mode must implement the following interface
-//
-//
-interface OpModeInterface
-{
-   public void Init();
-   public void Periodic();
-}
+
 
 public class Robot extends TimedRobot {
    private OpModeInterface teleop;
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
       m_chooser.addOption("AutonCone", new AutonCone()); 
       m_chooser.addOption("Auton3Left", new Auton3Left() );
       m_chooser.addOption("Auton3Right", new Auton3Right() );
+      m_chooser.addOption("AutonPrep", new AutonPrep() );
       SmartDashboard.putData("Auto choices", m_chooser);
   }
   @Override

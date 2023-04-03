@@ -1,5 +1,7 @@
-package frc.robot;
+package frc.robot.Autons;
 
+import frc.robot.OpModeInterface;
+import frc.robot.RobotContainer;
 import frc.robot.ManipulatorControl.MANIPPOS;
 
 public class AutonCone implements OpModeInterface

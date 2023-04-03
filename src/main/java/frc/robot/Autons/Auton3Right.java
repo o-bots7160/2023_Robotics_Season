@@ -1,8 +1,11 @@
-package frc.robot;
+package frc.robot.Autons;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.OpModeInterface;
+import frc.robot.RobotContainer;
+import frc.robot.SwervePath;
 
 public class Auton3Right implements OpModeInterface
 {

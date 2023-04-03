@@ -8,7 +8,7 @@ public class UI {
    private static final Joystick _buttons1        = new Joystick(1);
    private static final Joystick _buttons2        = new Joystick(2);
    //private static final Joystick _joystick2       = new Joystick(3);
-   private static boolean closed = false;
+   private static boolean closed = true;
    private static boolean spinCenter = false;
 
    public static boolean _manualUp() {

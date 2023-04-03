@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-class SwervePath {
+public class SwervePath {
     private RobotContainer robot;
     private int index;
     private Pose2d this_list[];
@@ -33,7 +33,7 @@ class SwervePath {
         return done;
     }
 
-    static Pose2d transform( Pose2d new_item)
+    public static Pose2d transform( Pose2d new_item)
     {
         double new_x = 16.54 - new_item.getX(); // need half field width
         double new_y = Units.feetToMeters(8.25) + new_item.getY(); // need half field height
