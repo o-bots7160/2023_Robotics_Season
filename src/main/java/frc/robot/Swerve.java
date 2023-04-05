@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Swerve {
     public boolean auton_active = false;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private double xy_kP  =  -2.36; // 5.5
-    private double xy_kI  =  -0.15; // .015
+    private double xy_kP  =  -2.4; // 5.5
+    private double xy_kI  =  -0.145; // .015
     private double xy_kD  =  0.0;
     private double rot_kP =  3.5; //5.1
     private double rot_kI =  0.0;       
@@ -28,16 +28,16 @@ public class Swerve {
     private double angle_target;
     private double rot_ctrl;
     //private double rot_err;
-    private double rot_ctrlMax = 1.5;//3
-    private double rot_ctrlMin = -1.5;//-3
+    //private double rot_ctrlMax = 1.5;//3
+    //private double rot_ctrlMin = -1.5;//-3
     private double x_ctrl;
     //private double x_err = 0;
-    private double x_ctrlMax = 1.5;//1.0
-    private double x_ctrlMin = -1.5;//-1.0
+    //private double xy_ctrlMax = 1.5;//1.0
+    //private double xy_ctrlMin = -1.5;//-1.0
     private double y_ctrl;
     //private double y_err = 0;
-    private double y_ctrlMax = 0.75;//1.0
-    private double y_ctrlMin = -0.75;//-1.0
+    // private double y_ctrlMax = 0.75;//1.0
+    // private double y_ctrlMin = -0.75;//-1.0
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private SwerveDriveKinematics currentKinematics = Constants.Swerve.swerveKinematics;
@@ -167,7 +167,7 @@ public class Swerve {
         auton_active = ! y_PID.atSetpoint(); 
         return auton_active;
     }
-    public boolean move_Pose2d( Pose2d new_pose)
+    public boolean move_Pose2d( Pose2d new_pose, double rot_ctrlMax, double rot_ctrlMin, double xy_ctrlMax, double xy_ctrlMin)
     {
         Pose2d pose = getPose();
         if ( ! auton_active )
@@ -188,17 +188,17 @@ public class Swerve {
         }
         //x_err    = pose.getX() - new_pose.getX();
         x_ctrl   = x_PID.calculate( pose.getX() );
-        if       (x_ctrl > x_ctrlMax) {
-            x_ctrl = x_ctrlMax;
-        }else if (x_ctrl < x_ctrlMin) {
-            x_ctrl = x_ctrlMin;
+        if       (x_ctrl > xy_ctrlMax) {
+            x_ctrl = xy_ctrlMax;
+        }else if (x_ctrl < xy_ctrlMin) {
+            x_ctrl = xy_ctrlMin;
         }
         //y_err    = pose.getY() - new_pose.getY();
         y_ctrl   = y_PID.calculate( pose.getY() );
-        if       (y_ctrl > y_ctrlMax) {
-            y_ctrl = y_ctrlMax;
-        }else if (y_ctrl < y_ctrlMin) {
-            y_ctrl = y_ctrlMin;
+        if       (y_ctrl > xy_ctrlMax) {
+            y_ctrl = xy_ctrlMax;
+        }else if (y_ctrl < xy_ctrlMin) {
+            y_ctrl = xy_ctrlMin;
         }
         drive( new Translation2d(-x_ctrl, -y_ctrl), rot_ctrl, true, true); //fieldRelative: MUST = true
         auton_active = !x_PID.atSetpoint() || !y_PID.atSetpoint() || !rot_PID.atSetpoint();
@@ -264,23 +264,23 @@ public class Swerve {
     public boolean chargeStationAutoLevel(){
 
         final double pitch = gyro.getRoll();
-        final double pitch_P = .014;      //0.00005
+        final double pitch_P = .015;      //.014
         final double current_yaw = gyro.getYaw();
         double delta = Math.abs(Math.abs(pitch) - prevPitch);
         final double maxDelta = 3;
         double driveCommand = pitch*pitch_P;
         if(pitch > 4 ){
             if(current_yaw > 135 && current_yaw < 225){
-                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
-            }else{
                 drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
             }
             
         }else if(pitch < -4 ){
             if(current_yaw > 135 && current_yaw < 225){
-                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
-            }else{
                 drive( new Translation2d( -driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
+            }else{
+                drive( new Translation2d( driveCommand, 0).times(Constants.Swerve.maxSpeed), 0, true, true );
             }
             
         }else{

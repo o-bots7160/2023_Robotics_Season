@@ -3,8 +3,8 @@ package frc.robot.Autons;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+//import edu.wpi.first.wpilibj.DriverStation;
+//import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.OpModeInterface;
 import frc.robot.RobotContainer;
 import frc.robot.SwervePath;
@@ -20,7 +20,7 @@ public class Auton1 implements OpModeInterface
    private Pose2d Path1[] = {
                     new Pose2d(Units.feetToMeters(13), Units.feetToMeters(0),new Rotation2d(Math.PI))
                      };
-    private SwervePath firstPath  = new SwervePath( Path1 );
+    private SwervePath firstPath  = new SwervePath( Path1, 1.5, -1.5, 1.0, -1.0 );
 
    public Auton1()
    {

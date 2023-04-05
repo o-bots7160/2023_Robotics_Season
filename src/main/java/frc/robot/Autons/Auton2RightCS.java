@@ -16,21 +16,21 @@ public class Auton2RightCS implements OpModeInterface
    private int step = 0;
    private Pose2d startPoint  = new Pose2d(Units.feetToMeters(0), Units.feetToMeters(0),new Rotation2d(Math.PI));
    private Pose2d Path1[] = {
-                    new Pose2d(Units.feetToMeters(11.0), Units.feetToMeters(-1.25),new Rotation2d(Math.PI)) }; //TODO test points only
+                    new Pose2d(Units.feetToMeters(11.0), Units.feetToMeters(-1),new Rotation2d(Math.PI)) }; //TODO test points only
    private Pose2d Path2[] = {
-                    new Pose2d(Units.feetToMeters(13.0), Units.feetToMeters(-1.25),new Rotation2d(Units.degreesToRadians(2.0))) };
+                    new Pose2d(Units.feetToMeters(11.0), Units.feetToMeters(-1),new Rotation2d(Units.degreesToRadians(2.0))) };
    private Pose2d Path3[] = {
-                    new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(-1.25),new Rotation2d(Units.degreesToRadians(2.0))) };
+                    new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(-1),new Rotation2d(Units.degreesToRadians(2.0))) };
    private Pose2d Path4[] = {
-                    new Pose2d(Units.feetToMeters(14.5), Units.feetToMeters(-1.25),new Rotation2d(Units.degreesToRadians(179.0))),
-                    new Pose2d(Units.feetToMeters(0.55), Units.feetToMeters(-2.75),new Rotation2d(Units.degreesToRadians(179.0))) };
-   private Pose2d Path5[] = {
-                    new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(5),new Rotation2d(Math.PI)),
-                    new Pose2d(Units.feetToMeters(8.25), Units.feetToMeters(5),new Rotation2d(Math.PI)) };
-   private SwervePath firstPath  = new SwervePath( Path1 );
-   private SwervePath secondPath = new SwervePath( Path2 );
-   private SwervePath thirdPath  = new SwervePath( Path3 );
-   private SwervePath fourthPath = new SwervePath( Path4 );
+                    new Pose2d(Units.feetToMeters(14.5), Units.feetToMeters(-1),new Rotation2d(Units.degreesToRadians(179.0))),
+                    new Pose2d(Units.feetToMeters(0.8), Units.feetToMeters(-2.7),new Rotation2d(Units.degreesToRadians(179.0))) };
+   // private Pose2d Path5[] = {
+   //                  new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(5),new Rotation2d(Math.PI)),
+   //                  new Pose2d(Units.feetToMeters(8.25), Units.feetToMeters(5),new Rotation2d(Math.PI)) };
+   private SwervePath firstPath  = new SwervePath( Path1, 1.5, -1.5, 1.5, -1.5 );
+   private SwervePath secondPath = new SwervePath( Path2, 1.5, -1.5, 1.5, -1.5 );
+   private SwervePath thirdPath  = new SwervePath( Path3, 1.5, -1.5, 1.5, -1.5 );
+   private SwervePath fourthPath = new SwervePath( Path4, 1.5, -1.5, 1.5, -1.5 );
    //private SwervePath fifthPath  = new SwervePath( Path5 );
 
    public Auton2RightCS()
@@ -42,7 +42,7 @@ public class Auton2RightCS implements OpModeInterface
       step = 0;
       robot.resetOdometry(startPoint);
       robot._manipulator.clawGrabCube();
-      robot._manipulator.setManipPos( MANIPPOS.MID );
+      robot._manipulator.setManipPos( MANIPPOS.AUTONCUBE );
       robot._manipulator.periodic();
    }
    public void Periodic()

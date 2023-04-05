@@ -75,7 +75,7 @@ public class TestPose2d implements OpModeInterface {
       }
       if ( moving )
       {
-         moving = robot._drive.move_Pose2d(control_pose);
+         moving = robot._drive.move_Pose2d(control_pose, 1.5, -1.5, 1.0, -1.0);
       }
       else
       {

@@ -46,6 +46,7 @@ public class ManipulatorControl
       FLOOR,
       TRAVEL,
       SUBSTATION,
+      AUTONCUBE,
       MANUAL
    };
 
@@ -76,7 +77,7 @@ public class ManipulatorControl
        if ( System.currentTimeMillis() > _SysPntTimer ){
           sysPrints();
        }
-       _claw.periodic();
+       _claw.periodic( wristGetPose() );
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME
@@ -150,6 +151,17 @@ public class ManipulatorControl
                   wristSetPose(-10);
             }
             break;
+
+         case AUTONCUBE:
+         liftSetPose(110);      
+         extSetPose(30000.0);
+         if ( liftGetPose() > 75)   
+         {
+               wristSetPose(-22.0);
+         }else{
+               wristSetPose(-10);
+         }
+         break;
 
          case MANUAL:
             break;

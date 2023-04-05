@@ -9,9 +9,17 @@ public class SwervePath {
     private RobotContainer robot;
     private int index;
     private Pose2d this_list[];
+    private double rot_ctrlMax;
+    private double rot_ctrlMin;
+    private double xy_ctrlMax;
+    private double xy_ctrlMin;
 
-    public SwervePath( Pose2d new_list[] )
+    public SwervePath( Pose2d new_list[], double new_rot_ctrlMax,  double new_rot_ctrlMin, double new_xy_ctrlMax, double new_xy_ctrlMin)
     {
+        rot_ctrlMax = new_rot_ctrlMax;
+        rot_ctrlMin = new_rot_ctrlMin;
+        xy_ctrlMax = new_xy_ctrlMax;
+        xy_ctrlMin = new_xy_ctrlMin;
         robot = RobotContainer.getInstance();
         this_list = new_list;
         index = 0;
@@ -21,7 +29,7 @@ public class SwervePath {
     {
         boolean done = false;
         //System.out.println("Driving to: " + this_list[index]);
-        if ( ! robot._drive.move_Pose2d( this_list[index] ) )
+        if ( ! robot._drive.move_Pose2d( this_list[index], rot_ctrlMax, rot_ctrlMin, xy_ctrlMax, xy_ctrlMin ) )
         {
             index++;
             if ( index >= this_list.length )

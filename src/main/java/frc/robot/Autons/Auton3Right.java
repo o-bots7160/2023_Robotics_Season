@@ -23,8 +23,8 @@ public class Auton3Right implements OpModeInterface
                     new Pose2d(Units.feetToMeters(14), Units.feetToMeters(4),new Rotation2d(Math.PI)),
                     new Pose2d(Units.feetToMeters(14), Units.feetToMeters(0),new Rotation2d(0.0)),
                     new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(0),new Rotation2d(0.0)) };
-    private SwervePath firstPath  = new SwervePath( Path1 );
-    private SwervePath secondPath = new SwervePath( Path2 );
+    private SwervePath firstPath  = new SwervePath( Path1, 1.5, -1.5, 1.5, -1.5 );
+    private SwervePath secondPath = new SwervePath( Path2, 1.5, -1.5, 1.5, -1.5 );
 
    public Auton3Right()
    {

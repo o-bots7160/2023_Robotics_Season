@@ -24,10 +24,10 @@ public class Auton2LeftCS implements OpModeInterface
    private Pose2d Path4[] = {
                     new Pose2d(Units.feetToMeters(0.25), Units.feetToMeters(-5),new Rotation2d(Math.PI)),
                     new Pose2d(Units.feetToMeters(6.5), Units.feetToMeters(-5),new Rotation2d(Math.PI)) };
-    private SwervePath firstPath  = new SwervePath( Path1 );
-    private SwervePath secondPath = new SwervePath( Path2 );
-    private SwervePath thirdPath  = new SwervePath( Path3 );
-    private SwervePath fourthPath = new SwervePath( Path4 );
+    private SwervePath firstPath  = new SwervePath( Path1, 1.5, -1.5, 1.5, -1.5 );
+    private SwervePath secondPath = new SwervePath( Path2, 1.5, -1.5, 1.5, -1.5 );
+    private SwervePath thirdPath  = new SwervePath( Path3, 1.5, -1.5, 1.5, -1.5 );
+    private SwervePath fourthPath = new SwervePath( Path4, 1.5, -1.5, 1.5, -1.5 );
 
    public Auton2LeftCS()
    {

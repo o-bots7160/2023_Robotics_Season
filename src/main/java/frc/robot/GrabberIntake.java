@@ -4,6 +4,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import frc.robot.ManipulatorControl.MANIPPOS;
+
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
@@ -23,10 +26,10 @@ public class GrabberIntake
       _intake.setIdleMode(IdleMode.kBrake);
       sensor.setRangingMode(RangingMode.Short, 24);
    }
-   public void periodic()
+   public void periodic( double wristPos )
    {
       double distance = sensor.getRange();
-      System.out.println("Distance: " + distance);
+      //System.out.println("Distance: " + distance);
       if ( distance < 27 )
       {
          distance = 500;
@@ -34,34 +37,37 @@ public class GrabberIntake
       {
          distance = 500;
       }
-      if ( grabbing )
+     
       {
-         if ( setCone && distance < 60 )
+         if ( grabbing )
          {
-            _intake.set( 0.0 );
+            if ( setCone && distance < 60 )
+            {
+               _intake.set( 0.0 );
+            }
+            else if ( !setCone && distance < 85)
+            {
+               _intake.set( 0.0 );
+            }
+            else if ( distance > 279)
+            {
+               _intake.set( 0.0 );
+            }
          }
-         else if ( !setCone && distance < 85)
+         else
          {
-            _intake.set( 0.0 );
-         }
-         else if ( distance > 400)
-         {
-            _intake.set( 0.0 );
-         }
-      }
-      else
-      {
-         if ( setCone && distance > 200 )
-         {
-            _intake.set( 0.0 );
-         }
-         else if ( !setCone && distance > 400 )
-         {
-            _intake.set( 0.0 );
-         }
-         else if ( distance < 20 )
-         {
-            _intake.set( 0.0 );
+            if ( setCone && distance > 200 )
+            {
+               _intake.set( 0.0 );
+            }
+            else if ( !setCone && distance > 279 )
+            {
+               _intake.set( 0.0 );
+            }
+            else if ( distance < 20 )
+            {
+               _intake.set( 0.0 );
+            }
          }
       }
    }
