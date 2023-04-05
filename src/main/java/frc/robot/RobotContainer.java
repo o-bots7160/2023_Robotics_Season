@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 //import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 public class RobotContainer {
    //
@@ -14,9 +16,18 @@ public class RobotContainer {
    //
    //
    private static RobotContainer RobotContainer_instance = null;
+   //
+   //  The devices this robot uses
+   //
+   //
+   private TimeOfFlight sensor = new TimeOfFlight(101);
+   public final Swerve _drive = new Swerve();
+   public final ManipulatorControl _manipulator;
 
    private RobotContainer()
    {
+      sensor.setRangingMode(RangingMode.Short, 24);
+      _manipulator = new ManipulatorControl( sensor );
       Init();
    }
 
@@ -31,12 +42,6 @@ public class RobotContainer {
  
       return RobotContainer_instance;
    }
-   //
-   //  The devices this robot uses
-   //
-   //
-   public final Swerve _drive = new Swerve();
-   public final ManipulatorControl _manipulator = new ManipulatorControl();
    //
    //  The methods used to control the robot... whether teleop or auton
    //

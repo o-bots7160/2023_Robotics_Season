@@ -5,26 +5,23 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.ManipulatorControl.MANIPPOS;
-
 import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 public class GrabberIntake
 {
    private boolean  setCone = false;
    private boolean  grabbing = false;
    private CANSparkMax _intake;
-   private TimeOfFlight sensor = new TimeOfFlight(101);
+   private TimeOfFlight sensor;
 
-   public GrabberIntake()
+   public GrabberIntake( TimeOfFlight sensor )
    {
       _intake = new CANSparkMax(53, MotorType.kBrushless);
       _intake.setInverted(false);
       _intake.enableSoftLimit(SoftLimitDirection.kReverse, false);
       _intake.enableSoftLimit(SoftLimitDirection.kForward, false);
       _intake.setIdleMode(IdleMode.kBrake);
-      sensor.setRangingMode(RangingMode.Short, 24);
+      this.sensor = sensor;
    }
    public void periodic( double wristPos )
    {

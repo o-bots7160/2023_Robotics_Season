@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -35,8 +36,8 @@ public class ManipulatorControl
    private double kP_Wrist, kI_Wrist, kD_Wrist, kIz_Wrist, kFF_Wrist, kMaxOutput_Wrist, kMinOutput_Wrist;
    private double wrist_target = 0.0;
 
-   //private GrabberClaw _claw = new GrabberClaw();
-   private GrabberIntake _claw = new GrabberIntake();
+   //private GrabberClaw _claw;
+   private GrabberIntake _claw;
 
    private long _SysPntTimer;
 
@@ -50,6 +51,11 @@ public class ManipulatorControl
       MANUAL
    };
 
+   public ManipulatorControl( TimeOfFlight sensor )
+   {
+      //private GrabberClaw _claw = new GrabberClaw();
+      _claw = new GrabberIntake( sensor );
+   }
    private MANIPPOS manipPos = MANIPPOS.MANUAL;
 
    public void init(){
