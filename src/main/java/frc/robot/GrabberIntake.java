@@ -9,9 +9,11 @@ import com.playingwithfusion.TimeOfFlight;
 
 public class GrabberIntake
 {
-   private boolean  setCone = false;
-   private boolean  grabbing = false;
-   private CANSparkMax _intake;
+   private boolean      setCone         = false;
+   private boolean      grabbing        = false;
+   private boolean      was_grabbing    = false;
+   private double       target_distance = 0.0;
+   private CANSparkMax  _intake;
    private TimeOfFlight sensor;
 
    public GrabberIntake( TimeOfFlight sensor )
@@ -26,44 +28,35 @@ public class GrabberIntake
    public void periodic( double wristPos )
    {
       double distance = sensor.getRange();
-      //System.out.println("Distance: " + distance);
-      if ( distance < 27 )
+      if ( sensor.isRangeValid() )
       {
-         distance = 500;
-      } else if ( distance > 500 )
-      {
-         distance = 500;
-      }
-     
-      {
-         if ( grabbing )
+         if ( grabbing != was_grabbing )
          {
-            if ( setCone && distance < 60 )
+            if ( was_grabbing )
             {
-               _intake.set( 0.0 );
+               _intake.set( -0.75 );
             }
-            else if ( !setCone && distance < 85)
+            else
             {
-               _intake.set( 0.0 );
+               _intake.set(1.0);
             }
-            else if ( distance > 279)
-            {
-               _intake.set( 0.0 );
-            }
+            was_grabbing = grabbing;
          }
          else
          {
-            if ( setCone && distance > 200 )
+            if ( was_grabbing )
             {
-               _intake.set( 0.0 );
+               if ( distance < target_distance )
+               {
+                  _intake.set( 0.0 );
+               }
             }
-            else if ( !setCone && distance > 279 )
+            else
             {
-               _intake.set( 0.0 );
-            }
-            else if ( distance < 20 )
-            {
-               _intake.set( 0.0 );
+               if ( distance > target_distance )
+               {
+                  _intake.set( 0.0 );
+               }
             }
          }
       }
@@ -71,28 +64,35 @@ public class GrabberIntake
 
    public void grabCone( )
    {
-      setCone = true;
-      grabbing = true;
-      _intake.set(1.0);
-      System.out.println("Cone");
+      setCone         = true;
+      grabbing        = true;
+      target_distance = 60;  // if less than this distance we've captured the cone
+      //System.out.println("Cone");
    }
    public void grabCube( )
    {
-      setCone = false;
-      grabbing = true;
-      _intake.set( 1.0 );
-      System.out.println("Cube");
+      setCone         = false;
+      grabbing        = true;
+      target_distance = 85;  // if less than this distance we've captured the cube
+      //System.out.println("Cube");
    }
    public void release( )
    {
       grabbing = false;
-      _intake.set( -0.75 );
-      
-      System.out.println("Release");
+      if (setCone )
+      {
+         target_distance = 200; // if greater than this distance we've released the cone
+      }
+      else
+      {
+         target_distance = 279; // if greater than this distance we've released the cube
+      }
+      //System.out.println("Release");
    }
    public void disable()
    {
-      grabbing = false;
+      grabbing     = false;
+      was_grabbing = false;
       _intake.set(0.0);
    }
    public void sysPrints(){
