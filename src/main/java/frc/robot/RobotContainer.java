@@ -23,11 +23,13 @@ public class RobotContainer {
    private TimeOfFlight sensor = new TimeOfFlight(101);
    public final Swerve _drive = new Swerve();
    public final ManipulatorControl _manipulator;
+   public LED   _LED;
 
    private RobotContainer()
    {
       sensor.setRangingMode(RangingMode.Short, 24);
       _manipulator = new ManipulatorControl( sensor );
+      _LED = new LED( sensor );
       Init();
    }
 
@@ -50,6 +52,7 @@ public class RobotContainer {
    {
       _drive.resetOdometry( new Pose2d( Units.feetToMeters( 0 ), Units.feetToMeters(0), new Rotation2d( 0.0)  ) );
       _manipulator.init();
+      _LED.Init();
    }
   
    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) 
@@ -61,6 +64,7 @@ public class RobotContainer {
    {
       _drive.periodic();
       _manipulator.periodic();
+      
    }
 
    public void resetOdometry(Pose2d pose)
@@ -71,5 +75,6 @@ public class RobotContainer {
    {
       _drive.disable();
       _manipulator.disable();
+      _LED.disable();
    }
 }

@@ -27,7 +27,7 @@ public class Teleop implements OpModeInterface {
    public void Periodic()
    {
       // Convert these from -1.0 - 1.0 to min/max speed or rotation
-      
+      robot._LED.Periodic( robot._manipulator.liftGetPose());
       double y = -Joystick.getRawAxis(4) / speedReducer;
       double x = -Joystick.getRawAxis(5) / speedReducer;
       double z = -Joystick.getRawAxis(0) / turnReducer;

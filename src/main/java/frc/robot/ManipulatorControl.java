@@ -80,10 +80,10 @@ public class ManipulatorControl
 
    public void periodic()
    {
-       if ( System.currentTimeMillis() > _SysPntTimer ){
-          sysPrints();
-       }
-       _claw.periodic( wristGetPose() );
+      if ( System.currentTimeMillis() > _SysPntTimer ){
+         //sysPrints();
+      }
+      _claw.periodic( wristGetPose() );
       switch(manipPos){
          case TOP:
             liftSetPose(170);      //FIXME

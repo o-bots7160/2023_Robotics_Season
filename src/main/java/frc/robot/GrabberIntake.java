@@ -34,10 +34,12 @@ public class GrabberIntake
          {
             if ( was_grabbing )
             {
+               System.out.println("Release start");
                _intake.set( -0.75 );
             }
             else
             {
+               System.out.println("intake start");
                _intake.set(1.0);
             }
             was_grabbing = grabbing;
@@ -48,6 +50,7 @@ public class GrabberIntake
             {
                if ( distance < target_distance )
                {
+                  System.out.println("intake stop1");
                   _intake.set( 0.0 );
                }
             }
@@ -55,6 +58,7 @@ public class GrabberIntake
             {
                if ( distance > target_distance )
                {
+                  System.out.println("intake stop2");
                   _intake.set( 0.0 );
                }
             }
@@ -62,40 +66,49 @@ public class GrabberIntake
       }
       else
       {
-         if ( grabbing != was_grabbing )
-         {
-            _intake.set( 0.0 );
-            was_grabbing = grabbing;
-         }
+         // if ( grabbing != was_grabbing )
+         // {
+         //    _intake.set( 0.0 );
+         //    was_grabbing = grabbing;
+         // }
       }
    }
 
    public void grabCone( )
    {
-      setCone         = true;
-      grabbing        = true;
-      target_distance = 60;  // if less than this distance we've captured the cone
-      //System.out.println("Cone");
+      if ( !grabbing )
+      {
+         setCone         = true;
+         grabbing        = true;
+         target_distance = 60;  // if less than this distance we've captured the cone
+         System.out.println("Cone");
+      }
    }
    public void grabCube( )
    {
-      setCone         = false;
-      grabbing        = true;
-      target_distance = 85;  // if less than this distance we've captured the cube
-      //System.out.println("Cube");
+      if ( ! grabbing )
+      {
+         setCone         = false;
+         grabbing        = true;
+         target_distance = 85;  // if less than this distance we've captured the cube
+         System.out.println("Cube");
+      }
    }
    public void release( )
    {
-      grabbing = false;
-      if (setCone )
+      if (grabbing )
       {
-         target_distance = 200; // if greater than this distance we've released the cone
-      }
-      else
-      {
-         target_distance = 279; // if greater than this distance we've released the cube
-      }
-      //System.out.println("Release");
+         grabbing = false;
+         if (setCone )
+         {
+            target_distance = 200; // if greater than this distance we've released the cone
+         }
+         else
+         {
+            target_distance = 279; // if greater than this distance we've released the cube
+         }
+         System.out.println("Release");
+   }
    }
    public void disable()
    {
@@ -104,8 +117,11 @@ public class GrabberIntake
       _intake.set(0.0);
    }
    public void sysPrints(){
-      System.out.println("Claw Motor Temp: " + _intake.getMotorTemperature());
-      System.out.println("Claw Motor Cur.: " + _intake.getOutputCurrent());
+      System.out.println("Intk Motor Temp: " + _intake.getMotorTemperature());
+      System.out.println("Intk Motor Cur.: " + _intake.getOutputCurrent());
+      System.out.println("Intk Distance: "   + sensor.getRange());
+      System.out.println("Intk valid: "      + sensor.isRangeValid());
+      //System.out.println("Cone");
       System.out.println("---");
    }
 }
