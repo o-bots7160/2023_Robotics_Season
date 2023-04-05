@@ -60,6 +60,14 @@ public class GrabberIntake
             }
          }
       }
+      else
+      {
+         if ( grabbing != was_grabbing )
+         {
+            _intake.set( 0.0 );
+            was_grabbing = grabbing;
+         }
+      }
    }
 
    public void grabCone( )
